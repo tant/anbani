@@ -82,7 +82,7 @@
 			<form onsubmit={(e) => { e.preventDefault(); signIn(false); }}>
 				<label>{t('email')}<input type="email" autocomplete="email" required bind:value={email} /></label>
 				<label>{t('password')}<input type="password" autocomplete="current-password" minlength="8" required bind:value={password} /></label>
-				{#if error}<p class="error" role="alert">{error}</p>{/if}
+				{#key error}{#if error}<p class="error" role="alert">{error}</p>{/if}{/key}
 				<div class="row">
 					<button class="btn primary" disabled={busy}>{t('signIn')}</button>
 					<button class="btn" type="button" disabled={busy} onclick={(e) => e.currentTarget.form?.reportValidity() && signIn(true)}>{t('signUp')}</button>
@@ -112,5 +112,9 @@
 		font-size: 1rem;
 	}
 	.row { display: flex; flex-wrap: wrap; gap: 10px; }
-	.error { color: var(--bad); }
+	.error { color: var(--bad); animation: shake 0.36s ease-in-out; }
+	@keyframes shake {
+		20%, 60% { transform: translateX(-5px); }
+		40%, 80% { transform: translateX(5px); }
+	}
 </style>

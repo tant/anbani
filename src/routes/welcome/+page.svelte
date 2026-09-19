@@ -16,22 +16,22 @@
 <main class="page">
 	<section class="hero">
 		<Staff char="ა" size="min(8.5rem, 34vw)" tone="lapis" write />
-		<h1 lang="ka">მხედრული</h1>
-		<p class="muted">{t('welcomeTagline')}</p>
+		<h1 class="rise" style:--d="7" lang="ka">მხედრული</h1>
+		<p class="muted rise" style:--d="8">{t('welcomeTagline')}</p>
 	</section>
 
-	<section>
+	<section class="rise" style:--d="10">
 		<h2 id="lang-label">{t('language')}</h2>
 		<Segmented name="lang" labelledby="lang-label" options={LANGS} value={settings.lang} onchange={(lang) => updateSettings({ lang })} />
 	</section>
 
-	<section>
+	<section class="rise" style:--d="11">
 		<h2 id="font-label">{t('glyphFont')}</h2>
 		<FontPicker labelledby="font-label" />
 		<p class="muted">{t('fontHelp')}</p>
 	</section>
 
-	<div class="actions bottom">
+	<div class="actions bottom rise" style:--d="13">
 		<button class="btn primary" onclick={() => begin('/learn')}>{t('startNew')}</button>
 		<button class="btn" onclick={() => begin('/test?scope=all')}>{t('startKnown')}</button>
 	</div>

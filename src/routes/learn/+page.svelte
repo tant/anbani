@@ -9,6 +9,8 @@
 	import { nextTask, SESSION_LENGTH, type Task } from '$lib/session';
 	import { settings, t } from '$lib/settings.svelte';
 	import { parseKey } from '$lib/srs';
+	import { dur, ease } from '$lib/motion';
+	import { Tween } from 'svelte/motion';
 
 	let task = $state<Task>({ kind: 'done', nextDue: null });
 	let options = $state<string[]>([]);
@@ -19,6 +21,12 @@
 	let lastKey: string | undefined;
 
 	const letter = $derived(task.kind === 'intro' ? byChar.get(task.char)! : null);
+	const score = new Tween(0, { duration: dur(700), easing: ease });
+
+	$effect(() => {
+		if (task.kind === 'done') score.target = right;
+		else score.set(0, { duration: 0 });
+	});
 
 	function show(next: Task) {
 		task = next;
@@ -76,8 +84,8 @@
 		<section class="stage">
 			<p class="prompt">{t('newLetter')}</p>
 			<Staff char={letter.char} size="min(11rem, 40vw)" tone="lapis" write />
-			<p class="sound">{letter.translit} <span class="muted">/{letter.ipa}/</span></p>
-			<p class="hint">{letter.hint[settings.lang]}</p>
+			<p class="sound rise" style:--d="9">{letter.translit} <span class="muted">/{letter.ipa}/</span></p>
+			<p class="hint rise" style:--d="10">{letter.hint[settings.lang]}</p>
 		</section>
 		<div class="actions bottom"><button class="btn primary" onclick={learnt}>{t('gotIt')}</button></div>
 	{:else if task.kind === 'question'}
@@ -86,13 +94,15 @@
 		{/key}
 	{:else}
 		<section class="stage done">
-			<h1>{paused ? t('sessionDone') : t('allCaughtUp')}</h1>
-			{#if answered}<p>{t('sessionStats', { right, total: answered })}</p>{/if}
+			<h1 class="rise">{paused ? t('sessionDone') : t('allCaughtUp')}</h1>
+			{#if answered}
+				<p class="big rise" style:--d="1" aria-label={t('sessionStats', { right, total: answered })}>{Math.round(score.current)}<span>/{answered}</span></p>
+			{/if}
 			{#if task.kind === 'done' && task.nextDue}
-				<p class="muted">{t('comeBack', { time: relativeTime(task.nextDue, new Date(), settings.lang) })}</p>
+				<p class="muted rise" style:--d="2">{t('comeBack', { time: relativeTime(task.nextDue, new Date(), settings.lang) })}</p>
 			{/if}
 		</section>
-		<div class="actions bottom">
+		<div class="actions bottom rise" style:--d="4">
 			<a class="btn primary" href="/test?scope=studied">{t('testLearned')}</a>
 			{#if paused}<button class="btn" onclick={keepGoing}>{t('keepGoing')}</button>{/if}
 			<a class="btn" href="/">{t('backHome')}</a>
@@ -105,4 +115,6 @@
 	.sound .muted { font-size: 1.1rem; font-weight: 400; }
 	.done { justify-content: center; gap: 12px; padding-top: 20vh; }
 	.done h1 { font-size: 1.6rem; font-weight: 600; }
+	.big { font-size: 4rem; font-weight: 600; line-height: 1; font-variant-numeric: tabular-nums; }
+	.big span { font-size: 1.8rem; color: var(--muted); }
 </style>

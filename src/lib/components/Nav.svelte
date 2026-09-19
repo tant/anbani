@@ -26,7 +26,7 @@
 					<span class="glyph" lang="ka" aria-hidden="true">ა</span>
 				{/if}
 				{#if tab.href === '/learn' && due}
-					<span class="badge"><span class="visually-hidden">{t('dueCount', { n: due })}</span><span aria-hidden="true">{due}</span></span>
+					{#key due}<span class="badge"><span class="visually-hidden">{t('dueCount', { n: due })}</span><span aria-hidden="true">{due}</span></span>{/key}
 				{/if}
 			</span>
 			<span>{t(tab.label)}</span>
@@ -79,6 +79,7 @@
 	a { transition: color 0.2s; }
 	.glyph { font-family: var(--font-glyph); font-size: 1.45rem; line-height: 1; }
 	.badge {
+		animation: pop 0.4s cubic-bezier(0.3, 1.6, 0.5, 1);
 		position: absolute;
 		top: -4px;
 		left: 32px;
@@ -91,5 +92,8 @@
 		font-weight: 600;
 		line-height: 18px;
 		text-align: center;
+	}
+	@keyframes pop {
+		from { transform: scale(0.4); }
 	}
 </style>

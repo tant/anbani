@@ -82,7 +82,8 @@ The app has two separate modes, both reachable from the home page.
 - Motion answers the learner's action, except two deliberate moments: the copybook page filling in on the first home visit of a session, and a new letter being written (rules drawn, then the glyph inked).
   - Page change: View Transitions API cross-fade with a small rise; the tab bar keeps its own layer.
   - Question: slides in; right answer pops and turns the prompt green; wrong answer shakes; comparison slides down.
-  - Letter sheet slides up; test score counts up; missed letters appear one after another; active tab pill widens.
+  - Letter sheet slides up and back down (Esc and backdrop tap included); test and session scores count up; missed letters appear one after another; active tab pill widens; the due badge pops when its count changes; a failed sign-in message shakes; the custom letter picker slides open.
+  - Staggered entrances (`.rise`, `--d` × 80 ms): the welcome screen assembles under the letter being written; a new letter's sound and hint follow its writing; the end-of-session screen.
 - `prefers-reduced-motion`: CSS animations off globally; Svelte transitions get zero duration through `dur()` in `src/lib/motion.ts`; view transitions off.
 
 ## Georgian letter style (added 2026-09-19)

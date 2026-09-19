@@ -1,10 +1,26 @@
 <script lang="ts">
 	import type { Letter } from '$lib/letters';
 	import { settings, t } from '$lib/settings.svelte';
+	import { dur } from '$lib/motion';
 	import Staff from './Staff.svelte';
 
 	let { letter, onclose }: { letter: Letter | null; onclose: () => void } = $props();
 	let dialog: HTMLDialogElement;
+
+	/** Play the closing animation, then close; instant when motion is reduced. */
+	let closing = $state(false);
+
+	function dismiss() {
+		if (!dialog.open || closing) return;
+		if (!dur(1)) return dialog.close();
+		closing = true;
+	}
+
+	function finish(e: AnimationEvent) {
+		if (!closing || e.target !== dialog) return;
+		closing = false;
+		dialog.close();
+	}
 
 	$effect(() => {
 		if (letter && !dialog.open) dialog.showModal();
@@ -12,13 +28,23 @@
 	});
 </script>
 
-<dialog bind:this={dialog} {onclose} onclick={(e) => e.target === dialog && dialog.close()}>
+<dialog
+	bind:this={dialog}
+	class:closing
+	onanimationend={finish}
+	{onclose}
+	oncancel={(e) => {
+		e.preventDefault();
+		dismiss();
+	}}
+	onclick={(e) => e.target === dialog && dismiss()}
+>
 	{#if letter}
 		<div class="sheet">
 			<Staff char={letter.char} size="7.5rem" write />
 			<p class="sound">{letter.translit} <span class="muted">/{letter.ipa}/</span></p>
 			<p class="hint">{letter.hint[settings.lang]}</p>
-			<button class="btn" onclick={() => dialog.close()}>{t('close')}</button>
+			<button class="btn" onclick={dismiss}>{t('close')}</button>
 		</div>
 	{/if}
 </dialog>
@@ -40,6 +66,17 @@
 	@media (min-width: 640px) {
 		dialog { margin: auto; border-radius: 24px; }
 		dialog[open] { animation-name: pop-in; }
+	}
+	dialog.closing { animation: sheet-down 0.22s ease-in both; }
+	dialog.closing::backdrop { animation: fade 0.22s ease-in reverse both; }
+	@media (min-width: 640px) {
+		dialog.closing { animation-name: pop-out; }
+	}
+	@keyframes sheet-down {
+		to { transform: translateY(100%); }
+	}
+	@keyframes pop-out {
+		to { opacity: 0; transform: translateY(12px) scale(0.97); }
 	}
 	@keyframes sheet-up {
 		from { transform: translateY(100%); }

@@ -14,7 +14,7 @@
 	import { ui } from '$lib/ui.svelte';
 	import { dur, ease } from '$lib/motion';
 	import { Tween } from 'svelte/motion';
-	import { fly } from 'svelte/transition';
+	import { fly, slide } from 'svelte/transition';
 
 	interface Setup {
 		scope: Scope;
@@ -103,6 +103,7 @@
 			<h2 id="scope-label">{t('scope')}</h2>
 			<Segmented name="scope" labelledby="scope-label" options={scopes} value={setup.scope} onchange={(v) => (setup.scope = v)} />
 			{#if setup.scope === 'custom'}
+				<div class="picker" transition:slide={{ duration: dur(260), easing: ease }}>
 				<AlphabetGrid
 					tone={(c) => (setup.custom.includes(c) ? 'lapis' : 'rule-strong')}
 					caption={(c) => byChar.get(c)!.translit}
@@ -114,6 +115,7 @@
 					<button class="link" onclick={() => (setup.custom = ALPHABET.map((l) => l.char))}>{t('selectAll')}</button>
 					<button class="link" onclick={() => (setup.custom = [])}>{t('selectNone')}</button>
 					<span class="muted">{t('selectedCount', { n: setup.custom.length })}</span>
+				</div>
 				</div>
 			{/if}
 		</section>
@@ -185,6 +187,7 @@
 	section { display: flex; flex-direction: column; gap: 12px; }
 	h2 { font-size: 1rem; font-weight: 600; }
 
+	.picker { display: flex; flex-direction: column; gap: 12px; }
 	.row { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 16px; }
 	.link {
 		min-height: 44px;
