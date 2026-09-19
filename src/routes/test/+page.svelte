@@ -10,6 +10,7 @@
 	import { buildQuiz, scopeChars, summarize, type Direction, type QuizAnswer, type QuizQuestion, type Scope } from '$lib/quiz';
 	import { settings, t } from '$lib/settings.svelte';
 	import { load, save } from '$lib/storage';
+	import { ui } from '$lib/ui.svelte';
 
 	interface Setup {
 		scope: Scope;
@@ -29,6 +30,11 @@
 	const studied = $derived(scopeChars('studied', progress.cards, []).length);
 	const chars = $derived(scopeChars(setup.scope, progress.cards, setup.custom));
 	const current = $derived(questions[index]);
+
+	$effect(() => {
+		ui.immersive = phase === 'running';
+		return () => (ui.immersive = false);
+	});
 	const summary = $derived(summarize(answers));
 
 	const scopes = $derived([
@@ -77,7 +83,6 @@
 <main class="page">
 	{#if phase === 'setup'}
 		<header class="bar">
-			<a class="icon-btn" href="/" aria-label={t('backHome')}><Icon name="back" /></a>
 			<h1>{t('test')}</h1>
 		</header>
 
@@ -123,7 +128,6 @@
 		{/key}
 	{:else}
 		<header class="bar">
-			<a class="icon-btn" href="/" aria-label={t('backHome')}><Icon name="back" /></a>
 			<h1>{t('result')}</h1>
 		</header>
 
@@ -165,7 +169,6 @@
 </main>
 
 <style>
-	.bar h1 { font-size: 1.3rem; font-weight: 600; }
 	section { display: flex; flex-direction: column; gap: 12px; }
 	h2 { font-size: 1rem; font-weight: 600; }
 
@@ -182,9 +185,9 @@
 
 	.cta {
 		position: sticky;
-		bottom: 0;
+		bottom: var(--nav-space, 0px);
 		margin-top: auto;
-		padding: 12px 0 max(4px, env(safe-area-inset-bottom));
+		padding: 12px 0;
 		background: var(--paper);
 		display: flex;
 		flex-direction: column;

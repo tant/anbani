@@ -135,7 +135,7 @@
 		border-radius: var(--radius);
 		background: var(--tile);
 		cursor: pointer;
-		transition: background-color 0.15s, border-color 0.15s;
+		transition: background-color 0.15s, border-color 0.15s, transform 0.08s ease-out;
 	}
 	.option[aria-disabled='true'] { cursor: default; }
 	.option.ok { background: var(--ok); border-color: var(--ok); color: var(--paper); }

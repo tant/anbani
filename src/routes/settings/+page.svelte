@@ -1,5 +1,4 @@
 <script lang="ts">
-	import Icon from '$lib/components/Icon.svelte';
 	import Segmented from '$lib/components/Segmented.svelte';
 	import type { Lang } from '$lib/letters';
 	import { pb } from '$lib/pb';
@@ -46,7 +45,6 @@
 
 <main class="page">
 	<header class="bar">
-		<a class="icon-btn" href="/" aria-label={t('backHome')}><Icon name="back" /></a>
 		<h1>{t('settings')}</h1>
 	</header>
 
@@ -94,7 +92,6 @@
 </main>
 
 <style>
-	.bar h1 { font-size: 1.3rem; font-weight: 600; }
 	section { display: flex; flex-direction: column; gap: 12px; }
 	h2 { font-size: 1rem; font-weight: 600; }
 
