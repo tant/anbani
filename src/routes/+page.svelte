@@ -25,8 +25,8 @@
 <main class="page">
 	<header>
 		<div>
-			<h1 lang="ka">მხედრული</h1>
-			<p class="muted"><span lang="en">Mkhedruli</span>. {t('tagline')}</p>
+			<h1 lang="ka">ანბანი</h1>
+			<p class="muted"><span lang="en">Anbani</span>. {t('tagline')}</p>
 		</div>
 	</header>
 

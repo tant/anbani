@@ -1,6 +1,6 @@
-# Mkhedruli
+# Anbani
 
-Learn to read the 33 letters of the modern Georgian alphabet: see ა and know it reads `a`, see `a` and find ა.
+Anbani (ანბანი, "alphabet" in Georgian) teaches you to read the 33 letters of the modern Georgian alphabet: see ა and know it reads `a`, see `a` and find ა.
 
 Free and open source (MIT). Works offline, on phones and desktops, in Vietnamese or English.
 

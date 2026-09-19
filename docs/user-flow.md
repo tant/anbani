@@ -28,9 +28,9 @@ Hiện một lần duy nhất (đường dẫn `/welcome`), sau đó ứng dụn
 
 | Thành phần | Nội dung |
 |---|---|
-| Tiêu đề | Chữ ა lớn trên khung bốn dòng kẻ, tên მხედრული, một dòng giới thiệu: học đọc 33 chữ cái tiếng Georgia, miễn phí, không cần tài khoản |
+| Tiêu đề | Chữ ა lớn trên khung bốn dòng kẻ, tên ứng dụng ანბანი (Anbani), một dòng giới thiệu: học đọc 33 chữ cái tiếng Georgia, miễn phí, không cần tài khoản |
 | Ngôn ngữ | Tiếng Việt / English, chọn sẵn theo ngôn ngữ của thiết bị |
-| Kiểu chữ | Ba ô mẫu cùng hiển thị các chữ ა ბ გ დ: Đơn giản, Có chân, Font của máy. Câu hướng dẫn: chọn kiểu giống với sách hoặc tài liệu bạn đang dùng |
+| Kiểu chữ | Năm ô mẫu cùng hiển thị chữ ქარ: Đơn giản, Chữ in sách, Nét bút, Tròn đậm, Font của máy. Câu hướng dẫn: chọn kiểu giống với sách hoặc tài liệu bạn đang dùng |
 | Lối vào chính | **Tôi mới bắt đầu** → mode Học, màn Chữ mới |
 | Lối vào phụ | **Tôi đã biết vài chữ, kiểm tra trước** → mode Kiểm tra, phạm vi Tất cả (33) |
 

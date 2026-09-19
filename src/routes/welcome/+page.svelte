@@ -16,7 +16,7 @@
 <main class="page">
 	<section class="hero">
 		<Staff char="ა" size="min(8.5rem, 34vw)" tone="lapis" write />
-		<h1 class="rise" style:--d="7" lang="ka">მხედრული</h1>
+		<h1 class="rise" style:--d="7" lang="ka">ანბანი</h1>
 		<p class="muted rise" style:--d="8">{t('welcomeTagline')}</p>
 	</section>
 
