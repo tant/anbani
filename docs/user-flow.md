@@ -62,7 +62,7 @@ Khi mở từ nút **Kiểm tra các chữ vừa học**, màn Thiết lập ch�
 |---|---|---|
 | Bảng chữ cái | 33 chữ trên trang vở bốn dòng kẻ; màu cho biết chưa học, đang học, đã thuộc; âm hiện dưới các chữ đã học; tóm tắt tiến độ | Chạm vào chữ → Thông tin chữ; thanh tab |
 | Thông tin chữ | Bảng trượt lên: chữ lớn, âm, IPA, gợi ý đọc | **Đóng** → Bảng chữ cái |
-| Cài đặt | Ngôn ngữ; **Kiểu chữ (mới)**; số lựa chọn mỗi câu; tài khoản (không bắt buộc) | Thanh tab |
+| Cài đặt | Ngôn ngữ; kiểu chữ; số lựa chọn mỗi câu; tài khoản (không bắt buộc) | Thanh tab |
 
 ## Kiểu chữ Georgian
 
@@ -80,4 +80,3 @@ Hai font Noto được đóng gói sẵn trong ứng dụng nên dùng được 
 
 1. Màn Chào mừng cho lần đầu mở app, gồm ngôn ngữ, kiểu chữ và hai lối vào.
 2. Nút **Kiểm tra các chữ vừa học** ở cuối buổi học, mở Thiết lập với phạm vi Đã học.
-3. Lựa chọn kiểu chữ trong Cài đặt và màn Chào mừng; đổi font mặc định sang Noto Sans Georgian.
