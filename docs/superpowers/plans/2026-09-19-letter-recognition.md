@@ -685,7 +685,7 @@ export function nextTask(cards: Cards, now: Date, lastKey?: string): Task {
 
 **Interfaces:** Produces `users.lang` (select `vi|en`), `users.distractors` (number 2–5), collection `reviews { user, key, card, due, updated }`, unique `(user, key)`, owner-only rules.
 
-- [ ] **Step 1: Write the migration**
+- [ ] **Step 1: Write the migration** — `pb/pb_migrations/1758240000_init.js`
 
 ```js
 /// <reference path="../pb_data/types.d.ts" />
@@ -1486,7 +1486,7 @@ Behaviour:
 - Wrong → picked option `--bad`, right one `--ok`, comparison panel (picked vs correct, both on staff with sounds) and hint; "Continue" or Enter advances.
 - After 20 answers → "Session complete" with score and "Keep going"; when nothing is due → "You have reviewed everything that is due" with next review time.
 
-- [ ] **Step 1: Implement**
+- [ ] **Step 1: Implement** — `src/routes/learn/+page.svelte`
 
 ```svelte
 <script lang="ts">
@@ -1745,7 +1745,7 @@ Behaviour:
 
 **Interfaces:** Consumes `settings`, `updateSettings`, `adoptProfile`, `MIN_DISTRACTORS`, `MAX_DISTRACTORS`, `t`, `pb`, `pull`, `forgetRemote`, `Icon`.
 
-- [ ] **Step 1: Implement**
+- [ ] **Step 1: Implement** — `src/routes/settings/+page.svelte`
 
 ```svelte
 <script lang="ts">
