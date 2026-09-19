@@ -15,6 +15,7 @@ drawio -x -f png -s 2 -b 24 -o docs/user-flow.png docs/user-flow.drawio
 ## Nguyên tắc điều hướng
 
 - **Thanh tab dưới đáy** gồm bốn mục: Bảng chữ cái, Học, Kiểm tra, Cài đặt. Tab Học hiển thị huy hiệu đỏ ghi số thẻ đến hạn ôn.
+- **Tab Học mở thẳng vào bài**: trước hết là câu hỏi của các thẻ đến hạn ôn; khi không còn thẻ đến hạn, ứng dụng giới thiệu chữ mới. Tab Kiểm tra luôn mở màn Thiết lập.
 - **Thanh tab ẩn khi đang học hoặc đang làm bài**, để người học tập trung. Nút đóng (X) ở góc trên đưa về màn trước đó: từ mode Học về Bảng chữ cái, từ bài kiểm tra về màn thiết lập.
 - **Tài khoản không chặn bất kỳ lối đi nào.** Toàn bộ tính năng dùng được khi chưa đăng nhập; tài khoản chỉ để đồng bộ tiến độ giữa các thiết bị và chỉ nằm trong Cài đặt.
 - **Mode Kiểm tra không ảnh hưởng tới lịch ôn** của mode Học.
@@ -42,9 +43,9 @@ Người học đổi lại ngôn ngữ và kiểu chữ bất cứ lúc nào tr
 | Chữ mới | Chữ mới trên khung dòng kẻ (hiệu ứng viết chữ), âm, IPA, gợi ý đọc | **Đã nhớ, làm bài** → Câu hỏi |
 | Câu hỏi | Nhìn chữ chọn âm, hoặc nhìn âm chọn chữ; 3–6 lựa chọn theo Cài đặt; phím 1–6 trên máy tính | Chọn đáp án → Phản hồi |
 | Phản hồi | Đúng: ô chuyển xanh, tự sang câu sau. Sai: ô rung, hiện chữ đã chọn cạnh đáp án đúng kèm gợi ý | **Tiếp tục** → câu tiếp theo hoặc chữ mới |
-| Xong buổi | Sau 20 câu: số câu đúng; nếu hết thẻ đến hạn: thời điểm ôn tiếp theo | **Kiểm tra các chữ vừa học (mới)**, **Học thêm**, **Về trang chủ** |
+| Xong buổi | Hiện trong hai trường hợp. Sau 20 câu: tiêu đề “Xong buổi học” và số câu đúng. Khi không còn bài để học: tiêu đề “Bạn đã ôn hết các thẻ đến hạn” và thời điểm ôn tiếp theo | **Kiểm tra các chữ vừa học (mới)**; **Học thêm** (chỉ khi vẫn còn bài); **Về trang chủ** |
 
-Lịch ôn: mỗi chữ có hai thẻ riêng cho hai chiều hỏi; ứng dụng giới thiệu chữ mới khi dưới bốn chữ đang ở giai đoạn làm quen.
+Lịch ôn: mỗi chữ có hai thẻ riêng cho hai chiều hỏi. Ứng dụng chỉ giới thiệu chữ mới khi không có thẻ nào đến hạn và dưới bốn chữ đang ở giai đoạn làm quen; nếu vẫn chưa có gì để giới thiệu, ứng dụng hỏi tiếp các thẻ sắp đến hạn trong 15 phút tới.
 
 ## Mode Kiểm tra
 
