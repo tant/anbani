@@ -4,34 +4,12 @@ Tài liệu này chốt cách người học đi qua ứng dụng: lần đầu 
 
 ## Sơ đồ tổng quan
 
-```mermaid
-flowchart LR
-    open([Mở app]) -->|Lần đầu| welcome["Chào mừng (mới)<br/>ngôn ngữ, kiểu chữ, lối vào"]
-    open -->|Các lần sau| home["Bảng chữ cái<br/>trang chủ"]
+![Sơ đồ luồng người dùng](user-flow.png)
 
-    welcome -->|Tôi mới bắt đầu| intro
-    welcome -->|Tôi đã biết vài chữ| setup
+Nguồn sơ đồ: [user-flow.drawio](user-flow.drawio), mở bằng draw.io để chỉnh sửa. Sau khi sửa, xuất lại ảnh bằng lệnh:
 
-    subgraph learn [Mode Học]
-        intro[Chữ mới] --> question[Câu hỏi] --> feedback[Phản hồi đúng/sai]
-        feedback -->|chưa đủ 20 câu| question
-        feedback -->|có chữ mới| intro
-        feedback -->|đủ 20 câu| done[Xong buổi]
-    end
-
-    subgraph test [Mode Kiểm tra]
-        setup[Thiết lập bài] --> tq[Câu hỏi] --> result[Kết quả]
-        result -->|Kiểm tra lại chữ sai| tq
-        result -->|Bài kiểm tra mới| setup
-    end
-
-    done -->|"Kiểm tra các chữ vừa học (mới)"| setup
-    done -->|Về trang chủ| home
-
-    home -->|Chạm vào một chữ| sheet[Thông tin chữ]
-    home -->|Tab Học| intro
-    home -->|Tab Kiểm tra| setup
-    home -->|Tab Cài đặt| settings[Cài đặt]
+```sh
+drawio -x -f png -s 2 -b 24 -o docs/user-flow.png docs/user-flow.drawio
 ```
 
 ## Nguyên tắc điều hướng
