@@ -1,0 +1,100 @@
+:root {
+	--paper: #eef2f7;
+	--tile: #f8fafc;
+	--ink: #16233f;
+	--muted: #56637d;
+	--rule: #c3cee0;
+	--rule-strong: #8fa0bf;
+	--lapis: #2a55c0;
+	--on-lapis: #ffffff;
+	--ok: #13806f;
+	--bad: #b42a33;
+	--font-glyph: 'Noto Serif Georgian Variable', 'Noto Serif Georgian', serif;
+	--font-ui: 'Lexend Variable', 'Lexend', system-ui, sans-serif;
+	/* Noto Serif Georgian at line-height 1.36: line positions from the top of the line box.
+	   Calibration knob if a font update shifts the glyphs. */
+	--staff-asc: 0.296em;
+	--staff-x: 0.52em;
+	--staff-base: 1.068em;
+	--staff-desc: 1.32em;
+	--radius: 14px;
+	color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--paper: #0e1629;
+		--tile: #141f38;
+		--ink: #e4eaf5;
+		--muted: #98a4bd;
+		--rule: #25355a;
+		--rule-strong: #3f5488;
+		--lapis: #8aa8ff;
+		--on-lapis: #0e1629;
+		--ok: #45c6b0;
+		--bad: #f2767d;
+	}
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+	margin: 0;
+	min-height: 100dvh;
+	background: var(--paper);
+	color: var(--ink);
+	font-family: var(--font-ui);
+	font-size: 1rem;
+	line-height: 1.5;
+	-webkit-tap-highlight-color: transparent;
+}
+
+h1, h2, p { margin: 0; }
+button, input { font: inherit; color: inherit; }
+a { color: var(--lapis); }
+:focus-visible { outline: 3px solid var(--lapis); outline-offset: 3px; border-radius: 4px; }
+
+.page {
+	max-width: 560px;
+	min-height: 100dvh;
+	margin: 0 auto;
+	padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+}
+
+.bar { display: flex; align-items: center; gap: 12px; min-height: 48px; }
+
+.muted { color: var(--muted); }
+
+.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 52px;
+	padding: 0 22px;
+	border: 1.5px solid var(--rule-strong);
+	border-radius: var(--radius);
+	background: transparent;
+	font-weight: 500;
+	text-decoration: none;
+	color: var(--ink);
+	cursor: pointer;
+}
+.btn.primary { background: var(--lapis); border-color: var(--lapis); color: var(--on-lapis); }
+.btn:disabled { opacity: 0.55; cursor: default; }
+
+.icon-btn {
+	display: inline-grid;
+	place-items: center;
+	width: 48px;
+	height: 48px;
+	border-radius: 50%;
+	color: var(--ink);
+}
+.icon-btn:hover { background: var(--tile); }
+
+@media (prefers-reduced-motion: reduce) {
+	*, *::before, *::after { transition: none !important; animation: none !important; }
+}
