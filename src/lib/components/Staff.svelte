@@ -25,6 +25,7 @@
 		transition: color 0.25s ease-out, background-color 0.2s;
 	}
 	.ink { display: inline-block; }
+	:global(:root[data-glyph='system']) .staff { background: none; }
 
 	/* A new letter: the rules are drawn, then the glyph is inked onto them. */
 	.write { animation: rules 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both; }

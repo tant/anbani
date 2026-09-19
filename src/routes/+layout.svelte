@@ -1,4 +1,5 @@
 <script lang="ts">
+	import '@fontsource-variable/noto-sans-georgian';
 	import '@fontsource-variable/noto-serif-georgian';
 	import '@fontsource-variable/lexend';
 	import '../app.css';
@@ -17,6 +18,7 @@
 
 	$effect(() => {
 		document.documentElement.lang = settings.lang;
+		document.documentElement.dataset.glyph = settings.glyphFont;
 	});
 
 	// Native cross-page transition; browsers without it navigate instantly.

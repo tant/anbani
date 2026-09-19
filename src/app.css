@@ -9,19 +9,31 @@
 	--on-lapis: #ffffff;
 	--ok: #13806f;
 	--bad: #b42a33;
-	--font-glyph: 'Noto Serif Georgian Variable', 'Noto Serif Georgian', serif;
+	--font-glyph-sans: 'Noto Sans Georgian Variable', 'Noto Sans Georgian', sans-serif;
+	--font-glyph-serif: 'Noto Serif Georgian Variable', 'Noto Serif Georgian', serif;
+	--font-glyph-system: system-ui, sans-serif;
+	--font-glyph: var(--font-glyph-sans);
 	--font-ui: 'Lexend Variable', 'Lexend', system-ui, sans-serif;
-	/* Noto Serif Georgian at line-height 1.36: line positions from the top of the line box.
-	   Calibration knob if a font update shifts the glyphs. */
-	--staff-asc: 0.296em;
-	--staff-x: 0.52em;
+	/* Staff line positions from the top of the line box at line-height 1.36, measured per font
+	   (ascender, x-height, baseline, descender). Calibration knob if a font update shifts the glyphs. */
+	--staff-asc: 0.308em;
+	--staff-x: 0.532em;
 	--staff-base: 1.068em;
-	--staff-desc: 1.32em;
+	--staff-desc: 1.318em;
 	--radius: 14px;
 	--backdrop: #dde4ee;
 	--nav-height: 56px;
 	color-scheme: light dark;
 }
+
+:root[data-glyph='serif'] {
+	--font-glyph: var(--font-glyph-serif);
+	--staff-asc: 0.296em;
+	--staff-x: 0.52em;
+	--staff-desc: 1.32em;
+}
+/* Device fonts differ per platform, so their glyphs cannot be lined up with the staff. */
+:root[data-glyph='system'] { --font-glyph: var(--font-glyph-system); }
 
 @media (prefers-color-scheme: dark) {
 	:root {

@@ -84,3 +84,13 @@ The app has two separate modes, both reachable from the home page.
   - Question: slides in; right answer pops and turns the prompt green; wrong answer shakes; comparison slides down.
   - Letter sheet slides up; test score counts up; missed letters appear one after another; active tab pill widens.
 - `prefers-reduced-motion`: CSS animations off globally; Svelte transitions get zero duration through `dur()` in `src/lib/motion.ts`; view transitions off.
+
+## Georgian letter style (added 2026-09-19)
+
+Learners pick the glyph style closest to their book (Settings; stored in `localStorage` and `users.glyphFont`):
+
+- `sans` (default): Noto Sans Georgian, monoline, close to how Wikipedia and most phones render Mkhedruli.
+- `serif`: Noto Serif Georgian, stroke contrast, close to printed books.
+- `system`: the device's own Georgian font; staff rules are hidden because its metrics differ per platform.
+
+`<html data-glyph>` switches `--font-glyph` and the staff metrics (`sans` 0.308/0.532/1.068/1.318 em, `serif` 0.296/0.52/1.068/1.32 em, both from the font files at line-height 1.36). The full user flow lives in `docs/user-flow.md`.
