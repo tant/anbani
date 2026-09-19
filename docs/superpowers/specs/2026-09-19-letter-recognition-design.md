@@ -64,3 +64,13 @@ The one bold element is the Georgian copybook four-line staff: every glyph sits 
 
 - Colours: cool copybook paper `#EEF2F7`, indigo ink `#16233F`, lapis `#2A55C0` (learning, primary action), turquoise `#13806F` (correct), pomegranate `#B42A33` (wrong), rules `#C3CEE0` / `#8FA0BF`. Dark theme mirrors these.
 - Type: Noto Serif Georgian for glyphs, Lexend for Latin UI text (built for reading proficiency, has a Vietnamese subset). Both self-hosted via Fontsource for offline use.
+
+## Modes (added 2026-09-19)
+
+The app has two separate modes, both reachable from the home page.
+
+- **Learn** (`/learn`): the spaced-repetition flow above. Unchanged.
+- **Test** (`/test`): a self-check that never touches the review schedule or the confusion history.
+  - Setup: letters = all 33, studied letters (any card exists), or a custom pick on the alphabet grid; question type = glyph → sound, sound → glyph, or mixed (half each, shuffled). Choices per question come from the same Settings value (2–5 distractors). The last setup is remembered on the device.
+  - Run: every chosen letter is asked exactly once in random order. Immediate right/wrong feedback, same question screen as Learn.
+  - Result: score and percentage, the missed letters with the sound and what was picked, "Retest missed letters" (same letters, same question type), "New test".
