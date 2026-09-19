@@ -1,8 +1,8 @@
 <script lang="ts">
 	import '@fontsource-variable/noto-sans-georgian';
-	import '@fontsource-variable/noto-serif-georgian';
 	import '@fontsource-variable/lexend';
 	import '../app.css';
+	import '../fonts.generated.css';
 	import { onMount } from 'svelte';
 	import { onNavigate } from '$app/navigation';
 	import { page } from '$app/state';

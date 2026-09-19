@@ -23,3 +23,4 @@ An account is optional; it only syncs progress between devices.
 - `src/lib/letters.ts`: the letters, sounds, hints. Content changes go here.
 - `src/lib/session.ts`, `srs.ts`, `options.ts`: what to ask next, scheduling, distractors.
 - `pb/pb_migrations`: database schema.
+- `scripts/build-fonts.py`: rebuilds the bundled Georgian fonts and `src/fonts.generated.css` (`pip install fonttools brotli`). Font licenses: `static/fonts/LICENSE.md`.

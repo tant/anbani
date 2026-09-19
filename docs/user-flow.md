@@ -67,12 +67,16 @@ Khi mở từ nút **Kiểm tra các chữ vừa học**, màn Thiết lập ch�
 
 ## Kiểu chữ Georgian
 
-Người mới học thường bỡ ngỡ khi chữ trong ứng dụng khác với chữ trong sách, nên ứng dụng cho chọn kiểu chữ:
+Người mới học thường bỡ ngỡ khi chữ trong ứng dụng khác với chữ trong sách, nên ứng dụng cho chọn năm kiểu chữ có phong cách khác hẳn nhau:
 
 | Lựa chọn | Font | Đặc điểm |
 |---|---|---|
 | **Đơn giản** (mặc định) | Noto Sans Georgian | Nét đều, không chân; gần với cách Wikipedia và phần lớn điện thoại hiển thị |
-| **Có chân** | Noto Serif Georgian | Nét thanh đậm, có chân; gần với chữ in trong sách |
+| **Chữ in sách** | BPG Serif Modern | Có chân, nét thanh đậm; gần với chữ in trong sách |
+| **Nét bút** | BPG Mikhail Stephan | Nét bút mềm, gần với chữ viết tay |
+| **Tròn đậm** | BPG Glaho | Nét đậm, đầu nét tròn; dễ nhìn trên màn hình nhỏ |
 | **Font của máy** | Font Georgian mặc định của thiết bị | Hiển thị đúng như thiết bị của người học; khung dòng kẻ được ẩn vì mỗi thiết bị có số đo chữ khác nhau |
 
-Hai font Noto được đóng gói sẵn trong ứng dụng nên dùng được khi không có mạng. Lựa chọn được lưu trên thiết bị, và lưu vào hồ sơ khi người học đã đăng nhập.
+Bốn font đầu được đóng gói sẵn trong ứng dụng nên dùng được khi không có mạng. Các font được đưa về cùng chiều cao chữ thường để không kiểu nào trông to hoặc nhỏ hơn hẳn, và khung bốn dòng kẻ được căn theo số đo riêng của từng font. Lựa chọn được lưu trên thiết bị, và lưu vào hồ sơ khi người học đã đăng nhập.
+
+Bảng so sánh 23 font Georgian có giấy phép tự do dùng để chọn bộ năm kiểu này: [georgian-fonts.png](georgian-fonts.png). Giấy phép từng font nằm trong `static/fonts/LICENSE.md`.

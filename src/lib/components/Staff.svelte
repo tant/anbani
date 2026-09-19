@@ -13,9 +13,9 @@
 	/* Georgian copybook: ascender, x-height, baseline (heavier), descender. */
 	.staff {
 		display: block;
-		height: 1.36em;
+		height: calc(var(--staff-lh) * 1em);
 		font-family: var(--font-glyph);
-		line-height: 1.36;
+		line-height: var(--staff-lh);
 		text-align: center;
 		background:
 			linear-gradient(var(--rule), var(--rule)) 0 var(--staff-asc) / 100% 1px no-repeat,

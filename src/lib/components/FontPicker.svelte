@@ -3,14 +3,14 @@
 
 	let { labelledby }: { labelledby: string } = $props();
 
-	const label = { sans: 'fontSans', serif: 'fontSerif', system: 'fontSystem' } as const;
+	const label = { sans: 'fontSans', serif: 'fontSerif', pen: 'fontPen', round: 'fontRound', system: 'fontSystem' } as const;
 </script>
 
 <div class="fonts" role="radiogroup" aria-labelledby={labelledby}>
 	{#each GLYPH_FONTS as font (font)}
 		<label class="font" class:on={settings.glyphFont === font}>
 			<input type="radio" name="glyphFont" value={font} checked={settings.glyphFont === font} onchange={() => updateSettings({ glyphFont: font })} />
-			<span class="sample {font}" lang="ka" aria-hidden="true">აბგდ</span>
+			<span class="sample {font}" lang="ka" aria-hidden="true">ქარ</span>
 			<span>{t(label[font])}</span>
 		</label>
 	{/each}
@@ -18,6 +18,9 @@
 
 <style>
 	.fonts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+	@media (min-width: 520px) {
+		.fonts { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+	}
 	.font {
 		display: flex;
 		flex-direction: column;
@@ -34,8 +37,10 @@
 	.font.on { border-color: var(--lapis); background: color-mix(in srgb, var(--lapis) 12%, transparent); font-weight: 600; }
 	.font:has(input:focus-visible) { outline: 3px solid var(--lapis); outline-offset: 2px; }
 	.font input { position: absolute; opacity: 0; pointer-events: none; }
-	.sample { font-size: 1.7rem; line-height: 1.4; font-weight: 400; }
+	.sample { display: grid; place-items: center; height: 3.2rem; font-size: 2rem; line-height: 1; font-weight: 400; }
 	.sample.sans { font-family: var(--font-glyph-sans); }
-	.sample.serif { font-family: var(--font-glyph-serif); }
+	.sample.serif { font-family: 'BPG Serif Modern'; }
+	.sample.pen { font-family: 'BPG Mikhail Stephan'; }
+	.sample.round { font-family: 'BPG Glaho'; }
 	.sample.system { font-family: var(--font-glyph-system); }
 </style>

@@ -86,12 +86,16 @@ The app has two separate modes, both reachable from the home page.
   - Staggered entrances (`.rise`, `--d` × 80 ms): the welcome screen assembles under the letter being written; a new letter's sound and hint follow its writing; the end-of-session screen.
 - `prefers-reduced-motion`: CSS animations off globally; Svelte transitions get zero duration through `dur()` in `src/lib/motion.ts`; view transitions off.
 
-## Georgian letter style (added 2026-09-19)
+## Georgian letter style (added 2026-09-19, revised)
 
-Learners pick the glyph style closest to their book (Settings; stored in `localStorage` and `users.glyphFont`):
+Learners pick the glyph style closest to their book (Settings and Welcome; stored in `localStorage` and `users.glyphFont`):
 
-- `sans` (default): Noto Sans Georgian, monoline, close to how Wikipedia and most phones render Mkhedruli.
-- `serif`: Noto Serif Georgian, stroke contrast, close to printed books.
-- `system`: the device's own Georgian font; staff rules are hidden because its metrics differ per platform.
+| Key | Font | License |
+|---|---|---|
+| `sans` (default) | Noto Sans Georgian (Fontsource) | OFL 1.1 |
+| `serif` | BPG Serif Modern | Bitstream Vera Fonts |
+| `pen` | BPG Mikhail Stephan | GPL-2 |
+| `round` | BPG Glaho 2011 | GPL-2 |
+| `system` | device font, staff rules hidden | n/a |
 
-`<html data-glyph>` switches `--font-glyph` and the staff metrics (`sans` 0.308/0.532/1.068/1.318 em, `serif` 0.296/0.52/1.068/1.32 em, both from the font files at line-height 1.36). The full user flow lives in `docs/user-flow.md`.
+`scripts/build-fonts.py` downloads the BPG originals from Debian `fonts-bpg-georgian` 2012-5, subsets them to the 33 letters plus space, rewrites vertical metrics from the glyph bounds (the originals disagree, and Mikhail Stephan's descender has the wrong sign), writes `static/fonts/*.woff2`, and generates `src/fonts.generated.css`: an `@font-face` with `size-adjust` (x-height normalised to Noto Sans, ascenders capped at 0.86 em) and per-style staff variables (`--staff-lh`, `--staff-asc`, `--staff-x`, `--staff-base`, `--staff-desc`). `<html data-glyph>` selects the style.

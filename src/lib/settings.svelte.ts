@@ -14,8 +14,8 @@ export const MIN_DISTRACTORS = 2;
 export const MAX_DISTRACTORS = 5;
 
 /** Georgian letter style: learners pick the one closest to their book. */
-export type GlyphFont = 'sans' | 'serif' | 'system';
-export const GLYPH_FONTS: GlyphFont[] = ['sans', 'serif', 'system'];
+export type GlyphFont = 'sans' | 'serif' | 'pen' | 'round' | 'system';
+export const GLYPH_FONTS: GlyphFont[] = ['sans', 'serif', 'pen', 'round', 'system'];
 
 export interface Settings {
 	lang: Lang;
