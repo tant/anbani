@@ -1,8 +1,8 @@
 <script lang="ts">
+	import AlphabetGrid from '$lib/components/AlphabetGrid.svelte';
 	import Icon from '$lib/components/Icon.svelte';
 	import LetterSheet from '$lib/components/LetterSheet.svelte';
-	import Staff from '$lib/components/Staff.svelte';
-	import { ALPHABET, type Letter } from '$lib/letters';
+	import { ALPHABET, byChar, type Letter } from '$lib/letters';
 	import { progress } from '$lib/progress.svelte';
 	import { t } from '$lib/settings.svelte';
 	import { dueCount, letterStatus, type LetterStatus } from '$lib/srs';
@@ -27,17 +27,12 @@
 		<a class="icon-btn" href="/settings" aria-label={t('settings')}><Icon name="settings" /></a>
 	</header>
 
-	<ol class="alphabet" aria-label={t('alphabet')}>
-		{#each ALPHABET as letter (letter.char)}
-			{@const s = status[letter.char]}
-			<li>
-				<button class="tile" onclick={() => (selected = letter)} aria-label="{letter.char}, {t(s)}">
-					<Staff char={letter.char} size="2.4rem" tone={tone[s]} />
-					<span class="translit" class:hidden={s === 'unseen'}>{letter.translit}</span>
-				</button>
-			</li>
-		{/each}
-	</ol>
+	<AlphabetGrid
+		tone={(c) => tone[status[c]]}
+		caption={(c) => (status[c] === 'unseen' ? '' : byChar.get(c)!.translit)}
+		label={(c) => `${c}, ${t(status[c])}`}
+		onpick={(c) => (selected = byChar.get(c)!)}
+	/>
 
 	<div class="legend">
 		<ul>
@@ -49,8 +44,13 @@
 	</div>
 
 	<footer class="cta">
-		<a class="btn primary" href="/learn">{started ? t('continue') : t('start')}</a>
-		{#if started}<p class="muted">{due ? t('dueCount', { n: due }) : t('nothingDue')}</p>{/if}
+		<div class="modes">
+			<a class="btn primary" href="/test">{t('test')}</a>
+			<a class="btn" href="/learn">
+				{started ? t('continue') : t('start')}
+				{#if due}<span class="badge" aria-label={t('dueCount', { n: due })}>{due}</span>{/if}
+			</a>
+		</div>
 	</footer>
 </main>
 
@@ -64,32 +64,6 @@
 		font-weight: 600;
 		line-height: 1.2;
 	}
-
-	.alphabet {
-		list-style: none;
-		margin: 0;
-		padding: 0;
-		display: grid;
-		grid-template-columns: repeat(6, 1fr);
-		row-gap: 8px;
-	}
-	@media (min-width: 520px) {
-		.alphabet { grid-template-columns: repeat(11, 1fr); }
-	}
-	.tile {
-		width: 100%;
-		min-height: 48px;
-		padding: 0;
-		border: 0;
-		background: none;
-		cursor: pointer;
-		display: flex;
-		flex-direction: column;
-		align-items: stretch;
-	}
-	.tile:hover :global(.staff) { background-color: var(--tile); }
-	.translit { font-size: 0.8rem; color: var(--muted); text-align: center; min-height: 1.2em; }
-	.translit.hidden { visibility: hidden; }
 
 	.legend { display: flex; flex-direction: column; gap: 8px; }
 	.legend ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 0.9rem; }
@@ -106,5 +80,16 @@
 		flex-direction: column;
 		gap: 6px;
 		text-align: center;
+	}
+	.modes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+	.badge {
+		min-width: 1.6em;
+		margin-left: 8px;
+		padding: 0 6px;
+		border-radius: 999px;
+		background: var(--lapis);
+		color: var(--on-lapis);
+		font-size: 0.8rem;
+		line-height: 1.6;
 	}
 </style>
