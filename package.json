@@ -13,7 +13,8 @@
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"test": "vitest run",
-		"pb": "./pb/pocketbase serve --dir pb/pb_data --migrationsDir pb/pb_migrations --publicDir build"
+		"pb": "./pb/pocketbase serve --dir pb/pb_data --migrationsDir pb/pb_migrations --publicDir build",
+		"pb:admin": "set -a && . ./.env && ./pb/pocketbase superuser upsert \"$PB_SUPERUSER_EMAIL\" \"$PB_SUPERUSER_PASSWORD\" --dir pb/pb_data"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-static": "^3.0.10",
