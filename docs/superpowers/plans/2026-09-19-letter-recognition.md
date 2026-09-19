@@ -1952,18 +1952,21 @@ sw.addEventListener('fetch', (event) => {
 }
 ```
 
-- [ ] **Step 3: Icons** — render ა in Noto Serif Georgian, paper colour on lapis, glyph inside the maskable safe zone (60% of the canvas):
+- [ ] **Step 3: Icons** — render ა in Noto Serif Georgian, paper colour on lapis, ink box 50% of the canvas (inside the maskable safe zone), centred on the glyph's ink rather than its line box:
 
 ```bash
-python3 - <<'EOF'
+cd static && python3 - <<'PY'
 from PIL import Image, ImageDraw, ImageFont
+F = 'NotoSerifGeorgian.ttf'
 for size in (192, 512):
-    im = Image.new('RGB', (size, size), '#2a55c0')
-    d = ImageDraw.Draw(im)
-    f = ImageFont.truetype('NotoSerifGeorgian.ttf', int(size * 0.62))
-    d.text((size / 2, size * 0.53), 'ა', font=f, fill='#eef2f7', anchor='mm')
-    im.save(f'static/icon-{size}.png')
-EOF
+    im = Image.new('RGB', (size, size), '#2a55c0'); d = ImageDraw.Draw(im)
+    f = ImageFont.truetype(F, int(size * 0.9))
+    x0, y0, x1, y1 = d.textbbox((0, 0), 'ა', font=f, anchor='ls')
+    f = ImageFont.truetype(F, int(size * 0.9 * size * 0.5 / max(x1 - x0, y1 - y0)))
+    x0, y0, x1, y1 = d.textbbox((0, 0), 'ა', font=f, anchor='ls')
+    d.text(((size - (x1 - x0)) / 2 - x0, (size - (y1 - y0)) / 2 - y0), 'ა', font=f, fill='#eef2f7', anchor='ls')
+    im.save(f'icon-{size}.png')
+PY
 ```
 (`NotoSerifGeorgian.ttf` from `github.com/google/fonts/ofl/notoserifgeorgian`, not committed.)
 
