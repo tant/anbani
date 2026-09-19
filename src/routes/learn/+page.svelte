@@ -93,7 +93,8 @@
 			{/if}
 		</section>
 		<div class="actions bottom">
-			{#if paused}<button class="btn primary" onclick={keepGoing}>{t('keepGoing')}</button>{/if}
+			<a class="btn primary" href="/test?scope=studied">{t('testLearned')}</a>
+			{#if paused}<button class="btn" onclick={keepGoing}>{t('keepGoing')}</button>{/if}
 			<a class="btn" href="/">{t('backHome')}</a>
 		</div>
 	{/if}

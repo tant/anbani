@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/state';
 	import AlphabetGrid from '$lib/components/AlphabetGrid.svelte';
 	import Icon from '$lib/components/Icon.svelte';
 	import Question from '$lib/components/Question.svelte';
@@ -22,6 +23,9 @@
 	}
 
 	const setup = $state<Setup>(load('testSetup', { scope: 'all', direction: 'mixed', custom: [] }));
+	// Links such as the end of a learn session preset the letter scope.
+	const requested = page.url.searchParams.get('scope');
+	if (requested === 'all' || requested === 'studied' || requested === 'custom') setup.scope = requested;
 	$effect(() => save('testSetup', setup));
 
 	let phase = $state<'setup' | 'running' | 'result'>('setup');

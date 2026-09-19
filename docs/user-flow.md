@@ -1,6 +1,6 @@
 # Luồng người dùng
 
-Tài liệu này chốt cách người học đi qua ứng dụng: lần đầu mở app thấy gì, từ đó sang đâu, và những lần sau quay lại ra sao. Ký hiệu **(mới)** đánh dấu phần chưa có trong ứng dụng hiện tại.
+Tài liệu này chốt cách người học đi qua ứng dụng: lần đầu mở app thấy gì, từ đó sang đâu, và những lần sau quay lại ra sao. Mọi màn hình và lối đi trong tài liệu này đều đã có trong ứng dụng.
 
 ## Sơ đồ tổng quan
 
@@ -22,9 +22,9 @@ drawio -x -f png -s 2 -b 24 -o docs/user-flow.png docs/user-flow.drawio
 
 ## Lần đầu mở app
 
-### Màn Chào mừng (mới)
+### Màn Chào mừng
 
-Hiện một lần duy nhất, sau đó ứng dụng ghi nhận là đã xem và không hiện lại.
+Hiện một lần duy nhất (đường dẫn `/welcome`), sau đó ứng dụng ghi nhận là đã xem và không hiện lại. Người học đã có tiến độ trên thiết bị, kể cả tiến độ đồng bộ từ tài khoản, không thấy màn này.
 
 | Thành phần | Nội dung |
 |---|---|
@@ -43,7 +43,7 @@ Người học đổi lại ngôn ngữ và kiểu chữ bất cứ lúc nào tr
 | Chữ mới | Chữ mới trên khung dòng kẻ (hiệu ứng viết chữ), âm, IPA, gợi ý đọc | **Đã nhớ, làm bài** → Câu hỏi |
 | Câu hỏi | Nhìn chữ chọn âm, hoặc nhìn âm chọn chữ; 3–6 lựa chọn theo Cài đặt; phím 1–6 trên máy tính | Chọn đáp án → Phản hồi |
 | Phản hồi | Đúng: ô chuyển xanh, tự sang câu sau. Sai: ô rung, hiện chữ đã chọn cạnh đáp án đúng kèm gợi ý | **Tiếp tục** → câu tiếp theo hoặc chữ mới |
-| Xong buổi | Hiện trong hai trường hợp. Sau 20 câu: tiêu đề “Xong buổi học” và số câu đúng. Khi không còn bài để học: tiêu đề “Bạn đã ôn hết các thẻ đến hạn” và thời điểm ôn tiếp theo | **Kiểm tra các chữ vừa học (mới)**; **Học thêm** (chỉ khi vẫn còn bài); **Về trang chủ** |
+| Xong buổi | Hiện trong hai trường hợp. Sau 20 câu: tiêu đề “Xong buổi học” và số câu đúng. Khi không còn bài để học: tiêu đề “Bạn đã ôn hết các thẻ đến hạn” và thời điểm ôn tiếp theo | **Kiểm tra các chữ vừa học**; **Học thêm** (chỉ khi vẫn còn bài); **Về trang chủ** |
 
 Lịch ôn: mỗi chữ có hai thẻ riêng cho hai chiều hỏi. Ứng dụng chỉ giới thiệu chữ mới khi không có thẻ nào đến hạn và dưới bốn chữ đang ở giai đoạn làm quen; nếu vẫn chưa có gì để giới thiệu, ứng dụng hỏi tiếp các thẻ sắp đến hạn trong 15 phút tới.
 
@@ -76,8 +76,3 @@ Người mới học thường bỡ ngỡ khi chữ trong ứng dụng khác v�
 | **Font của máy** | Font Georgian mặc định của thiết bị | Hiển thị đúng như thiết bị của người học; khung dòng kẻ được ẩn vì mỗi thiết bị có số đo chữ khác nhau |
 
 Hai font Noto được đóng gói sẵn trong ứng dụng nên dùng được khi không có mạng. Lựa chọn được lưu trên thiết bị, và lưu vào hồ sơ khi người học đã đăng nhập.
-
-## Hạng mục cần làm
-
-1. Màn Chào mừng cho lần đầu mở app, gồm ngôn ngữ, kiểu chữ và hai lối vào.
-2. Nút **Kiểm tra các chữ vừa học** ở cuối buổi học, mở Thiết lập với phạm vi Đã học.

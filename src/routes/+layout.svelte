@@ -14,7 +14,7 @@
 
 	let { children } = $props();
 
-	const immersive = $derived(page.url.pathname === '/learn' || ui.immersive);
+	const immersive = $derived(['/learn', '/welcome'].includes(page.url.pathname) || ui.immersive);
 
 	$effect(() => {
 		document.documentElement.lang = settings.lang;
@@ -39,6 +39,11 @@
 				.then(({ record }) => adoptProfile(record))
 				.then(pull)
 				.catch(() => {});
+		}
+		// A new release took over from the previous service worker: reload once so the page matches it.
+		// Progress is saved after every answer, so nothing is lost.
+		if (navigator.serviceWorker?.controller) {
+			navigator.serviceWorker.addEventListener('controllerchange', () => location.reload(), { once: true });
 		}
 		const online = () => void push();
 		addEventListener('online', online);

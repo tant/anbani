@@ -1,16 +1,9 @@
 <script lang="ts">
+	import FontPicker from '$lib/components/FontPicker.svelte';
 	import Segmented from '$lib/components/Segmented.svelte';
-	import type { Lang } from '$lib/letters';
 	import { pb } from '$lib/pb';
 	import { forgetRemote, pull } from '$lib/progress.svelte';
-	import { adoptProfile, GLYPH_FONTS, MAX_DISTRACTORS, MIN_DISTRACTORS, settings, t, updateSettings } from '$lib/settings.svelte';
-
-	const fontLabel = { sans: 'fontSans', serif: 'fontSerif', system: 'fontSystem' } as const;
-
-	const langs: { value: Lang; label: string }[] = [
-		{ value: 'vi', label: 'Tiếng Việt' },
-		{ value: 'en', label: 'English' }
-	];
+	import { adoptProfile, LANGS, MAX_DISTRACTORS, MIN_DISTRACTORS, settings, t, updateSettings } from '$lib/settings.svelte';
 
 	let user = $state(pb.authStore.record);
 	$effect(() => pb.authStore.onChange(() => (user = pb.authStore.record)));
@@ -52,20 +45,12 @@
 
 	<section>
 		<h2 id="lang-label">{t('language')}</h2>
-		<Segmented name="lang" labelledby="lang-label" options={langs} value={settings.lang} onchange={(lang) => updateSettings({ lang })} />
+		<Segmented name="lang" labelledby="lang-label" options={LANGS} value={settings.lang} onchange={(lang) => updateSettings({ lang })} />
 	</section>
 
 	<section>
 		<h2 id="font-label">{t('glyphFont')}</h2>
-		<div class="fonts" role="radiogroup" aria-labelledby="font-label">
-			{#each GLYPH_FONTS as font (font)}
-				<label class="font" class:on={settings.glyphFont === font}>
-					<input type="radio" name="glyphFont" value={font} checked={settings.glyphFont === font} onchange={() => updateSettings({ glyphFont: font })} />
-					<span class="sample {font}" lang="ka" aria-hidden="true">აბგდ</span>
-					<span>{t(fontLabel[font])}</span>
-				</label>
-			{/each}
-		</div>
+		<FontPicker labelledby="font-label" />
 		<p class="muted">{t('fontHelp')}</p>
 	</section>
 
@@ -115,28 +100,6 @@
 	.range { display: flex; align-items: center; gap: 16px; }
 	.range input { flex: 1; min-height: 48px; accent-color: var(--lapis); }
 	.range output { min-width: 7em; font-weight: 600; }
-
-	.fonts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-	.font {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 4px;
-		padding: 12px 6px 10px;
-		border: 1.5px solid var(--rule-strong);
-		border-radius: var(--radius);
-		font-size: 0.85rem;
-		text-align: center;
-		cursor: pointer;
-		transition: border-color 0.2s, background-color 0.2s;
-	}
-	.font.on { border-color: var(--lapis); background: color-mix(in srgb, var(--lapis) 12%, transparent); font-weight: 600; }
-	.font:has(input:focus-visible) { outline: 3px solid var(--lapis); outline-offset: 2px; }
-	.font input { position: absolute; opacity: 0; pointer-events: none; }
-	.sample { font-size: 1.7rem; line-height: 1.4; font-weight: 400; }
-	.sample.sans { font-family: var(--font-glyph-sans); }
-	.sample.serif { font-family: var(--font-glyph-serif); }
-	.sample.system { font-family: var(--font-glyph-system); }
 
 	form { display: flex; flex-direction: column; gap: 12px; }
 	form label { display: flex; flex-direction: column; gap: 6px; font-size: 0.9rem; }

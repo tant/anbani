@@ -5,6 +5,11 @@ import type { MessageKey } from './messages';
 import { pb } from './pb';
 import { load, save } from './storage';
 
+export const LANGS: { value: Lang; label: string }[] = [
+	{ value: 'vi', label: 'Tiếng Việt' },
+	{ value: 'en', label: 'English' }
+];
+
 export const MIN_DISTRACTORS = 2;
 export const MAX_DISTRACTORS = 5;
 
