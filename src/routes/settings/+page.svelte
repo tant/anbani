@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Icon from '$lib/components/Icon.svelte';
+	import Segmented from '$lib/components/Segmented.svelte';
 	import type { Lang } from '$lib/letters';
 	import { pb } from '$lib/pb';
 	import { forgetRemote, pull } from '$lib/progress.svelte';
@@ -51,14 +52,7 @@
 
 	<section>
 		<h2 id="lang-label">{t('language')}</h2>
-		<div class="segmented" role="radiogroup" aria-labelledby="lang-label">
-			{#each langs as l (l.value)}
-				<label class:on={settings.lang === l.value}>
-					<input type="radio" name="lang" value={l.value} checked={settings.lang === l.value} onchange={() => updateSettings({ lang: l.value })} />
-					{l.label}
-				</label>
-			{/each}
-		</div>
+		<Segmented name="lang" labelledby="lang-label" options={langs} value={settings.lang} onchange={(lang) => updateSettings({ lang })} />
 	</section>
 
 	<section>
@@ -104,11 +98,6 @@
 	section { display: flex; flex-direction: column; gap: 12px; }
 	h2 { font-size: 1rem; font-weight: 600; }
 
-	.segmented { display: grid; grid-template-columns: 1fr 1fr; border: 1.5px solid var(--rule-strong); border-radius: var(--radius); overflow: hidden; }
-	.segmented label { display: grid; place-items: center; min-height: 48px; cursor: pointer; }
-	.segmented label.on { background: var(--lapis); color: var(--on-lapis); }
-	.segmented label:has(input:focus-visible) { outline: 3px solid var(--lapis); outline-offset: -3px; }
-	.segmented input { position: absolute; opacity: 0; pointer-events: none; }
 
 	.range { display: flex; align-items: center; gap: 16px; }
 	.range input { flex: 1; min-height: 48px; accent-color: var(--lapis); }
