@@ -39,6 +39,7 @@
 		text-align: center;
 		line-height: 1.3;
 		cursor: pointer;
+		transition: background-color 0.2s ease-out, color 0.2s ease-out;
 	}
 	label + label { border-left: 1.5px solid var(--rule-strong); }
 	label.on { background: var(--lapis); color: var(--on-lapis); }

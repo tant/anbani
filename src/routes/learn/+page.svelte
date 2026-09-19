@@ -75,7 +75,7 @@
 	{#if task.kind === 'intro' && letter}
 		<section class="stage">
 			<p class="prompt">{t('newLetter')}</p>
-			<Staff char={letter.char} size="min(11rem, 40vw)" tone="lapis" />
+			<Staff char={letter.char} size="min(11rem, 40vw)" tone="lapis" write />
 			<p class="sound">{letter.translit} <span class="muted">/{letter.ipa}/</span></p>
 			<p class="hint">{letter.hint[settings.lang]}</p>
 		</section>

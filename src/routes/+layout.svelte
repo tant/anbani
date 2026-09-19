@@ -3,6 +3,7 @@
 	import '@fontsource-variable/lexend';
 	import '../app.css';
 	import { onMount } from 'svelte';
+	import { onNavigate } from '$app/navigation';
 	import { page } from '$app/state';
 	import Nav from '$lib/components/Nav.svelte';
 	import { pb } from '$lib/pb';
@@ -16,6 +17,17 @@
 
 	$effect(() => {
 		document.documentElement.lang = settings.lang;
+	});
+
+	// Native cross-page transition; browsers without it navigate instantly.
+	onNavigate((navigation) => {
+		if (!document.startViewTransition || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+		return new Promise((resolve) => {
+			document.startViewTransition(async () => {
+				resolve();
+				await navigation.complete;
+			});
+		});
 	});
 
 	onMount(() => {

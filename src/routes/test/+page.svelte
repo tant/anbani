@@ -11,6 +11,9 @@
 	import { settings, t } from '$lib/settings.svelte';
 	import { load, save } from '$lib/storage';
 	import { ui } from '$lib/ui.svelte';
+	import { dur, ease } from '$lib/motion';
+	import { Tween } from 'svelte/motion';
+	import { fly } from 'svelte/transition';
 
 	interface Setup {
 		scope: Scope;
@@ -36,6 +39,12 @@
 		return () => (ui.immersive = false);
 	});
 	const summary = $derived(summarize(answers));
+	const score = new Tween(0, { duration: dur(700), easing: ease });
+
+	$effect(() => {
+		if (phase === 'result') score.target = summary.right;
+		else score.set(0, { duration: 0 });
+	});
 
 	const scopes = $derived([
 		{ value: 'all' as const, label: t('scopeAll') },
@@ -132,7 +141,7 @@
 		</header>
 
 		<section class="score">
-			<p class="big">{summary.right}<span>/{summary.total}</span></p>
+			<p class="big" aria-label="{summary.right}/{summary.total}">{Math.round(score.current)}<span>/{summary.total}</span></p>
 			<p class="muted">{t('scorePct', { pct: Math.round((summary.right / summary.total) * 100) })}</p>
 		</section>
 
@@ -140,10 +149,10 @@
 			<section>
 				<h2>{t('toReview')}</h2>
 				<ul class="missed">
-					{#each summary.wrong as a (a.char)}
+					{#each summary.wrong as a, i (a.char)}
 						{@const l = byChar.get(a.char)!}
 						{@const p = byChar.get(a.chosen)!}
-						<li>
+						<li in:fly={{ y: 12, duration: dur(280), delay: dur(300 + i * 60), easing: ease }}>
 							<Staff char={l.char} size="2.6rem" tone="ok" />
 							<div>
 								<p><strong>{l.translit}</strong> <span class="muted">/{l.ipa}/</span></p>

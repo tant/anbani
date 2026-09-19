@@ -1,3 +1,7 @@
+<script lang="ts" module>
+	let filled = false;
+</script>
+
 <script lang="ts">
 	import AlphabetGrid from '$lib/components/AlphabetGrid.svelte';
 	import LetterSheet from '$lib/components/LetterSheet.svelte';
@@ -14,6 +18,8 @@
 	const started = $derived(known + learning > 0);
 
 	let selected = $state<Letter | null>(null);
+	const fill = !filled;
+	filled = true;
 </script>
 
 <main class="page">
@@ -29,6 +35,7 @@
 		caption={(c) => (status[c] === 'unseen' ? '' : byChar.get(c)!.translit)}
 		label={(c) => `${c}, ${t(status[c])}`}
 		onpick={(c) => (selected = byChar.get(c)!)}
+		{fill}
 	/>
 
 	<div class="legend">

@@ -74,3 +74,13 @@ The app has two separate modes, both reachable from the home page.
   - Setup: letters = all 33, studied letters (any card exists), or a custom pick on the alphabet grid; question type = glyph → sound, sound → glyph, or mixed (half each, shuffled). Choices per question come from the same Settings value (2–5 distractors). The last setup is remembered on the device.
   - Run: every chosen letter is asked exactly once in random order. Immediate right/wrong feedback, same question screen as Learn.
   - Result: score and percentage, the missed letters with the sound and what was picked, "Retest missed letters" (same letters, same question type), "New test".
+
+## Navigation and motion (added 2026-09-19)
+
+- App shell: a phone-width column (max 560px) on a backdrop; bottom tab bar with Alphabet, Learn (badge = cards due), Test, Settings; sticky title bars. The tab bar hides while a Learn session or a test is running (`ui.immersive`, or the `/learn` route).
+- Touch: `touch-action: manipulation`, no text selection on controls, 0.97 press scale, no overscroll bounce.
+- Motion answers the learner's action, except two deliberate moments: the copybook page filling in on the first home visit of a session, and a new letter being written (rules drawn, then the glyph inked).
+  - Page change: View Transitions API cross-fade with a small rise; the tab bar keeps its own layer.
+  - Question: slides in; right answer pops and turns the prompt green; wrong answer shakes; comparison slides down.
+  - Letter sheet slides up; test score counts up; missed letters appear one after another; active tab pill widens.
+- `prefers-reduced-motion`: CSS animations off globally; Svelte transitions get zero duration through `dur()` in `src/lib/motion.ts`; view transitions off.

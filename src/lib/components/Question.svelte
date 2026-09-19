@@ -2,6 +2,8 @@
 	import { byChar } from '$lib/letters';
 	import { settings, t } from '$lib/settings.svelte';
 	import type { Skill } from '$lib/srs';
+	import { slide, fly } from 'svelte/transition';
+	import { dur, ease } from '$lib/motion';
 	import Staff from './Staff.svelte';
 
 	let {
@@ -50,17 +52,17 @@
 
 <svelte:window {onkeydown} />
 
-<section class="stage">
+<section class="stage" in:fly={{ x: 28, duration: dur(260), easing: ease }}>
 	<p class="prompt">{skill === 'read' ? t('promptRead') : t('promptRecall')}</p>
 	{#if skill === 'read'}
-		<Staff char={letter.char} size={wrong ? '6rem' : 'min(11rem, 40vw)'} />
+		<Staff char={letter.char} size={wrong ? '6rem' : 'min(11rem, 40vw)'} tone={chosen === char ? 'ok' : 'ink'} />
 	{:else}
-		<p class="prompt-sound">{letter.translit}</p>
+		<p class="prompt-sound" class:right={chosen === char}>{letter.translit}</p>
 	{/if}
 </section>
 
 {#if wrong && picked}
-	<section class="compare" aria-live="polite">
+	<section class="compare" aria-live="polite" transition:slide={{ duration: dur(240), easing: ease }}>
 		<div>
 			<span class="muted">{t('youChose')}</span>
 			<Staff char={picked.char} size="3.2rem" tone="bad" />
@@ -75,7 +77,7 @@
 	</section>
 {/if}
 
-<div class="options" class:many={options.length > 4} role="group" aria-label={t('choicesLabel')}>
+<div class="options" class:many={options.length > 4} role="group" aria-label={t('choicesLabel')} in:fly={{ y: 16, duration: dur(280), delay: dur(60), easing: ease }}>
 	{#each options as option, i (option)}
 		{@const o = byChar.get(option)!}
 		<button
@@ -100,7 +102,9 @@
 {/if}
 
 <style>
+	.prompt-sound.right { color: var(--ok); }
 	.prompt-sound {
+		transition: color 0.25s ease-out;
 		font-size: clamp(4rem, 22vw, 6.5rem);
 		font-weight: 600;
 		text-align: center;
@@ -138,8 +142,15 @@
 		transition: background-color 0.15s, border-color 0.15s, transform 0.08s ease-out;
 	}
 	.option[aria-disabled='true'] { cursor: default; }
-	.option.ok { background: var(--ok); border-color: var(--ok); color: var(--paper); }
-	.option.bad { background: var(--bad); border-color: var(--bad); color: var(--paper); }
+	.option.ok { background: var(--ok); border-color: var(--ok); color: var(--paper); animation: pop 0.32s cubic-bezier(0.3, 1.5, 0.5, 1); }
+	.option.bad { background: var(--bad); border-color: var(--bad); color: var(--paper); animation: shake 0.36s ease-in-out; }
+	@keyframes pop {
+		50% { transform: scale(1.05); }
+	}
+	@keyframes shake {
+		20%, 60% { transform: translateX(-6px); }
+		40%, 80% { transform: translateX(6px); }
+	}
 	.opt-sound { font-size: 1.7rem; font-weight: 600; }
 	.opt-glyph { font-family: var(--font-glyph); font-size: 2.6rem; line-height: 1.3; }
 	kbd {

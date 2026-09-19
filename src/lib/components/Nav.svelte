@@ -36,6 +36,7 @@
 
 <style>
 	nav {
+		view-transition-name: tabbar;
 		position: fixed;
 		bottom: 0;
 		left: 50%;
@@ -62,12 +63,25 @@
 		text-decoration: none;
 	}
 	a[aria-current='page'] { color: var(--lapis); font-weight: 600; }
-	.icon { position: relative; display: grid; place-items: center; height: 26px; }
+	.icon { position: relative; display: grid; place-items: center; height: 28px; width: 56px; }
+	.icon::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		border-radius: 999px;
+		background: color-mix(in srgb, var(--lapis) 16%, transparent);
+		opacity: 0;
+		transform: scaleX(0.4);
+		transition: opacity 0.2s, transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+	}
+	a[aria-current='page'] .icon::before { opacity: 1; transform: none; }
+	.icon > :not(.badge) { position: relative; }
+	a { transition: color 0.2s; }
 	.glyph { font-family: var(--font-glyph); font-size: 1.45rem; line-height: 1; }
 	.badge {
 		position: absolute;
 		top: -4px;
-		left: 16px;
+		left: 32px;
 		min-width: 18px;
 		padding: 0 5px;
 		border-radius: 999px;
