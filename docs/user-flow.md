@@ -61,9 +61,17 @@ Khi mở từ nút **Kiểm tra các chữ vừa học**, màn Thiết lập ch�
 
 | Màn | Người học thấy | Đi tiếp |
 |---|---|---|
-| Bảng chữ cái | 33 chữ trên trang vở bốn dòng kẻ; màu cho biết chưa học, đang học, đã thuộc; âm hiện dưới các chữ đã học; tóm tắt tiến độ | Chạm vào chữ → Thông tin chữ; thanh tab |
+| Bảng chữ cái | 33 chữ trên trang vở bốn dòng kẻ; màu cho biết chưa học, đang học, đã thuộc; âm hiện dưới các chữ đã học; tóm tắt tiến độ; lời mời cài ứng dụng khi trình duyệt cho phép | Chạm vào chữ → Thông tin chữ; thanh tab |
 | Thông tin chữ | Bảng trượt lên: chữ lớn, âm, IPA, gợi ý đọc | **Đóng** → Bảng chữ cái |
 | Cài đặt | Ngôn ngữ; kiểu chữ; số lựa chọn mỗi câu; tài khoản (không bắt buộc) | Thanh tab |
+
+## Cài ứng dụng
+
+Ứng dụng chạy được như một app cài trên máy (PWA). Thẻ mời cài nằm cuối màn Bảng chữ cái và chỉ hiện khi cài được:
+
+- **Chrome, Edge, trình duyệt Android:** thẻ có nút **Cài ứng dụng**, mở đúng hộp thoại cài đặt của trình duyệt.
+- **iPhone và iPad:** Safari không cho gọi hộp thoại, nên thẻ hướng dẫn bấm nút Chia sẻ rồi chọn Thêm vào màn hình chính.
+- Thẻ tự ẩn khi ứng dụng đã được cài, và khi người học bấm **Để sau** thì không hiện lại trên thiết bị đó.
 
 ## Kiểu chữ Georgian
 
