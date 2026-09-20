@@ -7,6 +7,7 @@
 	import { onNavigate } from '$app/navigation';
 	import { page } from '$app/state';
 	import Nav from '$lib/components/Nav.svelte';
+	import { watchInstall } from '$lib/install.svelte';
 	import { pb } from '$lib/pb';
 	import { pull, push } from '$lib/progress.svelte';
 	import { adoptProfile, settings } from '$lib/settings.svelte';
@@ -47,7 +48,11 @@
 		}
 		const online = () => void push();
 		addEventListener('online', online);
-		return () => removeEventListener('online', online);
+		const unwatch = watchInstall();
+		return () => {
+			removeEventListener('online', online);
+			unwatch?.();
+		};
 	});
 </script>
 

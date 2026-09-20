@@ -4,6 +4,7 @@
 
 <script lang="ts">
 	import AlphabetGrid from '$lib/components/AlphabetGrid.svelte';
+	import InstallCard from '$lib/components/InstallCard.svelte';
 	import LetterSheet from '$lib/components/LetterSheet.svelte';
 	import { ALPHABET, byChar, type Letter } from '$lib/letters';
 	import { progress } from '$lib/progress.svelte';
@@ -47,6 +48,7 @@
 		<p class="muted">{started ? t('summary', { known, learning }) : t('intro')}</p>
 	</div>
 
+	<InstallCard />
 </main>
 
 <LetterSheet letter={selected} onclose={() => (selected = null)} />
