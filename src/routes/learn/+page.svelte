@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Icon from '$lib/components/Icon.svelte';
 	import Question from '$lib/components/Question.svelte';
+	import SavePrompt from '$lib/components/SavePrompt.svelte';
 	import Staff from '$lib/components/Staff.svelte';
 	import { relativeTime } from '$lib/i18n';
 	import { byChar } from '$lib/letters';
@@ -101,6 +102,7 @@
 			{#if task.kind === 'done' && task.nextDue}
 				<p class="muted rise" style:--d="2">{t('comeBack', { time: relativeTime(task.nextDue, new Date(), settings.lang) })}</p>
 			{/if}
+			{#if answered}<SavePrompt />{/if}
 		</section>
 		<div class="actions bottom rise" style:--d="4">
 			<a class="btn primary" href="/test?scope=studied">{t('testLearned')}</a>

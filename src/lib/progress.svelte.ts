@@ -16,11 +16,19 @@ const dirty = new Set<string>(load<string[]>('dirty', []));
 let remoteIds = load<Record<string, string>>('remoteIds', {});
 let pushing = false;
 
+/** What Settings shows about syncing: waiting cards, when the last push landed, work in flight. */
+export const sync = $state({
+	pending: dirty.size,
+	at: load<number | null>('syncedAt', null),
+	busy: false
+});
+
 function persist() {
 	save('cards', progress.cards);
 	save('confusions', progress.confusions);
 	save('dirty', [...dirty]);
 	save('remoteIds', remoteIds);
+	sync.pending = dirty.size;
 }
 
 export function introduce(char: string, now = new Date()) {
@@ -52,6 +60,7 @@ export async function push() {
 	const user = pb.authStore.record;
 	if (!user || pushing || !navigator.onLine) return;
 	pushing = true;
+	sync.busy = true;
 	try {
 		for (const key of [...dirty]) {
 			const card = progress.cards[key];
@@ -64,6 +73,11 @@ export async function push() {
 		// remaining keys stay dirty; retried on the next answer or when the device is back online
 	} finally {
 		pushing = false;
+		sync.busy = false;
+		if (!dirty.size) {
+			sync.at = Date.now();
+			save('syncedAt', sync.at);
+		}
 		persist();
 	}
 }
