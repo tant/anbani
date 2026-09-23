@@ -13,7 +13,7 @@
 	$effect(() => pb.authStore.onChange(() => (user = pb.authStore.record)));
 
 	type Mode = 'in' | 'up';
-	let mode = $state<Mode>('in');
+	let mode = $state<Mode>('up');
 	let email = $state('');
 	let password = $state('');
 	let again = $state('');
