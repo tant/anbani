@@ -18,7 +18,8 @@ drawio -x -f png -s 2 -b 24 -o docs/user-flow.png docs/user-flow.drawio
 - **Tab Học mở thẳng vào bài**: trước hết là câu hỏi của các thẻ đến hạn ôn; khi không còn thẻ đến hạn, ứng dụng giới thiệu chữ mới. Tab Kiểm tra luôn mở màn Thiết lập.
 - **Thanh tab ẩn khi đang học hoặc đang làm bài**, để người học tập trung. Nút đóng (X) ở góc trên đưa về màn trước đó: từ mode Học về Bảng chữ cái, từ bài kiểm tra về màn thiết lập.
 - **Tài khoản không chặn bất kỳ lối đi nào.** Toàn bộ tính năng dùng được khi chưa đăng nhập; tài khoản chỉ để đồng bộ tiến độ giữa các thiết bị và chỉ nằm trong Cài đặt.
-- **Mode Kiểm tra không ảnh hưởng tới lịch ôn** của mode Học.
+- **Mode Kiểm tra không ảnh hưởng tới lịch ôn** của mode Học, nhưng có cập nhật mức thuộc của từng chữ.
+- **Mức thuộc mỗi chữ chấm theo thang 0–100**: vừa học xong được 30 điểm, trả lời đúng thì cộng theo tốc độ, sai thì trừ 10. Chữ càng thấp điểm càng hay bị hỏi; chữ gần 100 chỉ còn khoảng 5% khả năng xuất hiện.
 
 ## Lần đầu mở app
 
@@ -52,7 +53,7 @@ Lịch ôn: mỗi chữ có hai thẻ riêng cho hai chiều hỏi. Ứng dụng
 | Màn | Người học thấy | Đi tiếp |
 |---|---|---|
 | Thiết lập | Chọn chữ: Tất cả (33), Đã học (n), Tự chọn trên bảng chữ cái. Kiểu câu hỏi: Nhìn chữ chọn âm, Nhìn âm chọn chữ, Trộn cả hai. Số lựa chọn theo Cài đặt | **Bắt đầu kiểm tra (n câu)** |
-| Câu hỏi | Mỗi chữ hỏi đúng một lần, thứ tự ngẫu nhiên; bộ đếm câu; phản hồi đúng/sai ngay | Hết câu → Kết quả |
+| Câu hỏi | Tối đa 20 câu, chữ được rút theo mức thuộc nên chữ yếu hỏi nhiều hơn; chữ tự chọn thì hỏi đủ, mỗi chữ một lần; chữ trên 80 điểm hiện bằng kiểu chữ ngẫu nhiên; bộ đếm câu; phản hồi đúng/sai ngay | Hết câu → Kết quả |
 | Kết quả | Điểm, tỉ lệ đúng, danh sách chữ sai kèm âm đúng và chữ đã chọn | **Kiểm tra lại các chữ sai**, **Bài kiểm tra mới** |
 
 Khi mở từ nút **Kiểm tra các chữ vừa học**, màn Thiết lập chọn sẵn phạm vi Đã học.
