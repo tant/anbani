@@ -1,5 +1,7 @@
 export const vi = {
 	tagline: 'Học đọc 33 chữ cái tiếng Georgia',
+	privacy: 'Quyền riêng tư',
+	terms: 'Điều khoản sử dụng',
 	installTitle: 'Cài Anbani vào máy',
 	installWhy: 'Mở nhanh từ màn hình chính, học được cả khi không có mạng.',
 	installAction: 'Cài ứng dụng',
@@ -111,6 +113,8 @@ export type MessageKey = keyof typeof vi;
 
 export const en: Record<MessageKey, string> = {
 	tagline: 'Learn to read the 33 Georgian letters',
+	privacy: 'Privacy',
+	terms: 'Terms of service',
 	installTitle: 'Install Anbani',
 	installWhy: 'Open it from your home screen, and keep learning offline.',
 	installAction: 'Install',

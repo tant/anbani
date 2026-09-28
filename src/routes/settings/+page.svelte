@@ -40,6 +40,11 @@
 	</section>
 
 	<Account />
+
+	<footer class="legal">
+		<a href="/privacy">{t('privacy')}</a>
+		<a href="/terms">{t('terms')}</a>
+	</footer>
 </main>
 
 <style>
@@ -49,4 +54,6 @@
 	.range { display: flex; align-items: center; gap: 16px; }
 	.range input { flex: 1; min-height: 48px; accent-color: var(--lapis); }
 	.range output { min-width: 7em; font-weight: 600; }
+
+	.legal { display: flex; gap: 18px; font-size: 0.85rem; }
 </style>
