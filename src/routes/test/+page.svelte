@@ -7,8 +7,10 @@
 	import Staff from '$lib/components/Staff.svelte';
 	import { ALPHABET, byChar } from '$lib/letters';
 	import { buildOptions, shuffle } from '$lib/options';
-	import { progress } from '$lib/progress.svelte';
-	import { buildQuiz, scopeChars, summarize, type Direction, type QuizAnswer, type QuizQuestion, type Scope } from '$lib/quiz';
+	import { progress, score as recordScore } from '$lib/progress.svelte';
+	import { randomFont, usesRandomFont } from '$lib/mastery';
+	import { AUTO_TEST_LENGTH, buildQuiz, pickChars, scopeChars, summarize, type Direction, type QuizAnswer, type QuizQuestion, type Scope } from '$lib/quiz';
+	import type { GlyphFont } from '$lib/settings.svelte';
 	import { settings, t } from '$lib/settings.svelte';
 	import { load, save } from '$lib/storage';
 	import { ui } from '$lib/ui.svelte';
@@ -33,9 +35,12 @@
 	let answers = $state<QuizAnswer[]>([]);
 	let index = $state(0);
 	let options = $state<string[]>([]);
+	// A well-known letter is asked in a style the learner did not choose: reading it anywhere is the point.
+	let font = $state<GlyphFont | null>(null);
 
 	const studied = $derived(scopeChars('studied', progress.cards, []).length);
 	const chars = $derived(scopeChars(setup.scope, progress.cards, setup.custom));
+	const asked = $derived(setup.scope === 'custom' ? chars.length : Math.min(AUTO_TEST_LENGTH, chars.length));
 	const current = $derived(questions[index]);
 
 	$effect(() => {
@@ -73,10 +78,12 @@
 		const q = questions[index];
 		const inTest = new Set(questions.map((x) => x.char));
 		options = buildOptions(q.char, q.skill, settings.distractors, { known: inTest, confusions: progress.confusions, rng: Math.random });
+		font = usesRandomFont(progress.mastery[q.char] ?? 0) ? randomFont() : null;
 	}
 
-	function record(chosen: string) {
+	function record(chosen: string, ms: number) {
 		answers.push({ ...current, chosen });
+		recordScore(current.char, chosen === current.char, ms);
 	}
 
 	function next() {
@@ -128,8 +135,8 @@
 
 		<footer class="cta">
 			{#if !chars.length}<p class="muted">{setup.scope === 'studied' ? t('noStudied') : t('noneSelected')}</p>{/if}
-			<button class="btn primary" disabled={!chars.length} onclick={() => run(buildQuiz(chars, setup.direction, Math.random))}>
-				{t('startTest', { n: chars.length })}
+			<button class="btn primary" disabled={!chars.length} onclick={() => run(buildQuiz(pickChars(setup.scope, chars, progress.mastery, Math.random), setup.direction, Math.random))}>
+				{t('startTest', { n: asked })}
 			</button>
 		</footer>
 	{:else if phase === 'running' && current}
@@ -139,7 +146,7 @@
 			<span class="count">{index + 1}/{questions.length}</span>
 		</header>
 		{#key index}
-			<Question skill={current.skill} char={current.char} {options} onanswer={record} onnext={next} />
+			<Question skill={current.skill} char={current.char} {options} {font} onanswer={record} onnext={next} />
 		{/key}
 	{:else}
 		<header class="bar">

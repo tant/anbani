@@ -1,10 +1,13 @@
 <script lang="ts">
 	import type { Letter } from '$lib/letters';
+	import { progress } from '$lib/progress.svelte';
 	import { settings, t } from '$lib/settings.svelte';
 	import { dur } from '$lib/motion';
 	import Staff from './Staff.svelte';
 
 	let { letter, onclose }: { letter: Letter | null; onclose: () => void } = $props();
+
+	const score = $derived(letter ? progress.mastery[letter.char] : undefined);
 	let dialog: HTMLDialogElement;
 
 	/** Play the closing animation, then close; instant when motion is reduced. */
@@ -44,12 +47,23 @@
 			<Staff char={letter.char} size="7.5rem" write />
 			<p class="sound">{letter.translit} <span class="muted">/{letter.ipa}/</span></p>
 			<p class="hint">{letter.hint[settings.lang]}</p>
+			{#if score !== undefined}
+				<div class="mastery">
+					<p>{t('masteryLabel')} <strong>{score}</strong><span class="muted">/100</span></p>
+					<div class="bar"><i style:width="{score}%"></i></div>
+				</div>
+			{/if}
 			<button class="btn" onclick={dismiss}>{t('close')}</button>
 		</div>
 	{/if}
 </dialog>
 
 <style>
+	.mastery { display: flex; flex-direction: column; gap: 6px; width: 100%; max-width: 280px; }
+	.mastery p { font-size: 0.9rem; }
+	.bar { height: 8px; border-radius: 4px; background: var(--rule); overflow: hidden; }
+	.bar i { display: block; height: 100%; background: var(--lapis); transition: width 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
+
 	dialog {
 		width: 100%;
 		max-width: 560px;

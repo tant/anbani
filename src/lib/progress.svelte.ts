@@ -1,5 +1,6 @@
+import { INITIAL, KNOWN_AT, scoreAfter, type Mastery } from './mastery';
 import { pb } from './pb';
-import { cardKey, gradeAnswer, isNewer, newCard, reviewCard, reviveCard, SKILLS, type Cards, type Skill } from './srs';
+import { cardKey, gradeAnswer, isNewer, letterStatus, newCard, parseKey, reviewCard, reviveCard, SKILLS, type Cards, type Skill } from './srs';
 import { load, save } from './storage';
 
 type Confusions = Record<string, Record<string, number>>;
@@ -8,8 +9,16 @@ const revive = (raw: Cards): Cards => Object.fromEntries(Object.entries(raw).map
 
 export const progress = $state({
 	cards: revive(load<Cards>('cards', {})),
-	confusions: load<Confusions>('confusions', {})
+	confusions: load<Confusions>('confusions', {}),
+	/** How well each letter is known, 0 to 100; see mastery.ts. */
+	mastery: load<Mastery>('mastery', {})
 });
+
+/** Progress from before scores existed: start each letter off from what its review cards say. */
+for (const key of Object.keys(progress.cards)) {
+	const { item } = parseKey(key);
+	progress.mastery[item] ??= letterStatus(progress.cards, item) === 'known' ? KNOWN_AT + 5 : INITIAL;
+}
 
 /** Keys changed on this device and not yet stored in PocketBase. */
 const dirty = new Set<string>(load<string[]>('dirty', []));
@@ -26,6 +35,7 @@ export const sync = $state({
 function persist() {
 	save('cards', progress.cards);
 	save('confusions', progress.confusions);
+	save('mastery', progress.mastery);
 	save('dirty', [...dirty]);
 	save('remoteIds', remoteIds);
 	sync.pending = dirty.size;
@@ -38,6 +48,7 @@ export function introduce(char: string, now = new Date()) {
 		progress.cards[key] = newCard(now);
 		dirty.add(key);
 	}
+	progress.mastery[char] ??= INITIAL;
 	persist();
 	void push();
 }
@@ -50,10 +61,22 @@ export function answer(skill: Skill, char: string, chosen: string, ms: number, n
 		const row = (progress.confusions[char] ??= {});
 		row[chosen] = (row[chosen] ?? 0) + 1;
 	}
+	progress.mastery[char] = scoreAfter(progress.mastery[char] ?? INITIAL, correct, ms);
 	dirty.add(key);
 	persist();
 	void push();
 	return correct;
+}
+
+/**
+ * A test answer moves the mastery score but never the review schedule: the learner checks themselves
+ * without dragging the next review closer or further away.
+ */
+export function score(char: string, correct: boolean, ms: number) {
+	progress.mastery[char] = scoreAfter(progress.mastery[char] ?? INITIAL, correct, ms);
+	for (const skill of SKILLS) if (progress.cards[cardKey(skill, char)]) dirty.add(cardKey(skill, char));
+	persist();
+	void push();
 }
 
 export async function push() {
@@ -64,7 +87,8 @@ export async function push() {
 	try {
 		for (const key of [...dirty]) {
 			const card = progress.cards[key];
-			const data = { user: user.id, key, card, due: card.due };
+			const { item } = parseKey(key);
+			const data = { user: user.id, key, card, due: card.due, score: progress.mastery[item] ?? INITIAL };
 			if (remoteIds[key]) await pb.collection('reviews').update(remoteIds[key], data);
 			else remoteIds[key] = (await pb.collection('reviews').create(data)).id;
 			dirty.delete(key);
@@ -85,7 +109,7 @@ export async function push() {
 /** Merge the account's cards into this device, keeping whichever copy saw more practice. */
 export async function pull() {
 	if (!pb.authStore.record) return;
-	const records = await pb.collection('reviews').getFullList({ fields: 'id,key,card' });
+	const records = await pb.collection('reviews').getFullList({ fields: 'id,key,card,score' });
 	remoteIds = {};
 	for (const r of records) {
 		remoteIds[r.key] = r.id;
@@ -93,6 +117,7 @@ export async function pull() {
 		const local = progress.cards[r.key];
 		if (!local || isNewer(remote, local)) {
 			progress.cards[r.key] = remote;
+			progress.mastery[parseKey(r.key).item] = r.score ?? INITIAL;
 			dirty.delete(r.key);
 		} else if (isNewer(local, remote)) dirty.add(r.key);
 	}

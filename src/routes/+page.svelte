@@ -9,11 +9,12 @@
 	import { ALPHABET, byChar, type Letter } from '$lib/letters';
 	import { progress } from '$lib/progress.svelte';
 	import { t } from '$lib/settings.svelte';
-	import { letterStatus, type LetterStatus } from '$lib/srs';
+	import { band } from '$lib/mastery';
+	import type { LetterStatus } from '$lib/srs';
 
 	const tone: Record<LetterStatus, string> = { unseen: 'muted', learning: 'lapis', known: 'ink' };
 
-	const status = $derived(Object.fromEntries(ALPHABET.map((l) => [l.char, letterStatus(progress.cards, l.char)])) as Record<string, LetterStatus>);
+	const status = $derived(Object.fromEntries(ALPHABET.map((l) => [l.char, band(progress.mastery[l.char])])) as Record<string, LetterStatus>);
 	const known = $derived(Object.values(status).filter((s) => s === 'known').length);
 	const learning = $derived(Object.values(status).filter((s) => s === 'learning').length);
 	const started = $derived(known + learning > 0);

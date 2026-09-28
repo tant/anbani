@@ -1,5 +1,6 @@
 export const vi = {
 	tagline: 'Học đọc 33 chữ cái tiếng Georgia',
+	masteryLabel: 'Mức thuộc',
 	continueWithGoogle: 'Tiếp tục với Google',
 	signingIn: 'Đang đăng nhập…',
 	privacy: 'Quyền riêng tư',
@@ -100,6 +101,7 @@ export type MessageKey = keyof typeof vi;
 
 export const en: Record<MessageKey, string> = {
 	tagline: 'Learn to read the 33 Georgian letters',
+	masteryLabel: 'Mastery',
 	continueWithGoogle: 'Continue with Google',
 	signingIn: 'Signing you in…',
 	privacy: 'Privacy',

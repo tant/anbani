@@ -69,7 +69,7 @@ def build(key, src, family):
     return (
         f"@font-face {{\n\tfont-family: '{family}';\n\tsrc: url('/fonts/{key}.woff2') format('woff2');\n"
         f"\tfont-display: swap;\n\tsize-adjust: {s * 100:.1f}%;\n}}\n"
-        f":root[data-glyph='{key}'] {{\n\t--font-glyph: '{family}', var(--font-glyph-sans);\n\t--staff-lh: {lh:.3f};\n"
+        f"[data-glyph='{key}'] {{\n\t--font-glyph: '{family}', var(--font-glyph-sans);\n\t--staff-lh: {lh:.3f};\n"
         f"\t--staff-asc: {em(a - asc)};\n\t--staff-x: {em(a - x)};\n\t--staff-base: {em(a)};\n\t--staff-desc: {em(a + desc)};\n}}\n"
     )
 

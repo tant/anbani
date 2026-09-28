@@ -27,7 +27,7 @@
 }
 
 /* Device fonts differ per platform, so their glyphs cannot be lined up with the staff. */
-:root[data-glyph='system'] { --font-glyph: var(--font-glyph-system); }
+[data-glyph='system'] { --font-glyph: var(--font-glyph-system); }
 
 @media (prefers-color-scheme: dark) {
 	:root {

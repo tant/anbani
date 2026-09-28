@@ -5,7 +5,7 @@
 	font-display: swap;
 	size-adjust: 93.8%;
 }
-:root[data-glyph='serif'] {
+[data-glyph='serif'] {
 	--font-glyph: 'BPG Serif Modern', var(--font-glyph-sans);
 	--staff-lh: 1.305;
 	--staff-asc: 0.162em;
@@ -19,7 +19,7 @@
 	font-display: swap;
 	size-adjust: 121.6%;
 }
-:root[data-glyph='pen'] {
+[data-glyph='pen'] {
 	--font-glyph: 'BPG Mikhail Stephan', var(--font-glyph-sans);
 	--staff-lh: 1.712;
 	--staff-asc: 0.154em;
@@ -33,7 +33,7 @@
 	font-display: swap;
 	size-adjust: 107.4%;
 }
-:root[data-glyph='round'] {
+[data-glyph='round'] {
 	--font-glyph: 'BPG Glaho', var(--font-glyph-sans);
 	--staff-lh: 1.547;
 	--staff-asc: 0.174em;

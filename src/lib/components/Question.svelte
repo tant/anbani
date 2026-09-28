@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { byChar } from '$lib/letters';
-	import { settings, t } from '$lib/settings.svelte';
+	import { settings, t, type GlyphFont } from '$lib/settings.svelte';
 	import type { Skill } from '$lib/srs';
 	import { slide, fly } from 'svelte/transition';
 	import { dur, ease } from '$lib/motion';
@@ -10,12 +10,15 @@
 		skill,
 		char,
 		options,
+		font = null,
 		onanswer,
 		onnext
 	}: {
 		skill: Skill;
 		char: string;
 		options: string[];
+		/** Overrides the learner's letter style for this question; see mastery.ts. */
+		font?: GlyphFont | null;
 		onanswer: (chosen: string, ms: number) => void;
 		onnext: () => void;
 	} = $props();
@@ -52,7 +55,7 @@
 
 <svelte:window {onkeydown} />
 
-<section class="stage" in:fly={{ x: 28, duration: dur(260), easing: ease }}>
+<section class="stage" data-glyph={font} in:fly={{ x: 28, duration: dur(260), easing: ease }}>
 	<p class="prompt">{skill === 'read' ? t('promptRead') : t('promptRecall')}</p>
 	{#if skill === 'read'}
 		<Staff char={letter.char} size={wrong ? '6rem' : 'min(11rem, 40vw)'} tone={chosen === char ? 'ok' : 'ink'} />
@@ -62,7 +65,7 @@
 </section>
 
 {#if wrong && picked}
-	<section class="compare" aria-live="polite" transition:slide={{ duration: dur(240), easing: ease }}>
+	<section class="compare" data-glyph={font} aria-live="polite" transition:slide={{ duration: dur(240), easing: ease }}>
 		<div>
 			<span class="muted">{t('youChose')}</span>
 			<Staff char={picked.char} size="3.2rem" tone="bad" />
@@ -77,7 +80,7 @@
 	</section>
 {/if}
 
-<div class="options" class:many={options.length > 4} role="group" aria-label={t('choicesLabel')} in:fly={{ y: 16, duration: dur(280), delay: dur(60), easing: ease }}>
+<div class="options" data-glyph={font} class:many={options.length > 4} role="group" aria-label={t('choicesLabel')} in:fly={{ y: 16, duration: dur(280), delay: dur(60), easing: ease }}>
 	{#each options as option, i (option)}
 		{@const o = byChar.get(option)!}
 		<button
