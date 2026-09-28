@@ -1,23 +1,15 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { authError } from '$lib/authError';
+	import { startGoogleSignIn } from '$lib/google';
 	import { relativeTime } from '$lib/i18n';
-	import { dur, ease } from '$lib/motion';
 	import { pb } from '$lib/pb';
-	import { forgetRemote, pull, push, sync } from '$lib/progress.svelte';
-	import { adoptProfile, settings, t } from '$lib/settings.svelte';
-	import { slide } from 'svelte/transition';
-	import Segmented from './Segmented.svelte';
+	import { forgetRemote, push, sync } from '$lib/progress.svelte';
+	import { settings, t } from '$lib/settings.svelte';
 
 	let user = $state(pb.authStore.record);
 	$effect(() => pb.authStore.onChange(() => (user = pb.authStore.record)));
 
-	type Mode = 'in' | 'up';
-	let mode = $state<Mode>('up');
-	let email = $state('');
-	let password = $state('');
-	let again = $state('');
-	let reveal = $state(false);
 	let error = $state('');
 	let busy = $state(false);
 
@@ -41,23 +33,13 @@
 		!online ? t('syncOffline') : sync.busy ? t('syncBusy') : sync.pending ? t('syncPending', { n: sync.pending }) : sync.at ? t('syncedAt', { time: relativeTime(new Date(sync.at), new Date(now), settings.lang) }) : t('syncNever')
 	);
 
-	async function submit() {
+	async function signIn() {
 		error = '';
-		if (mode === 'up' && password !== again) {
-			error = t('passwordMismatch');
-			return;
-		}
 		busy = true;
 		try {
-			const users = pb.collection('users');
-			if (mode === 'up') await users.create({ email, password, passwordConfirm: password, ...settings });
-			const { record } = await users.authWithPassword(email, password);
-			await adoptProfile(record);
-			await pull();
-			password = again = '';
+			await startGoogleSignIn();
 		} catch (err) {
-			error = t(authError(err, mode, navigator.onLine));
-		} finally {
+			error = t(authError(err, navigator.onLine));
 			busy = false;
 		}
 	}
@@ -69,7 +51,7 @@
 </script>
 
 <section>
-	<h2 id="account-label">{t('account')}</h2>
+	<h2>{t('account')}</h2>
 
 	{#if user}
 		<p>{t('signedInAs', { email: user.email })}</p>
@@ -80,56 +62,16 @@
 		<button class="btn" onclick={signOut}>{t('signOut')}</button>
 	{:else}
 		<p class="muted">{t('accountHelp')}</p>
-		<Segmented
-			name="account-mode"
-			labelledby="account-label"
-			options={[
-				{ value: 'up' as Mode, label: t('newAccount') },
-				{ value: 'in' as Mode, label: t('haveAccount') }
-			]}
-			value={mode}
-			onchange={(m) => {
-				mode = m;
-				error = '';
-			}}
-		/>
-
-		<form
-			onsubmit={(e) => {
-				e.preventDefault();
-				void submit();
-			}}
-		>
-			<label>
-				{t('email')}
-				<input type="email" autocomplete="email" required bind:value={email} />
-			</label>
-
-			<label>
-				{t('password')}
-				<span class="reveal">
-					<input
-						type={reveal ? 'text' : 'password'}
-						autocomplete={mode === 'up' ? 'new-password' : 'current-password'}
-						minlength="8"
-						required
-						bind:value={password}
-					/>
-					<button type="button" onclick={() => (reveal = !reveal)}>{reveal ? t('hidePassword') : t('showPassword')}</button>
-				</span>
-			</label>
-
-			{#if mode === 'up'}
-				<label transition:slide={{ duration: dur(260), easing: ease }}>
-					{t('passwordAgain')}
-					<input type={reveal ? 'text' : 'password'} autocomplete="new-password" minlength="8" required bind:value={again} />
-				</label>
-			{/if}
-
-			{#key error}{#if error}<p class="error" role="alert">{error}</p>{/if}{/key}
-
-			<button class="btn primary" disabled={busy}>{mode === 'up' ? t('signUp') : t('signIn')}</button>
-		</form>
+		<button class="btn primary google" onclick={signIn} disabled={busy}>
+			<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+				<path fill="#ffffff" d="M21.6 12.2c0-.7-.06-1.4-.18-2.04H12v3.87h5.38a4.6 4.6 0 0 1-2 3.02v2.5h3.24c1.9-1.74 2.98-4.3 2.98-7.35z" />
+				<path fill="#ffffff" d="M12 22c2.7 0 4.97-.9 6.62-2.44l-3.24-2.5c-.9.6-2.05.96-3.38.96-2.6 0-4.8-1.75-5.6-4.1H3.06v2.58A10 10 0 0 0 12 22z" />
+				<path fill="#ffffff" d="M6.4 13.92a6 6 0 0 1 0-3.84V7.5H3.06a10 10 0 0 0 0 9z" />
+				<path fill="#ffffff" d="M12 5.98c1.47 0 2.79.5 3.83 1.5l2.87-2.87C16.96 2.98 14.7 2 12 2a10 10 0 0 0-8.94 5.5L6.4 10.1c.8-2.36 3-4.11 5.6-4.11z" />
+			</svg>
+			{busy ? t('signingIn') : t('continueWithGoogle')}
+		</button>
+		{#key error}{#if error}<p class="error" role="alert">{error}</p>{/if}{/key}
 	{/if}
 </section>
 
@@ -141,33 +83,7 @@
 	.sync p { font-size: 0.9rem; color: var(--muted); }
 	.sync p.waiting { color: var(--ink); }
 
-	form { display: flex; flex-direction: column; gap: 12px; }
-	form label { display: flex; flex-direction: column; gap: 6px; font-size: 0.9rem; }
-	form input {
-		width: 100%;
-		min-height: 48px;
-		padding: 0 14px;
-		border: 1.5px solid var(--rule-strong);
-		border-radius: 10px;
-		background: var(--tile);
-		font-size: 1rem;
-	}
-
-	.reveal { position: relative; display: block; }
-	.reveal button {
-		position: absolute;
-		inset-inline-end: 6px;
-		top: 50%;
-		transform: translateY(-50%);
-		min-height: 36px;
-		padding: 0 10px;
-		border: 0;
-		border-radius: 8px;
-		background: none;
-		color: var(--lapis);
-		font-size: 0.85rem;
-		cursor: pointer;
-	}
+	.google { gap: 10px; }
 
 	.error { color: var(--bad); animation: shake 0.36s ease-in-out; }
 	@keyframes shake {
