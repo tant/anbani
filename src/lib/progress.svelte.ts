@@ -41,6 +41,14 @@ function persist() {
 	sync.pending = dirty.size;
 }
 
+/** The score belongs to the letter, so both of its rows have to carry the new value. */
+function markLetter(char: string) {
+	for (const skill of SKILLS) {
+		const key = cardKey(skill, char);
+		if (progress.cards[key]) dirty.add(key);
+	}
+}
+
 export function introduce(char: string, now = new Date()) {
 	for (const skill of SKILLS) {
 		const key = cardKey(skill, char);
@@ -63,6 +71,7 @@ export function answer(skill: Skill, char: string, chosen: string, ms: number, n
 	}
 	progress.mastery[char] = scoreAfter(progress.mastery[char] ?? INITIAL, correct, ms);
 	dirty.add(key);
+	markLetter(char);
 	persist();
 	void push();
 	return correct;
@@ -74,7 +83,7 @@ export function answer(skill: Skill, char: string, chosen: string, ms: number, n
  */
 export function score(char: string, correct: boolean, ms: number) {
 	progress.mastery[char] = scoreAfter(progress.mastery[char] ?? INITIAL, correct, ms);
-	for (const skill of SKILLS) if (progress.cards[cardKey(skill, char)]) dirty.add(cardKey(skill, char));
+	markLetter(char);
 	persist();
 	void push();
 }
