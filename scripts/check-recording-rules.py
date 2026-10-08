@@ -40,7 +40,7 @@ SUPER = superuser_token()
 AUDIO = silence()
 
 
-def call(path, payload=None, method="GET", token=None, files=0):
+def call(path, payload=None, method="GET", token=None, files=0, raw=False):
     headers = {}
     if token:
         headers["Authorization"] = token
@@ -65,9 +65,12 @@ def call(path, payload=None, method="GET", token=None, files=0):
     try:
         with urllib.request.urlopen(req) as r:
             body = r.read()
+            if raw:
+                return r.status, body
             return r.status, (json.loads(body) if body else {})
     except urllib.error.HTTPError as e:
-        return e.code, json.loads(e.read() or b"{}")
+        body = e.read()
+        return e.code, (body if raw else json.loads(body or b"{}"))
 
 
 def check(name, got, want):
@@ -147,6 +150,27 @@ check("learner still edits own settings", st, 200)
 # the reader cannot delete someone else's work either
 st, _ = call(f"/api/collections/recordings/records/{pend['id']}", None, "DELETE", learner_tok)
 check("learner cannot delete a recording", st, 404)
+
+# A take is a protected file: the address alone opens nothing, and the file route ignores the
+# Authorization header, so reaching one takes a file token of its own.
+def file_token(token):
+    st, out = call("/api/files/token", {}, "POST", token)
+    return out.get("token") if st == 200 else None
+
+
+def at(row, name, token=None):
+    url = f"/api/files/{row['collectionId']}/{row['id']}/{name}"
+    if token:
+        url += "?token=" + token
+    return call(url, None, "GET", None, raw=True)[0]
+
+
+check("a file token needs an account", file_token(None), None)
+check("plain address of a pending take, nobody signed in", at(pend, pend["audio"][0]), 404)
+check("plain address of a pending take, a learner", at(pend, pend["audio"][0], file_token(learner_tok)), 404)
+check("the owner reaches a pending take with a file token", at(pend, pend["audio"][0], file_token(owner_tok)), 200)
+check("its reader reaches it too", at(pend, pend["audio"][0], file_token(reader_tok)), 200)
+check("an approved take stays playable by anyone", at(full, full["audio"][0]), 200)
 
 # a role is handed out by a superuser only, at sign-up as much as afterwards
 st, _ = call("/api/collections/users/records", {"email": f"sneak-{tag}@test.local", "password": "passw0rd1234", "passwordConfirm": "passw0rd1234", "role": "owner"}, "POST")

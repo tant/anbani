@@ -8,10 +8,14 @@
 
 	interface Pending {
 		id: string;
+		collectionId: string;
 		item: string;
-		urls: string[];
+		files: string[];
 		note: string;
 	}
+
+	/** A take still under review is a protected file: the address alone opens nothing. */
+	const TOKEN_LIFE = 180_000;
 
 	const byId = new Map(CATALOGUE.map((item) => [item.id, item]));
 
@@ -22,6 +26,7 @@
 	let error = $state('');
 	let busy = $state('');
 	let reasons = $state<Record<string, string>>({});
+	let fileToken = $state('');
 
 	const owner = $derived(user?.role === 'owner');
 
@@ -32,8 +37,9 @@
 				.filter((r) => r.status !== 'approved')
 				.map((r) => ({
 					id: r.id,
+					collectionId: r.collectionId,
 					item: r.item as string,
-					urls: ((r.audio as string[]) ?? []).map((name) => pb.files.getURL(r, name)),
+					files: (r.audio as string[]) ?? [],
 					note: (r.note as string) ?? ''
 				}));
 			approved = rows.filter((r) => r.status === 'approved').length;
@@ -46,9 +52,20 @@
 	}
 
 	onMount(() => {
-		if (owner) void refresh();
-		else loading = false;
+		if (!owner) {
+			loading = false;
+			return;
+		}
+		void refresh();
+		// The token expires while the queue sits open, so it is renewed well inside its life.
+		const mint = () => pb.files.getToken().then((t) => (fileToken = t)).catch(() => {});
+		void mint();
+		const renew = setInterval(mint, TOKEN_LIFE / 2);
+		return () => clearInterval(renew);
 	});
+
+	const take = (row: Pending, name: string) =>
+		pb.files.getURL({ id: row.id, collectionId: row.collectionId }, name, { token: fileToken });
 
 	async function decide(row: Pending, status: 'approved' | 'rejected') {
 		busy = row.id;
@@ -94,13 +111,15 @@
 							<span class="about">
 								<strong>{item?.translit ?? ''}</strong>
 								{#if item?.example}<span class="muted" lang="ka">{item.example}</span>{/if}
-								{#if row.urls.length !== TAKES}<span class="short">{row.urls.length}/{TAKES}</span>{/if}
+								{#if row.files.length !== TAKES}<span class="short">{row.files.length}/{TAKES}</span>{/if}
 							</span>
 						</div>
 
 						<div class="takes">
-							{#each row.urls as url, i (url)}
-								<button class="chip" onclick={() => void new Audio(url).play().catch(() => {})}>{t('takeNo', { n: i + 1 })}</button>
+							{#each row.files as name, i (name)}
+								<button class="chip" onclick={() => void new Audio(take(row, name)).play().catch(() => {})} disabled={!fileToken}>
+									{t('takeNo', { n: i + 1 })}
+								</button>
 							{/each}
 						</div>
 
@@ -110,7 +129,7 @@
 						</label>
 
 						<div class="decide">
-							<button class="btn primary" onclick={() => decide(row, 'approved')} disabled={busy === row.id || row.urls.length !== TAKES}>
+							<button class="btn primary" onclick={() => decide(row, 'approved')} disabled={busy === row.id || row.files.length !== TAKES}>
 								{t('approve')}
 							</button>
 							<button class="btn" onclick={() => decide(row, 'rejected')} disabled={busy === row.id}>{t('sendBack')}</button>

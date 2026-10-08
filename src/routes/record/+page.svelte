@@ -104,6 +104,9 @@
 					This account cannot record yet. Send the address below to the project owner and they will grant access.
 				</p>
 				<p class="who">{user.email}</p>
+				<p class="muted consent">
+					<span lang="en">Before recording, please read the <a href="/terms">terms</a> and the <a href="/privacy">privacy notice</a>.</span>
+				</p>
 			</section>
 		{:else}
 			{#if failed}<p class="error" role="alert">სია ვერ განახლდა. The list could not be refreshed.</p>{/if}
@@ -124,6 +127,11 @@
 				</button>
 				{#if user.role === 'owner'}<a class="btn" href="/record/review">განხილვა · Review</a>{/if}
 			</div>
+
+			<p class="muted consent">
+				ჩაწერით თქვენ ეთანხმებით პირობებს.
+				<span lang="en">By recording you agree to the <a href="/terms">terms</a> and the <a href="/privacy">privacy notice</a>.</span>
+			</p>
 
 			<div class="filters" role="group" aria-label="Filter">
 				<button class="chip" class:on={filter === 'all'} onclick={() => (filter = 'all')}>ყველა · All</button>
@@ -204,4 +212,5 @@
 	.translit { font-weight: 500; }
 	.mark { color: var(--rule-strong); font-size: 1.1rem; }
 	.error { color: var(--bad); font-size: 0.9rem; }
+	.consent { font-size: 0.8rem; line-height: 1.5; }
 </style>

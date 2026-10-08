@@ -20,6 +20,7 @@ import json
 import os
 import subprocess
 import sys
+import time
 import urllib.parse
 import urllib.request
 
@@ -27,14 +28,14 @@ BASE = os.environ.get("PB_URL", "http://127.0.0.1:8090").rstrip("/")
 OUT = os.path.abspath(sys.argv[1] if len(sys.argv) > 1 else "recordings")
 
 
-def get(path, payload=None, token=None, raw=False):
-    headers = {"Content-Type": "application/json"} if payload else {}
+def get(path, payload=None, token=None, raw=False, method=None):
+    headers = {"Content-Type": "application/json"} if payload is not None else {}
     if token:
         headers["Authorization"] = token
     req = urllib.request.Request(
         BASE + path,
-        data=json.dumps(payload).encode() if payload else None,
-        method="POST" if payload else "GET",
+        data=json.dumps(payload).encode() if payload is not None else None,
+        method=method or ("POST" if payload is not None else "GET"),
         headers=headers,
     )
     with urllib.request.urlopen(req) as r:
@@ -59,6 +60,18 @@ token = get(
     {"identity": os.environ["PB_SUPERUSER_EMAIL"], "password": os.environ["PB_SUPERUSER_PASSWORD"]},
 )["token"]
 
+# Takes are protected files: the file route ignores the Authorization header and wants a token of its
+# own, which lasts three minutes, so a long download renews it as it goes.
+file_token, minted = "", 0.0
+
+
+def take_url(row, name):
+    global file_token, minted
+    if time.monotonic() - minted > 120:
+        file_token = get("/api/files/token", {}, token=token, method="POST")["token"]
+        minted = time.monotonic()
+    return f"/api/files/{row['collectionId']}/{row['id']}/{urllib.parse.quote(name)}?token={file_token}"
+
 audio_dir = os.path.join(OUT, "audio")
 os.makedirs(audio_dir, exist_ok=True)
 
@@ -74,9 +87,8 @@ manifest = []
 for row in rows:
     for take, name in enumerate(row["audio"], start=1):
         path = os.path.join(audio_dir, name)
-        url = f"/api/files/{row['collectionId']}/{row['id']}/{urllib.parse.quote(name)}"
         with open(path, "wb") as f:
-            f.write(get(url, token=token, raw=True))
+            f.write(get(take_url(row, name), raw=True))
         manifest.append({
             "item": row["item"],
             "take": take,
