@@ -125,6 +125,13 @@ export const extensionFor = (mime: string) =>
 	mime.includes('webm') ? 'webm' : mime.includes('ogg') ? 'ogg' : 'm4a';
 
 /**
+ * A readable name for the stored file. The item id carries Georgian letters, which the server strips
+ * out, leaving files nobody can tell apart; the reading survives ASCII and says which item it is.
+ */
+export const takeName = (item: Item, take: number, mime: string) =>
+	`${`${item.type}-${item.translit}`.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toLowerCase() || 'take'}-${take}.${extensionFor(mime)}`;
+
+/**
  * The next item still missing takes, carrying on from the one just finished and wrapping around, so
  * a reader who starts in the middle of the list still gets shown everything that is left.
  */

@@ -1,0 +1,33 @@
+- generic [ref=f6e2]:
+  - main [ref=f6e4]:
+    - generic [ref=f6e620]:
+      - generic [ref=f6e621]:
+        - button "Back to the list" [ref=f6e622] [cursor=pointer]
+        - paragraph [ref=f6e625]: ასო · letter
+      - generic [ref=f6e626]:
+        - paragraph [ref=f6e627]: ა
+        - paragraph [ref=f6e628]: a
+      - list [ref=f6e629]:
+        - listitem [ref=f6e630]:
+          - generic [ref=f6e631]: "1"
+          - button "მოსმენა · Play 9.4s" [ref=f6e643] [cursor=pointer]
+          - button "ხელახლა · Again" [ref=f6e644] [cursor=pointer]
+        - listitem [ref=f6e633]:
+          - generic [ref=f6e634]: "2"
+          - button "მოსმენა · Play 10.0s" [ref=f6e648] [cursor=pointer]
+          - button "ხელახლა · Again" [ref=f6e649] [cursor=pointer]
+        - listitem [ref=f6e636]:
+          - generic [ref=f6e637]: "3"
+          - button "მოსმენა · Play 4.3s" [ref=f6e652] [cursor=pointer]
+          - button "ხელახლა · Again" [ref=f6e653] [cursor=pointer]
+      - button "შენახვა · Save all three" [ref=f6e654] [cursor=pointer]
+  - navigation "Main navigation" [ref=f6e595]:
+    - link "Alphabet" [ref=f6e596] [cursor=pointer]:
+      - /url: /
+      - generic [aria-hidden] [ref=f6e598]: ა
+    - link "Learn" [ref=f6e600] [cursor=pointer]:
+      - /url: /learn
+    - link "Test" [ref=f6e606] [cursor=pointer]:
+      - /url: /test
+    - link "Settings" [ref=f6e612] [cursor=pointer]:
+      - /url: /settings

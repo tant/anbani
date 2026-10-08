@@ -1,0 +1,24 @@
+- generic [ref=f8e2]:
+  - main [ref=f8e4]:
+    - generic [ref=f8e5]:
+      - link "Close" [ref=f8e6] [cursor=pointer]:
+        - /url: /
+      - heading "Hear a native speaker" [level=1] [ref=f8e9]
+    - paragraph [ref=f8e10]: Recorded by a native speaker in Georgia. Each item has three takes, so tapping again plays a different one.
+    - generic [ref=f8e11]:
+      - heading "Letters" [level=2] [ref=f8e12]
+      - list [ref=f8e13]:
+        - listitem [ref=f8e14]:
+          - generic [ref=f8e15]: ა
+          - generic [ref=f8e16]: a
+          - button "Listen" [ref=f8e18] [cursor=pointer]
+  - navigation "Main navigation" [ref=f8e23]:
+    - link "Alphabet" [ref=f8e24] [cursor=pointer]:
+      - /url: /
+      - generic [aria-hidden] [ref=f8e26]: ა
+    - link "Learn" [ref=f8e28] [cursor=pointer]:
+      - /url: /learn
+    - link "Test" [ref=f8e34] [cursor=pointer]:
+      - /url: /test
+    - link "Settings" [ref=f8e40] [cursor=pointer]:
+      - /url: /settings

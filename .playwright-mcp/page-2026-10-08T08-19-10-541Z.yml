@@ -1,0 +1,566 @@
+- generic [ref=f15e2]:
+  - main [ref=f15e4]:
+    - generic [ref=f15e5]:
+      - link "Back" [ref=f15e6] [cursor=pointer]:
+        - /url: /
+      - heading "ჩაწერა Recording" [level=1] [ref=f15e9]
+    - generic [ref=f15e10]:
+      - paragraph [ref=f15e11]: 0/85
+      - paragraph [ref=f15e13]: ჩაწერილია / recorded
+    - button "დაწყება · Start recording" [ref=f15e15] [cursor=pointer]
+    - group "Filter" [ref=f15e16]:
+      - button "ყველა · All" [ref=f15e17] [cursor=pointer]
+      - button "ასოები 0/33" [ref=f15e18] [cursor=pointer]
+      - button "თანხმოვანთა ჯგუფები 0/10" [ref=f15e19] [cursor=pointer]
+      - button "სიტყვები 0/24" [ref=f15e20] [cursor=pointer]
+      - button "ფრაზები 0/18" [ref=f15e21] [cursor=pointer]
+    - list [ref=f15e22]:
+      - listitem [ref=f15e23]:
+        - button "ა a not recorded" [ref=f15e24] [cursor=pointer]:
+          - generic [ref=f15e25]: ა
+          - generic [ref=f15e26]: a
+          - generic "not recorded" [ref=f15e28]: ○
+      - listitem [ref=f15e29]:
+        - button "ბ b not recorded" [ref=f15e30] [cursor=pointer]:
+          - generic [ref=f15e31]: ბ
+          - generic [ref=f15e32]: b
+          - generic "not recorded" [ref=f15e34]: ○
+      - listitem [ref=f15e35]:
+        - button "გ g not recorded" [ref=f15e36] [cursor=pointer]:
+          - generic [ref=f15e37]: გ
+          - generic [ref=f15e38]: g
+          - generic "not recorded" [ref=f15e40]: ○
+      - listitem [ref=f15e41]:
+        - button "დ d not recorded" [ref=f15e42] [cursor=pointer]:
+          - generic [ref=f15e43]: დ
+          - generic [ref=f15e44]: d
+          - generic "not recorded" [ref=f15e46]: ○
+      - listitem [ref=f15e47]:
+        - button "ე e not recorded" [ref=f15e48] [cursor=pointer]:
+          - generic [ref=f15e49]: ე
+          - generic [ref=f15e50]: e
+          - generic "not recorded" [ref=f15e52]: ○
+      - listitem [ref=f15e53]:
+        - button "ვ v not recorded" [ref=f15e54] [cursor=pointer]:
+          - generic [ref=f15e55]: ვ
+          - generic [ref=f15e56]: v
+          - generic "not recorded" [ref=f15e58]: ○
+      - listitem [ref=f15e59]:
+        - button "ზ z not recorded" [ref=f15e60] [cursor=pointer]:
+          - generic [ref=f15e61]: ზ
+          - generic [ref=f15e62]: z
+          - generic "not recorded" [ref=f15e64]: ○
+      - listitem [ref=f15e65]:
+        - button "თ t not recorded" [ref=f15e66] [cursor=pointer]:
+          - generic [ref=f15e67]: თ
+          - generic [ref=f15e68]: t
+          - generic "not recorded" [ref=f15e70]: ○
+      - listitem [ref=f15e71]:
+        - button "ი i not recorded" [ref=f15e72] [cursor=pointer]:
+          - generic [ref=f15e73]: ი
+          - generic [ref=f15e74]: i
+          - generic "not recorded" [ref=f15e76]: ○
+      - listitem [ref=f15e77]:
+        - button "კ k' not recorded" [ref=f15e78] [cursor=pointer]:
+          - generic [ref=f15e79]: კ
+          - generic [ref=f15e80]: k'
+          - generic "not recorded" [ref=f15e82]: ○
+      - listitem [ref=f15e83]:
+        - button "ლ l not recorded" [ref=f15e84] [cursor=pointer]:
+          - generic [ref=f15e85]: ლ
+          - generic [ref=f15e86]: l
+          - generic "not recorded" [ref=f15e88]: ○
+      - listitem [ref=f15e89]:
+        - button "მ m not recorded" [ref=f15e90] [cursor=pointer]:
+          - generic [ref=f15e91]: მ
+          - generic [ref=f15e92]: m
+          - generic "not recorded" [ref=f15e94]: ○
+      - listitem [ref=f15e95]:
+        - button "ნ n not recorded" [ref=f15e96] [cursor=pointer]:
+          - generic [ref=f15e97]: ნ
+          - generic [ref=f15e98]: "n"
+          - generic "not recorded" [ref=f15e100]: ○
+      - listitem [ref=f15e101]:
+        - button "ო o not recorded" [ref=f15e102] [cursor=pointer]:
+          - generic [ref=f15e103]: ო
+          - generic [ref=f15e104]: o
+          - generic "not recorded" [ref=f15e106]: ○
+      - listitem [ref=f15e107]:
+        - button "პ p' not recorded" [ref=f15e108] [cursor=pointer]:
+          - generic [ref=f15e109]: პ
+          - generic [ref=f15e110]: p'
+          - generic "not recorded" [ref=f15e112]: ○
+      - listitem [ref=f15e113]:
+        - button "ჟ zh not recorded" [ref=f15e114] [cursor=pointer]:
+          - generic [ref=f15e115]: ჟ
+          - generic [ref=f15e116]: zh
+          - generic "not recorded" [ref=f15e118]: ○
+      - listitem [ref=f15e119]:
+        - button "რ r not recorded" [ref=f15e120] [cursor=pointer]:
+          - generic [ref=f15e121]: რ
+          - generic [ref=f15e122]: r
+          - generic "not recorded" [ref=f15e124]: ○
+      - listitem [ref=f15e125]:
+        - button "ს s not recorded" [ref=f15e126] [cursor=pointer]:
+          - generic [ref=f15e127]: ს
+          - generic [ref=f15e128]: s
+          - generic "not recorded" [ref=f15e130]: ○
+      - listitem [ref=f15e131]:
+        - button "ტ t' not recorded" [ref=f15e132] [cursor=pointer]:
+          - generic [ref=f15e133]: ტ
+          - generic [ref=f15e134]: t'
+          - generic "not recorded" [ref=f15e136]: ○
+      - listitem [ref=f15e137]:
+        - button "უ u not recorded" [ref=f15e138] [cursor=pointer]:
+          - generic [ref=f15e139]: უ
+          - generic [ref=f15e140]: u
+          - generic "not recorded" [ref=f15e142]: ○
+      - listitem [ref=f15e143]:
+        - button "ფ p not recorded" [ref=f15e144] [cursor=pointer]:
+          - generic [ref=f15e145]: ფ
+          - generic [ref=f15e146]: p
+          - generic "not recorded" [ref=f15e148]: ○
+      - listitem [ref=f15e149]:
+        - button "ქ k not recorded" [ref=f15e150] [cursor=pointer]:
+          - generic [ref=f15e151]: ქ
+          - generic [ref=f15e152]: k
+          - generic "not recorded" [ref=f15e154]: ○
+      - listitem [ref=f15e155]:
+        - button "ღ gh not recorded" [ref=f15e156] [cursor=pointer]:
+          - generic [ref=f15e157]: ღ
+          - generic [ref=f15e158]: gh
+          - generic "not recorded" [ref=f15e160]: ○
+      - listitem [ref=f15e161]:
+        - button "ყ q' not recorded" [ref=f15e162] [cursor=pointer]:
+          - generic [ref=f15e163]: ყ
+          - generic [ref=f15e164]: q'
+          - generic "not recorded" [ref=f15e166]: ○
+      - listitem [ref=f15e167]:
+        - button "შ sh not recorded" [ref=f15e168] [cursor=pointer]:
+          - generic [ref=f15e169]: შ
+          - generic [ref=f15e170]: sh
+          - generic "not recorded" [ref=f15e172]: ○
+      - listitem [ref=f15e173]:
+        - button "ჩ ch not recorded" [ref=f15e174] [cursor=pointer]:
+          - generic [ref=f15e175]: ჩ
+          - generic [ref=f15e176]: ch
+          - generic "not recorded" [ref=f15e178]: ○
+      - listitem [ref=f15e179]:
+        - button "ც ts not recorded" [ref=f15e180] [cursor=pointer]:
+          - generic [ref=f15e181]: ც
+          - generic [ref=f15e182]: ts
+          - generic "not recorded" [ref=f15e184]: ○
+      - listitem [ref=f15e185]:
+        - button "ძ dz not recorded" [ref=f15e186] [cursor=pointer]:
+          - generic [ref=f15e187]: ძ
+          - generic [ref=f15e188]: dz
+          - generic "not recorded" [ref=f15e190]: ○
+      - listitem [ref=f15e191]:
+        - button "წ ts' not recorded" [ref=f15e192] [cursor=pointer]:
+          - generic [ref=f15e193]: წ
+          - generic [ref=f15e194]: ts'
+          - generic "not recorded" [ref=f15e196]: ○
+      - listitem [ref=f15e197]:
+        - button "ჭ ch' not recorded" [ref=f15e198] [cursor=pointer]:
+          - generic [ref=f15e199]: ჭ
+          - generic [ref=f15e200]: ch'
+          - generic "not recorded" [ref=f15e202]: ○
+      - listitem [ref=f15e203]:
+        - button "ხ kh not recorded" [ref=f15e204] [cursor=pointer]:
+          - generic [ref=f15e205]: ხ
+          - generic [ref=f15e206]: kh
+          - generic "not recorded" [ref=f15e208]: ○
+      - listitem [ref=f15e209]:
+        - button "ჯ j not recorded" [ref=f15e210] [cursor=pointer]:
+          - generic [ref=f15e211]: ჯ
+          - generic [ref=f15e212]: j
+          - generic "not recorded" [ref=f15e214]: ○
+      - listitem [ref=f15e215]:
+        - button "ჰ h not recorded" [ref=f15e216] [cursor=pointer]:
+          - generic [ref=f15e217]: ჰ
+          - generic [ref=f15e218]: h
+          - generic "not recorded" [ref=f15e220]: ○
+      - listitem [ref=f15e221]:
+        - button "მწვ mts'v მწვანე green not recorded" [ref=f15e222] [cursor=pointer]:
+          - generic [ref=f15e223]: მწვ
+          - generic [ref=f15e224]:
+            - generic [ref=f15e225]: mts'v
+            - generic [ref=f15e226]: მწვანე
+            - generic [ref=f15e227]: green
+          - generic "not recorded" [ref=f15e228]: ○
+      - listitem [ref=f15e229]:
+        - button "ბრწყ brts'q' ბრწყინვალე brilliant not recorded" [ref=f15e230] [cursor=pointer]:
+          - generic [ref=f15e231]: ბრწყ
+          - generic [ref=f15e232]:
+            - generic [ref=f15e233]: brts'q'
+            - generic [ref=f15e234]: ბრწყინვალე
+            - generic [ref=f15e235]: brilliant
+          - generic "not recorded" [ref=f15e236]: ○
+      - listitem [ref=f15e237]:
+        - button "ცხვ tskhv ცხვირი nose not recorded" [ref=f15e238] [cursor=pointer]:
+          - generic [ref=f15e239]: ცხვ
+          - generic [ref=f15e240]:
+            - generic [ref=f15e241]: tskhv
+            - generic [ref=f15e242]: ცხვირი
+            - generic [ref=f15e243]: nose
+          - generic "not recorded" [ref=f15e244]: ○
+      - listitem [ref=f15e245]:
+        - button "ტკბ t'k'b ტკბილი sweet not recorded" [ref=f15e246] [cursor=pointer]:
+          - generic [ref=f15e247]: ტკბ
+          - generic [ref=f15e248]:
+            - generic [ref=f15e249]: t'k'b
+            - generic [ref=f15e250]: ტკბილი
+            - generic [ref=f15e251]: sweet
+          - generic "not recorded" [ref=f15e252]: ○
+      - listitem [ref=f15e253]:
+        - button "სხვ skhv სხვა other not recorded" [ref=f15e254] [cursor=pointer]:
+          - generic [ref=f15e255]: სხვ
+          - generic [ref=f15e256]:
+            - generic [ref=f15e257]: skhv
+            - generic [ref=f15e258]: სხვა
+            - generic [ref=f15e259]: other
+          - generic "not recorded" [ref=f15e260]: ○
+      - listitem [ref=f15e261]:
+        - button "თქვ tkv თქვენ you (plural) not recorded" [ref=f15e262] [cursor=pointer]:
+          - generic [ref=f15e263]: თქვ
+          - generic [ref=f15e264]:
+            - generic [ref=f15e265]: tkv
+            - generic [ref=f15e266]: თქვენ
+            - generic [ref=f15e267]: you (plural)
+          - generic "not recorded" [ref=f15e268]: ○
+      - listitem [ref=f15e269]:
+        - button "ვხვდ vkhvd ვხვდები I realise not recorded" [ref=f15e270] [cursor=pointer]:
+          - generic [ref=f15e271]: ვხვდ
+          - generic [ref=f15e272]:
+            - generic [ref=f15e273]: vkhvd
+            - generic [ref=f15e274]: ვხვდები
+            - generic [ref=f15e275]: I realise
+          - generic "not recorded" [ref=f15e276]: ○
+      - listitem [ref=f15e277]:
+        - button "მკვლ mk'vl მკვლევარი researcher not recorded" [ref=f15e278] [cursor=pointer]:
+          - generic [ref=f15e279]: მკვლ
+          - generic [ref=f15e280]:
+            - generic [ref=f15e281]: mk'vl
+            - generic [ref=f15e282]: მკვლევარი
+            - generic [ref=f15e283]: researcher
+          - generic "not recorded" [ref=f15e284]: ○
+      - listitem [ref=f15e285]:
+        - button "ფრცქვ prtskv გვფრცქვნი you peel us not recorded" [ref=f15e286] [cursor=pointer]:
+          - generic [ref=f15e287]: ფრცქვ
+          - generic [ref=f15e288]:
+            - generic [ref=f15e289]: prtskv
+            - generic [ref=f15e290]: გვფრცქვნი
+            - generic [ref=f15e291]: you peel us
+          - generic "not recorded" [ref=f15e292]: ○
+      - listitem [ref=f15e293]:
+        - button "ძვ dzv ძვირი expensive not recorded" [ref=f15e294] [cursor=pointer]:
+          - generic [ref=f15e295]: ძვ
+          - generic [ref=f15e296]:
+            - generic [ref=f15e297]: dzv
+            - generic [ref=f15e298]: ძვირი
+            - generic [ref=f15e299]: expensive
+          - generic "not recorded" [ref=f15e300]: ○
+      - listitem [ref=f15e301]:
+        - button "წყალი ts'q'ali water not recorded" [ref=f15e302] [cursor=pointer]:
+          - generic [ref=f15e303]: წყალი
+          - generic [ref=f15e304]:
+            - generic [ref=f15e305]: ts'q'ali
+            - generic [ref=f15e306]: water
+          - generic "not recorded" [ref=f15e307]: ○
+      - listitem [ref=f15e308]:
+        - button "პური p'uri bread not recorded" [ref=f15e309] [cursor=pointer]:
+          - generic [ref=f15e310]: პური
+          - generic [ref=f15e311]:
+            - generic [ref=f15e312]: p'uri
+            - generic [ref=f15e313]: bread
+          - generic "not recorded" [ref=f15e314]: ○
+      - listitem [ref=f15e315]:
+        - button "ღვინო ghvino wine not recorded" [ref=f15e316] [cursor=pointer]:
+          - generic [ref=f15e317]: ღვინო
+          - generic [ref=f15e318]:
+            - generic [ref=f15e319]: ghvino
+            - generic [ref=f15e320]: wine
+          - generic "not recorded" [ref=f15e321]: ○
+      - listitem [ref=f15e322]:
+        - button "ყავა q'ava coffee not recorded" [ref=f15e323] [cursor=pointer]:
+          - generic [ref=f15e324]: ყავა
+          - generic [ref=f15e325]:
+            - generic [ref=f15e326]: q'ava
+            - generic [ref=f15e327]: coffee
+          - generic "not recorded" [ref=f15e328]: ○
+      - listitem [ref=f15e329]:
+        - button "ჩაი chai tea not recorded" [ref=f15e330] [cursor=pointer]:
+          - generic [ref=f15e331]: ჩაი
+          - generic [ref=f15e332]:
+            - generic [ref=f15e333]: chai
+            - generic [ref=f15e334]: tea
+          - generic "not recorded" [ref=f15e335]: ○
+      - listitem [ref=f15e336]:
+        - button "სახლი sakhli house not recorded" [ref=f15e337] [cursor=pointer]:
+          - generic [ref=f15e338]: სახლი
+          - generic [ref=f15e339]:
+            - generic [ref=f15e340]: sakhli
+            - generic [ref=f15e341]: house
+          - generic "not recorded" [ref=f15e342]: ○
+      - listitem [ref=f15e343]:
+        - button "ქალაქი kalaki city not recorded" [ref=f15e344] [cursor=pointer]:
+          - generic [ref=f15e345]: ქალაქი
+          - generic [ref=f15e346]:
+            - generic [ref=f15e347]: kalaki
+            - generic [ref=f15e348]: city
+          - generic "not recorded" [ref=f15e349]: ○
+      - listitem [ref=f15e350]:
+        - button "ქუჩა kucha street not recorded" [ref=f15e351] [cursor=pointer]:
+          - generic [ref=f15e352]: ქუჩა
+          - generic [ref=f15e353]:
+            - generic [ref=f15e354]: kucha
+            - generic [ref=f15e355]: street
+          - generic "not recorded" [ref=f15e356]: ○
+      - listitem [ref=f15e357]:
+        - button "მეგობარი megobari friend not recorded" [ref=f15e358] [cursor=pointer]:
+          - generic [ref=f15e359]: მეგობარი
+          - generic [ref=f15e360]:
+            - generic [ref=f15e361]: megobari
+            - generic [ref=f15e362]: friend
+          - generic "not recorded" [ref=f15e363]: ○
+      - listitem [ref=f15e364]:
+        - button "დედა deda mother not recorded" [ref=f15e365] [cursor=pointer]:
+          - generic [ref=f15e366]: დედა
+          - generic [ref=f15e367]:
+            - generic [ref=f15e368]: deda
+            - generic [ref=f15e369]: mother
+          - generic "not recorded" [ref=f15e370]: ○
+      - listitem [ref=f15e371]:
+        - button "მამა mama father not recorded" [ref=f15e372] [cursor=pointer]:
+          - generic [ref=f15e373]: მამა
+          - generic [ref=f15e374]:
+            - generic [ref=f15e375]: mama
+            - generic [ref=f15e376]: father
+          - generic "not recorded" [ref=f15e377]: ○
+      - listitem [ref=f15e378]:
+        - button "ბავშვი bavshvi child not recorded" [ref=f15e379] [cursor=pointer]:
+          - generic [ref=f15e380]: ბავშვი
+          - generic [ref=f15e381]:
+            - generic [ref=f15e382]: bavshvi
+            - generic [ref=f15e383]: child
+          - generic "not recorded" [ref=f15e384]: ○
+      - listitem [ref=f15e385]:
+        - button "დღე dghe day not recorded" [ref=f15e386] [cursor=pointer]:
+          - generic [ref=f15e387]: დღე
+          - generic [ref=f15e388]:
+            - generic [ref=f15e389]: dghe
+            - generic [ref=f15e390]: day
+          - generic "not recorded" [ref=f15e391]: ○
+      - listitem [ref=f15e392]:
+        - button "ღამე ghame night not recorded" [ref=f15e393] [cursor=pointer]:
+          - generic [ref=f15e394]: ღამე
+          - generic [ref=f15e395]:
+            - generic [ref=f15e396]: ghame
+            - generic [ref=f15e397]: night
+          - generic "not recorded" [ref=f15e398]: ○
+      - listitem [ref=f15e399]:
+        - button "კაცი k'atsi man not recorded" [ref=f15e400] [cursor=pointer]:
+          - generic [ref=f15e401]: კაცი
+          - generic [ref=f15e402]:
+            - generic [ref=f15e403]: k'atsi
+            - generic [ref=f15e404]: man
+          - generic "not recorded" [ref=f15e405]: ○
+      - listitem [ref=f15e406]:
+        - button "ქალი kali woman not recorded" [ref=f15e407] [cursor=pointer]:
+          - generic [ref=f15e408]: ქალი
+          - generic [ref=f15e409]:
+            - generic [ref=f15e410]: kali
+            - generic [ref=f15e411]: woman
+          - generic "not recorded" [ref=f15e412]: ○
+      - listitem [ref=f15e413]:
+        - button "წიგნი ts'igni book not recorded" [ref=f15e414] [cursor=pointer]:
+          - generic [ref=f15e415]: წიგნი
+          - generic [ref=f15e416]:
+            - generic [ref=f15e417]: ts'igni
+            - generic [ref=f15e418]: book
+          - generic "not recorded" [ref=f15e419]: ○
+      - listitem [ref=f15e420]:
+        - button "მანქანა mankana car not recorded" [ref=f15e421] [cursor=pointer]:
+          - generic [ref=f15e422]: მანქანა
+          - generic [ref=f15e423]:
+            - generic [ref=f15e424]: mankana
+            - generic [ref=f15e425]: car
+          - generic "not recorded" [ref=f15e426]: ○
+      - listitem [ref=f15e427]:
+        - button "მაღაზია maghazia shop not recorded" [ref=f15e428] [cursor=pointer]:
+          - generic [ref=f15e429]: მაღაზია
+          - generic [ref=f15e430]:
+            - generic [ref=f15e431]: maghazia
+            - generic [ref=f15e432]: shop
+          - generic "not recorded" [ref=f15e433]: ○
+      - listitem [ref=f15e434]:
+        - button "კარგი k'argi good not recorded" [ref=f15e435] [cursor=pointer]:
+          - generic [ref=f15e436]: კარგი
+          - generic [ref=f15e437]:
+            - generic [ref=f15e438]: k'argi
+            - generic [ref=f15e439]: good
+          - generic "not recorded" [ref=f15e440]: ○
+      - listitem [ref=f15e441]:
+        - button "ცუდი tsudi bad not recorded" [ref=f15e442] [cursor=pointer]:
+          - generic [ref=f15e443]: ცუდი
+          - generic [ref=f15e444]:
+            - generic [ref=f15e445]: tsudi
+            - generic [ref=f15e446]: bad
+          - generic "not recorded" [ref=f15e447]: ○
+      - listitem [ref=f15e448]:
+        - button "დიდი didi big not recorded" [ref=f15e449] [cursor=pointer]:
+          - generic [ref=f15e450]: დიდი
+          - generic [ref=f15e451]:
+            - generic [ref=f15e452]: didi
+            - generic [ref=f15e453]: big
+          - generic "not recorded" [ref=f15e454]: ○
+      - listitem [ref=f15e455]:
+        - button "პატარა p'at'ara small not recorded" [ref=f15e456] [cursor=pointer]:
+          - generic [ref=f15e457]: პატარა
+          - generic [ref=f15e458]:
+            - generic [ref=f15e459]: p'at'ara
+            - generic [ref=f15e460]: small
+          - generic "not recorded" [ref=f15e461]: ○
+      - listitem [ref=f15e462]:
+        - button "მწვანე mts'vane green not recorded" [ref=f15e463] [cursor=pointer]:
+          - generic [ref=f15e464]: მწვანე
+          - generic [ref=f15e465]:
+            - generic [ref=f15e466]: mts'vane
+            - generic [ref=f15e467]: green
+          - generic "not recorded" [ref=f15e468]: ○
+      - listitem [ref=f15e469]:
+        - button "გამარჯობა gamarjoba hello not recorded" [ref=f15e470] [cursor=pointer]:
+          - generic [ref=f15e471]: გამარჯობა
+          - generic [ref=f15e472]:
+            - generic [ref=f15e473]: gamarjoba
+            - generic [ref=f15e474]: hello
+          - generic "not recorded" [ref=f15e475]: ○
+      - listitem [ref=f15e476]:
+        - button "დილა მშვიდობისა dila mshvidobisa good morning not recorded" [ref=f15e477] [cursor=pointer]:
+          - generic [ref=f15e478]: დილა მშვიდობისა
+          - generic [ref=f15e479]:
+            - generic [ref=f15e480]: dila mshvidobisa
+            - generic [ref=f15e481]: good morning
+          - generic "not recorded" [ref=f15e482]: ○
+      - listitem [ref=f15e483]:
+        - button "საღამო მშვიდობისა saghamo mshvidobisa good evening not recorded" [ref=f15e484] [cursor=pointer]:
+          - generic [ref=f15e485]: საღამო მშვიდობისა
+          - generic [ref=f15e486]:
+            - generic [ref=f15e487]: saghamo mshvidobisa
+            - generic [ref=f15e488]: good evening
+          - generic "not recorded" [ref=f15e489]: ○
+      - listitem [ref=f15e490]:
+        - button "ღამე მშვიდობისა ghame mshvidobisa good night not recorded" [ref=f15e491] [cursor=pointer]:
+          - generic [ref=f15e492]: ღამე მშვიდობისა
+          - generic [ref=f15e493]:
+            - generic [ref=f15e494]: ghame mshvidobisa
+            - generic [ref=f15e495]: good night
+          - generic "not recorded" [ref=f15e496]: ○
+      - listitem [ref=f15e497]:
+        - button "როგორ ხარ? rogor khar? how are you? not recorded" [ref=f15e498] [cursor=pointer]:
+          - generic [ref=f15e499]: როგორ ხარ?
+          - generic [ref=f15e500]:
+            - generic [ref=f15e501]: rogor khar?
+            - generic [ref=f15e502]: how are you?
+          - generic "not recorded" [ref=f15e503]: ○
+      - listitem [ref=f15e504]:
+        - button "კარგად ვარ, მადლობა k'argad var, madloba I am well, thank you not recorded" [ref=f15e505] [cursor=pointer]:
+          - generic [ref=f15e506]: კარგად ვარ, მადლობა
+          - generic [ref=f15e507]:
+            - generic [ref=f15e508]: k'argad var, madloba
+            - generic [ref=f15e509]: I am well, thank you
+          - generic "not recorded" [ref=f15e510]: ○
+      - listitem [ref=f15e511]:
+        - button "მადლობა madloba thank you not recorded" [ref=f15e512] [cursor=pointer]:
+          - generic [ref=f15e513]: მადლობა
+          - generic [ref=f15e514]:
+            - generic [ref=f15e515]: madloba
+            - generic [ref=f15e516]: thank you
+          - generic "not recorded" [ref=f15e517]: ○
+      - listitem [ref=f15e518]:
+        - button "დიდი მადლობა didi madloba thank you very much not recorded" [ref=f15e519] [cursor=pointer]:
+          - generic [ref=f15e520]: დიდი მადლობა
+          - generic [ref=f15e521]:
+            - generic [ref=f15e522]: didi madloba
+            - generic [ref=f15e523]: thank you very much
+          - generic "not recorded" [ref=f15e524]: ○
+      - listitem [ref=f15e525]:
+        - button "არაფრის arapris you're welcome not recorded" [ref=f15e526] [cursor=pointer]:
+          - generic [ref=f15e527]: არაფრის
+          - generic [ref=f15e528]:
+            - generic [ref=f15e529]: arapris
+            - generic [ref=f15e530]: you're welcome
+          - generic "not recorded" [ref=f15e531]: ○
+      - listitem [ref=f15e532]:
+        - button "ბოდიში bodishi sorry not recorded" [ref=f15e533] [cursor=pointer]:
+          - generic [ref=f15e534]: ბოდიში
+          - generic [ref=f15e535]:
+            - generic [ref=f15e536]: bodishi
+            - generic [ref=f15e537]: sorry
+          - generic "not recorded" [ref=f15e538]: ○
+      - listitem [ref=f15e539]:
+        - button "გთხოვთ gtkhovt please not recorded" [ref=f15e540] [cursor=pointer]:
+          - generic [ref=f15e541]: გთხოვთ
+          - generic [ref=f15e542]:
+            - generic [ref=f15e543]: gtkhovt
+            - generic [ref=f15e544]: please
+          - generic "not recorded" [ref=f15e545]: ○
+      - listitem [ref=f15e546]:
+        - button "დიახ diakh yes not recorded" [ref=f15e547] [cursor=pointer]:
+          - generic [ref=f15e548]: დიახ
+          - generic [ref=f15e549]:
+            - generic [ref=f15e550]: diakh
+            - generic [ref=f15e551]: "yes"
+          - generic "not recorded" [ref=f15e552]: ○
+      - listitem [ref=f15e553]:
+        - button "არა ara no not recorded" [ref=f15e554] [cursor=pointer]:
+          - generic [ref=f15e555]: არა
+          - generic [ref=f15e556]:
+            - generic [ref=f15e557]: ara
+            - generic [ref=f15e558]: "no"
+          - generic "not recorded" [ref=f15e559]: ○
+      - listitem [ref=f15e560]:
+        - button "ნახვამდის nakhvamdis goodbye not recorded" [ref=f15e561] [cursor=pointer]:
+          - generic [ref=f15e562]: ნახვამდის
+          - generic [ref=f15e563]:
+            - generic [ref=f15e564]: nakhvamdis
+            - generic [ref=f15e565]: goodbye
+          - generic "not recorded" [ref=f15e566]: ○
+      - listitem [ref=f15e567]:
+        - button "რა ღირს? ra ghirs? how much is it? not recorded" [ref=f15e568] [cursor=pointer]:
+          - generic [ref=f15e569]: რა ღირს?
+          - generic [ref=f15e570]:
+            - generic [ref=f15e571]: ra ghirs?
+            - generic [ref=f15e572]: how much is it?
+          - generic "not recorded" [ref=f15e573]: ○
+      - listitem [ref=f15e574]:
+        - button "არ მესმის ar mesmis I don't understand not recorded" [ref=f15e575] [cursor=pointer]:
+          - generic [ref=f15e576]: არ მესმის
+          - generic [ref=f15e577]:
+            - generic [ref=f15e578]: ar mesmis
+            - generic [ref=f15e579]: I don't understand
+          - generic "not recorded" [ref=f15e580]: ○
+      - listitem [ref=f15e581]:
+        - button "სად არის? sad aris? where is it? not recorded" [ref=f15e582] [cursor=pointer]:
+          - generic [ref=f15e583]: სად არის?
+          - generic [ref=f15e584]:
+            - generic [ref=f15e585]: sad aris?
+            - generic [ref=f15e586]: where is it?
+          - generic "not recorded" [ref=f15e587]: ○
+      - listitem [ref=f15e588]:
+        - button "მე მქვია me mkvia my name is not recorded" [ref=f15e589] [cursor=pointer]:
+          - generic [ref=f15e590]: მე მქვია
+          - generic [ref=f15e591]:
+            - generic [ref=f15e592]: me mkvia
+            - generic [ref=f15e593]: my name is
+          - generic "not recorded" [ref=f15e594]: ○
+  - navigation "Main navigation" [ref=f15e595]:
+    - link "Alphabet" [ref=f15e596] [cursor=pointer]:
+      - /url: /
+      - generic [aria-hidden] [ref=f15e598]: ა
+    - link "Learn" [ref=f15e600] [cursor=pointer]:
+      - /url: /learn
+    - link "Test" [ref=f15e606] [cursor=pointer]:
+      - /url: /test
+    - link "Settings" [ref=f15e612] [cursor=pointer]:
+      - /url: /settings

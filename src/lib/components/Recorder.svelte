@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { levelOf, mic } from '$lib/mic';
 	import { pb } from '$lib/pb';
-	import { AUDIO, baseMime, extensionFor, pickMime, TAKES, type Item } from '$lib/recording';
+	import { AUDIO, baseMime, pickMime, takeName, TAKES, type Item } from '$lib/recording';
 	import Icon from './Icon.svelte';
 
 	// The reader is a native speaker who does not read Vietnamese: this screen stays Georgian + English.
@@ -35,6 +35,8 @@
 	/** Which of the three takes the next recording fills. */
 	let slot = $state(0);
 	let recording = $state(false);
+	/** Opening the microphone takes a moment the first time; a second tap must not start a second recorder. */
+	let arming = $state(false);
 	let level = $state(0);
 	let saving = $state(false);
 	let error = $state('');
@@ -64,18 +66,21 @@
 	}
 
 	async function start() {
-		if (recording) return;
+		if (recording || arming) return;
+		arming = true;
 		error = '';
 		let stream: MediaStream;
 		let analyser: AnalyserNode;
 		try {
 			({ stream, analyser } = await mic());
 		} catch {
+			arming = false;
 			error = 'მიკროფონზე წვდომა არ არის. Microphone access is blocked — allow it in the browser settings for this site, then reload.';
 			return;
 		}
 		const mime = pickMime((m) => MediaRecorder.isTypeSupported(m));
 		if (!mime) {
+			arming = false;
 			error = 'ამ ბრაუზერს ჩაწერა არ შეუძლია. This browser cannot record audio; try Chrome or Safari.';
 			return;
 		}
@@ -104,6 +109,7 @@
 		};
 		recorder.start();
 		recording = true;
+		arming = false;
 		// A stuck recorder would otherwise fill the whole take with room noise.
 		cutoff = setTimeout(stop, AUDIO.maxSeconds * 1000);
 		meter(analyser);
@@ -115,7 +121,7 @@
 
 	/** One tap to replace a single take, instead of starting the item over. */
 	function redo(index: number) {
-		if (recording) return;
+		if (recording || arming) return;
 		slot = index;
 		void start();
 	}
@@ -136,8 +142,7 @@
 			body.append('status', 'pending');
 			body.append('reader', reader ?? '');
 			takes.forEach((take, i) => {
-				const name = `${item.id.replace(/[^a-z0-9]+/gi, '-')}-${i + 1}.${extensionFor(take!.blob.type)}`;
-				body.append('audio', new File([take!.blob], name, { type: take!.blob.type }));
+				body.append('audio', new File([take!.blob], takeName(item, i + 1, take!.blob.type), { type: take!.blob.type }));
 			});
 			// Takes cannot be slipped into a stored row one at a time, so a fresh row replaces the old.
 			if (existing) await pb.collection('recordings').delete(existing);
@@ -172,7 +177,7 @@
 				<span class="no">{i + 1}</span>
 				{#if take}
 					<button class="chip" onclick={() => playTake(i)}>მოსმენა · Play <span class="muted">{take.seconds.toFixed(1)}s</span></button>
-					<button class="chip" onclick={() => redo(i)} disabled={recording}>ხელახლა · Again</button>
+					<button class="chip" onclick={() => redo(i)} disabled={recording || arming}>ხელახლა · Again</button>
 				{:else if recording && slot === i}
 					<span class="muted">იწერება… recording…</span>
 				{:else}
@@ -189,6 +194,8 @@
 	<div class="actions bottom">
 		{#if recording}
 			<button class="btn primary stop" onclick={stop}>გაჩერება · Stop</button>
+		{:else if arming}
+			<button class="btn primary" disabled>მზადება… Getting ready…</button>
 		{:else if complete}
 			<button class="btn primary" onclick={store} disabled={saving}>
 				{saving ? 'ინახება… Saving…' : 'შენახვა · Save all three'}

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ALPHABET } from './letters';
-import { CATALOGUE, TAKES, baseMime, byType, extensionFor, nextUnrecorded, pickMime, recordedCount } from './recording';
+import { CATALOGUE, TAKES, baseMime, byType, extensionFor, nextUnrecorded, pickMime, recordedCount, takeName } from './recording';
 
 describe('recording catalogue', () => {
 	it('gives every item a unique id', () => {
@@ -55,6 +55,12 @@ describe('recording catalogue', () => {
 		expect(extensionFor('audio/webm;codecs=opus')).toBe('webm');
 		expect(extensionFor('audio/ogg;codecs=opus')).toBe('ogg');
 		expect(extensionFor('audio/mp4')).toBe('m4a');
+	});
+
+	it('names a stored take after the item, in letters a server will keep', () => {
+		const letter = CATALOGUE.find((i) => i.text === 'კ')!;
+		expect(takeName(letter, 2, 'audio/webm;codecs=opus')).toBe('letter-k-2.webm');
+		expect(takeName(CATALOGUE.find((i) => i.id === 'phrase:how-are-you')!, 1, 'audio/mp4')).toBe('phrase-rogor-khar-1.m4a');
 	});
 
 	it('asks for three takes', () => {
