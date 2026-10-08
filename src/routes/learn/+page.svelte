@@ -14,6 +14,8 @@
 	import { Tween } from 'svelte/motion';
 
 	let task = $state<Task>({ kind: 'done', nextDue: null });
+	// Set by a wrong answer so the next question can be the letter it was confused with.
+	let confusion: { char: string; chosen: string } | undefined;
 	let options = $state<string[]>([]);
 	let seq = $state(0);
 	let answered = $state(0);
@@ -38,7 +40,8 @@
 	}
 
 	function advance() {
-		const next = nextTask(progress.cards, new Date(), lastKey);
+		const next = nextTask(progress.cards, new Date(), lastKey, confusion);
+		confusion = undefined;
 		paused = answered >= SESSION_LENGTH && next.kind !== 'done';
 		show(paused ? { kind: 'done', nextDue: null } : next);
 	}
@@ -54,6 +57,7 @@
 		lastKey = task.key;
 		answered += 1;
 		if (answer(task.skill, task.char, chosen, ms)) right += 1;
+		else confusion = { char: task.char, chosen };
 	}
 
 	function learnt() {

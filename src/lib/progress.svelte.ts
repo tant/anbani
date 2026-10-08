@@ -2,6 +2,7 @@ import { INITIAL, KNOWN_AT, scoreAfter, type Mastery } from './mastery';
 import { pb } from './pb';
 import { cardKey, gradeAnswer, isNewer, letterStatus, newCard, parseKey, reviewCard, reviveCard, SKILLS, type Cards, type Skill } from './srs';
 import { load, save } from './storage';
+import { difficultyBump, tuneDue } from './tuning';
 
 type Confusions = Record<string, Record<string, number>>;
 
@@ -53,7 +54,9 @@ export function introduce(char: string, now = new Date()) {
 	for (const skill of SKILLS) {
 		const key = cardKey(skill, char);
 		if (progress.cards[key]) continue;
-		progress.cards[key] = newCard(now);
+		const card = newCard(now);
+		// Letters that look or sound like another start out harder, so they come back sooner.
+		progress.cards[key] = { ...card, difficulty: Math.min(10, card.difficulty + difficultyBump(char)) };
 		dirty.add(key);
 	}
 	progress.mastery[char] ??= INITIAL;
@@ -64,7 +67,7 @@ export function introduce(char: string, now = new Date()) {
 export function answer(skill: Skill, char: string, chosen: string, ms: number, now = new Date()): boolean {
 	const key = cardKey(skill, char);
 	const correct = chosen === char;
-	progress.cards[key] = reviewCard(progress.cards[key], gradeAnswer(correct, ms), now);
+	progress.cards[key] = tuneDue(reviewCard(progress.cards[key], gradeAnswer(correct, ms), now), char, now);
 	if (!correct) {
 		const row = (progress.confusions[char] ??= {});
 		row[chosen] = (row[chosen] ?? 0) + 1;

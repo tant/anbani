@@ -86,6 +86,28 @@ The app has two separate modes, both reachable from the home page.
   - Staggered entrances (`.rise`, `--d` × 80 ms): the welcome screen assembles under the letter being written; a new letter's sound and hint follow its writing; the end-of-session screen.
 - `prefers-reduced-motion`: CSS animations off globally; Svelte transitions get zero duration through `dur()` in `src/lib/motion.ts`; view transitions off.
 
+## Mastery score and scheduling inputs (added 2026-10-08)
+
+Each letter carries a 0–100 mastery score (`src/lib/mastery.ts`), one per letter across both skills:
+30 when introduced, a correct answer moves a third of the way towards what its speed deserves
+(<1 s → 100, then 85 / 70 / 55 / 40), a wrong answer takes 10 straight off, and nothing decays. The
+score picks the letters for a self-chosen test — weight `max(5, 100 − score)`, at most 20 questions,
+so a mastered letter still surfaces about 5% of the time — and above 80 the question is shown in a
+random bundled style. It syncs on the `score` field of each `reviews` row (both rows of a letter
+carry the same value). FSRS still owns the Learn schedule.
+
+Three inputs FSRS cannot see feed that schedule (`src/lib/tuning.ts`):
+
+- **Frequency**: share of each letter in Georgian text, counted from random Georgian Wikipedia
+  articles by `scripts/letter-frequency.py` into `src/lib/frequency.generated.ts`. It sets the
+  teaching order and scales review gaps (common letters 0.85×, rare ones 1.15×).
+- **Sound twins**: the ejective pairs, derived from the romanisation (`ts` ↔ `ts'`), no new data.
+- **Look-alikes**: the existing `looksLike` triples.
+
+A letter with a twin or close look-alikes starts with a higher FSRS difficulty, a letter is not
+introduced while something confusable is still in learning, and a wrong answer puts the letter it
+was confused with next.
+
 ## Georgian letter style (added 2026-09-19, revised)
 
 Learners pick the glyph style closest to their book (Settings and Welcome; stored in `localStorage` and `users.glyphFont`):

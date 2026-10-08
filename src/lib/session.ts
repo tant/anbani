@@ -1,6 +1,6 @@
 import { State } from 'ts-fsrs';
-import { LETTERS } from './letters';
 import { parseKey, type Cards, type Skill } from './srs';
+import { confusedWith, nextLetter } from './tuning';
 
 export type Task =
 	| { kind: 'intro'; char: string }
@@ -11,7 +11,7 @@ export const MAX_LEARNING_LETTERS = 4;
 export const LOOKAHEAD_MS = 15 * 60_000;
 export const SESSION_LENGTH = 20;
 
-export function nextTask(cards: Cards, now: Date, lastKey?: string): Task {
+export function nextTask(cards: Cards, now: Date, lastKey?: string, confusion?: { char: string; chosen: string }): Task {
 	const entries = Object.entries(cards).sort(([, a], [, b]) => +a.due - +b.due);
 	const ask = (list: typeof entries): Task => {
 		const [key] = list.find(([k]) => k !== lastKey) ?? list[0];
@@ -19,13 +19,21 @@ export function nextTask(cards: Cards, now: Date, lastKey?: string): Task {
 		return { kind: 'question', skill, char: item, key };
 	};
 
+	const introducedChars = new Set(entries.map(([k]) => parseKey(k).item));
+
+	// Straight after a mistake, put the letter it was confused with next: the pair is what needs work.
+	if (confusion) {
+		const twin = confusedWith(confusion.char, confusion.chosen, introducedChars);
+		const pair = twin ? entries.filter(([k]) => parseKey(k).item === twin && k !== lastKey) : [];
+		if (pair.length) return ask(pair);
+	}
+
 	const due = entries.filter(([, c]) => +c.due <= +now);
 	if (due.length) return ask(due);
 
-	const introduced = new Set(entries.map(([k]) => parseKey(k).item));
 	const learning = new Set(entries.filter(([, c]) => c.state !== State.Review).map(([k]) => parseKey(k).item));
-	const fresh = LETTERS.find((l) => !introduced.has(l.char));
-	if (fresh && learning.size < MAX_LEARNING_LETTERS) return { kind: 'intro', char: fresh.char };
+	const fresh = nextLetter(introducedChars, learning);
+	if (fresh && learning.size < MAX_LEARNING_LETTERS) return { kind: 'intro', char: fresh };
 
 	const soon = entries.filter(([, c]) => +c.due - +now <= LOOKAHEAD_MS);
 	if (soon.length) return ask(soon);
