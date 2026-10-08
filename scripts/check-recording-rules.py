@@ -127,8 +127,8 @@ check("all three takes are stored", len(row.get("audio", [])), 3)
 st, _ = call("/api/collections/recordings/records", {"item": OTHER, "status": "approved"}, "POST", None, files=3)
 check("a recording cannot arrive already reviewed", st, 400)
 
-st, _ = call("/api/collections/recordings/records", {"item": ITEM, "status": "pending"}, "POST", None, files=3)
-check("one row per item", st, 400)
+st, again = call("/api/collections/recordings/records", {"item": ITEM, "status": "pending"}, "POST", None, files=3)
+check("the same item can be read again, and both readings are kept", st, 200)
 
 # Together these two bound what an open endpoint can ever store: 85 items x 3 takes x 128 KB.
 st, _ = call("/api/collections/recordings/records", {"item": "not-in-the-catalogue", "status": "pending"}, "POST", None, files=3)
@@ -154,10 +154,10 @@ check("the audio does not open on its address alone", reach(row, row["audio"][0]
 check("nor for an ordinary account holding a token", reach(row, row["audio"][0], file_token(learner_tok)), 404)
 check("the owner reaches the audio with a file token", reach(row, row["audio"][0], file_token(owner_tok)), 200)
 
-# A misread item can be recorded again: drop the row, record it once more.
-check("an unreviewed row can be dropped so a redo can replace it", call(f"/api/collections/recordings/records/{row['id']}", None, "DELETE")[0], 204)
-st, row = call("/api/collections/recordings/records", {"item": ITEM, "status": "pending"}, "POST", None, files=3)
-check("and recorded again in its place", st, 200)
+# Deleting is the owner's alone, so nothing a contributor recorded can be wiped by a passer-by.
+check("a stranger cannot delete a reading", call(f"/api/collections/recordings/records/{again['id']}", None, "DELETE")[0], 404)
+check("nor can an ordinary account", call(f"/api/collections/recordings/records/{again['id']}", None, "DELETE", learner_tok)[0], 404)
+check("the owner can", call(f"/api/collections/recordings/records/{again['id']}", None, "DELETE", owner_tok)[0], 204)
 
 # Reviewing is nobody's job but the owner's, and it is still gated on three takes.
 check("an ordinary account cannot review", call(f"/api/collections/recordings/records/{row['id']}", {"status": "approved"}, "PATCH", learner_tok)[0], 404)
@@ -165,7 +165,7 @@ st, short = call("/api/collections/recordings/records", {"item": THIRD, "status"
 check("a short item is stored", st, 200)
 check("but cannot be approved", call(f"/api/collections/recordings/records/{short['id']}", {"status": "approved"}, "PATCH", owner_tok)[0], 404)
 check("a full item can", call(f"/api/collections/recordings/records/{row['id']}", {"status": "approved"}, "PATCH", owner_tok)[0], 200)
-check("and once approved it can no longer be dropped", call(f"/api/collections/recordings/records/{row['id']}", None, "DELETE")[0], 404)
+
 
 # A role is handed out by a superuser only, at sign-up as much as afterwards.
 st, _ = call("/api/collections/users/records",

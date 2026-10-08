@@ -4,6 +4,9 @@ Nothing in the app plays a recording, so this is how the takes are listened to a
 Writes every take to disk and leaves a manifest beside them. The `item` field is the catalogue key
 from src/lib/recording.ts, so it is also the label of what was read.
 
+Every reading is kept, so one item can have several: three takes from one person reading it, three
+more from the next. `reading` groups the takes that were recorded together, and `recorded` says when.
+
     cd ~/works/learn-mkhedruli && set -a && . ~/works/mydevops/.env && set +a
     PB_URL=https://anbani.korbvazi.com \
       PB_SUPERUSER_EMAIL="$ANBANI_PB_SUPERUSER_EMAIL" \
@@ -91,6 +94,7 @@ for row in rows:
             f.write(get(take_url(row, name), raw=True))
         manifest.append({
             "item": row["item"],
+            "reading": row["id"],
             "take": take,
             "file": os.path.join("audio", name),
             "bytes": os.path.getsize(path),
@@ -108,7 +112,8 @@ if not manifest:
 
 total = sum(m["bytes"] for m in manifest)
 items = len({m["item"] for m in manifest})
-short = sorted(i for i in {m["item"] for m in manifest} if sum(1 for m in manifest if m["item"] == i) != 3)
-print(f"{len(manifest)} takes of {items} items, {total / 1024:.0f} KB, into {OUT}")
+readings = {m["reading"] for m in manifest}
+short = sorted({m["item"] for m in manifest if sum(1 for x in manifest if x["reading"] == m["reading"]) != 3})
+print(f"{len(manifest)} takes in {len(readings)} readings of {items} items, {total / 1024:.0f} KB, into {OUT}")
 if short:
-    print(f"{len(short)} item(s) without all three takes: " + ", ".join(short))
+    print(f"{len(short)} item(s) with a reading short of three takes: " + ", ".join(short))

@@ -8,13 +8,10 @@
 	// The reader is a native speaker who does not read Vietnamese: this screen stays Georgian + English.
 	let {
 		item,
-		existing,
 		onsaved,
 		onclose
 	}: {
 		item: Item;
-		/** A row already stored for this item; recording it again replaces that row. */
-		existing?: string;
 		onsaved: () => void;
 		onclose: () => void;
 	} = $props();
@@ -165,8 +162,7 @@
 			takes.forEach((take, i) => {
 				body.append('audio', new File([take!.blob], takeName(item, i + 1, take!.blob.type), { type: take!.blob.type }));
 			});
-			// Takes cannot be slipped into a stored row one at a time, so a fresh row replaces the old.
-			if (existing) await pb.collection('recordings').delete(existing);
+			// Every reading is kept: this adds three takes rather than replacing anyone's.
 			await pb.collection('recordings').create(body);
 			onsaved();
 		} catch {

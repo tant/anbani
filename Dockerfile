@@ -16,6 +16,8 @@ RUN apk add --no-cache ca-certificates
 WORKDIR /app
 COPY --from=pocketbase /app/pb/pocketbase ./pocketbase
 COPY pb/pb_migrations ./pb_migrations
+# PocketBase looks for hooks next to the data directory, so /app/pb_hooks given --dir=pb_data
+COPY pb/pb_hooks ./pb_hooks
 COPY --from=web /app/build ./pb_public
 EXPOSE 8090
 CMD ["./pocketbase", "serve", "--http=0.0.0.0:8090", "--dir=pb_data", "--migrationsDir=pb_migrations", "--publicDir=pb_public"]

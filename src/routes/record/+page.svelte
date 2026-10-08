@@ -16,12 +16,9 @@
 		phrase: { ka: 'ფრაზები', en: 'Phrases' }
 	};
 
-	interface Row {
-		id: string;
-	}
-
-	let rows = $state(new Map<string, Row>());
+	/** Items with at least one complete reading; a second reader is welcome to add another. */
 	let done = $state(new Set<string>());
+	let readings = $state(0);
 	let loading = $state(true);
 	let failed = $state(false);
 	let filter = $state<ItemType | 'all'>('all');
@@ -31,8 +28,9 @@
 		try {
 			const found = await pb.collection('recordings').getFullList({ fields: 'id,item,audio', requestKey: null });
 			// Exactly three takes, nothing less: a half-finished item stays on the list.
-			done = new Set(found.filter((r) => (r.audio as string[])?.length === TAKES).map((r) => r.item as string));
-			rows = new Map(found.map((r) => [r.item as string, { id: r.id }]));
+			const complete = found.filter((r) => (r.audio as string[])?.length === TAKES);
+			done = new Set(complete.map((r) => r.item as string));
+			readings = complete.length;
 			failed = false;
 		} catch {
 			failed = true;
@@ -61,7 +59,7 @@
 <main class="page">
 	{#if current}
 		{#key current.id}
-			<Recorder item={current} existing={rows.get(current.id)?.id} onsaved={saved} onclose={() => (current = null)} />
+			<Recorder item={current} onsaved={saved} onclose={() => (current = null)} />
 		{/key}
 	{:else}
 		<header class="bar">
@@ -77,7 +75,9 @@
 			<section class="summary">
 				<p class="count">{total.done}<span>/{total.total}</span></p>
 				<div class="bar-track"><i style:width="{(total.done / total.total) * 100}%"></i></div>
-				<p class="muted">ჩაწერილია / recorded</p>
+				<p class="muted">
+					ჩაწერილია / recorded{#if readings > total.done}<span> · {readings} ჩანაწერი / readings</span>{/if}
+				</p>
 			</section>
 
 			<div class="actions">
