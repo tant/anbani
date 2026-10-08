@@ -148,6 +148,12 @@ check("learner still edits own settings", st, 200)
 st, _ = call(f"/api/collections/recordings/records/{pend['id']}", None, "DELETE", learner_tok)
 check("learner cannot delete a recording", st, 404)
 
+# a role is handed out by a superuser only, at sign-up as much as afterwards
+st, _ = call("/api/collections/users/records", {"email": f"sneak-{tag}@test.local", "password": "passw0rd1234", "passwordConfirm": "passw0rd1234", "role": "owner"}, "POST")
+check("signing up cannot ask for a role", st, 400)
+st, _ = call("/api/collections/users/records", {"email": f"plain-{tag}@test.local", "password": "passw0rd1234", "passwordConfirm": "passw0rd1234"}, "POST")
+check("an ordinary sign-up still works", st, 200)
+
 print()
 print("FAILED: " + ", ".join(fails) if fails else "all checks passed")
 sys.exit(1 if fails else 0)

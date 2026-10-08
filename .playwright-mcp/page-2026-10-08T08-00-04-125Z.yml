@@ -1,0 +1,17 @@
+- generic [ref=f4e2]:
+  - main [ref=f4e4]:
+    - generic [ref=f4e5]:
+      - link "Close" [ref=f4e6] [cursor=pointer]:
+        - /url: /
+      - heading "Hear a native speaker" [level=1] [ref=f4e9]
+    - paragraph [ref=f4e10]: No recordings have been approved yet. This opens as soon as the first one is in.
+  - navigation "Main navigation" [ref=f4e11]:
+    - link "Alphabet" [ref=f4e12] [cursor=pointer]:
+      - /url: /
+      - generic [aria-hidden] [ref=f4e14]: ა
+    - link "Learn" [ref=f4e16] [cursor=pointer]:
+      - /url: /learn
+    - link "Test" [ref=f4e22] [cursor=pointer]:
+      - /url: /test
+    - link "Settings" [ref=f4e28] [cursor=pointer]:
+      - /url: /settings
