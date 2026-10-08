@@ -1,6 +1,7 @@
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { ALPHABET } from './letters';
-import { CATALOGUE, TAKES, baseMime, byType, extensionFor, nextUnrecorded, pickMime, recordedCount, takeName } from './recording';
+import { AUDIO, CATALOGUE, TAKES, baseMime, byType, extensionFor, nextUnrecorded, pickMime, recordedCount, takeName } from './recording';
 
 describe('recording catalogue', () => {
 	it('gives every item a unique id', () => {
@@ -61,6 +62,20 @@ describe('recording catalogue', () => {
 		const letter = CATALOGUE.find((i) => i.text === 'კ')!;
 		expect(takeName(letter, 2, 'audio/webm;codecs=opus')).toBe('letter-k-2.webm');
 		expect(takeName(CATALOGUE.find((i) => i.id === 'phrase:how-are-you')!, 1, 'audio/mp4')).toBe('phrase-rogor-khar-1.m4a');
+	});
+
+	it('lets the server accept only the items it lists', () => {
+		// The migration carries its own copy of the keys, because a PocketBase rule cannot read this
+		// file. A select field is what bounds an open recording endpoint, so the two must not drift.
+		const migration = readFileSync('pb/pb_migrations/1758290700_item_from_catalogue.js', 'utf8');
+		const allowed = JSON.parse(migration.slice(migration.indexOf('['), migration.indexOf('];') + 1).replace(/\t/g, ''));
+		expect(allowed).toEqual(CATALOGUE.map((i) => i.id));
+	});
+
+	it('keeps a take well inside the size the server accepts', () => {
+		// 24 kbps for at most ten seconds is about 30 KB; the ceiling has to clear that with room.
+		expect(AUDIO.maxBytes).toBeGreaterThan((AUDIO.bitrate / 8) * AUDIO.maxSeconds * 3);
+		expect(AUDIO.maxBytes).toBe(131072);
 	});
 
 	it('asks for three takes', () => {

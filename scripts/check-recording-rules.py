@@ -89,6 +89,9 @@ AUDIO = silence()
 SUPER = superuser_token()
 tag = uuid.uuid4().hex[:6]
 
+# Items have to be real catalogue keys; these three stand in for "one item", "another" and "a third".
+ITEM, OTHER, THIRD = "letter:ა", "word:water", "phrase:hello"
+
 
 def account(email, role):
     st, _ = call("/api/collections/users/records",
@@ -117,19 +120,29 @@ def reach(row, name, token=None):
 
 
 # Recording needs no account at all.
-st, row = call("/api/collections/recordings/records", {"item": f"letter:{tag}", "status": "pending"}, "POST", None, files=3)
+st, row = call("/api/collections/recordings/records", {"item": ITEM, "status": "pending"}, "POST", None, files=3)
 check("anyone can record, with no account", st, 200)
 check("all three takes are stored", len(row.get("audio", [])), 3)
 
-st, _ = call("/api/collections/recordings/records", {"item": f"word:{tag}", "status": "approved"}, "POST", None, files=3)
+st, _ = call("/api/collections/recordings/records", {"item": OTHER, "status": "approved"}, "POST", None, files=3)
 check("a recording cannot arrive already reviewed", st, 400)
 
-st, _ = call("/api/collections/recordings/records", {"item": f"letter:{tag}", "status": "pending"}, "POST", None, files=3)
-check("one row per item, so an open endpoint is capped", st, 400)
+st, _ = call("/api/collections/recordings/records", {"item": ITEM, "status": "pending"}, "POST", None, files=3)
+check("one row per item", st, 400)
+
+# Together these two bound what an open endpoint can ever store: 85 items x 3 takes x 128 KB.
+st, _ = call("/api/collections/recordings/records", {"item": "not-in-the-catalogue", "status": "pending"}, "POST", None, files=3)
+check("an item outside the catalogue is refused", st, 400)
+st, col = call("/api/collections/recordings", None, "GET", SUPER)
+audio = [f for f in col["fields"] if f["name"] == "audio"][0]
+item = [f for f in col["fields"] if f["name"] == "item"][0]
+check("the item is a fixed list, not free text", item["type"], "select")
+check("a take is capped at 128 KB", audio["maxSize"], 131072)
+check("three takes at most", audio["maxSelect"], 3)
 
 # The screen has to know what is done; the audio stays shut.
 st, listed = call("/api/collections/recordings/records?perPage=200")
-check("the list is open, so the screen knows what is recorded", any(r["item"] == f"letter:{tag}" for r in listed["items"]), True)
+check("the list is open, so the screen knows what is recorded", any(r["item"] == ITEM for r in listed["items"]), True)
 check("the list says nothing about who recorded it", "reader" in listed["items"][0], False)
 
 check("one row cannot be read without an account", call(f"/api/collections/recordings/records/{row['id']}")[0], 404)
@@ -143,12 +156,12 @@ check("the owner reaches the audio with a file token", reach(row, row["audio"][0
 
 # A misread item can be recorded again: drop the row, record it once more.
 check("an unreviewed row can be dropped so a redo can replace it", call(f"/api/collections/recordings/records/{row['id']}", None, "DELETE")[0], 204)
-st, row = call("/api/collections/recordings/records", {"item": f"letter:{tag}", "status": "pending"}, "POST", None, files=3)
+st, row = call("/api/collections/recordings/records", {"item": ITEM, "status": "pending"}, "POST", None, files=3)
 check("and recorded again in its place", st, 200)
 
 # Reviewing is nobody's job but the owner's, and it is still gated on three takes.
 check("an ordinary account cannot review", call(f"/api/collections/recordings/records/{row['id']}", {"status": "approved"}, "PATCH", learner_tok)[0], 404)
-st, short = call("/api/collections/recordings/records", {"item": f"short:{tag}", "status": "pending"}, "POST", None, files=2)
+st, short = call("/api/collections/recordings/records", {"item": THIRD, "status": "pending"}, "POST", None, files=2)
 check("a short item is stored", st, 200)
 check("but cannot be approved", call(f"/api/collections/recordings/records/{short['id']}", {"status": "approved"}, "PATCH", owner_tok)[0], 404)
 check("a full item can", call(f"/api/collections/recordings/records/{row['id']}", {"status": "approved"}, "PATCH", owner_tok)[0], 200)

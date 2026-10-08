@@ -102,13 +102,14 @@ export const CATALOGUE: Item[] = [...letters, ...clusters, ...words, ...phrases]
 /**
  * How a take is encoded. Speech at one channel and 16 kHz is what a speech-to-text engine resamples
  * to anyway, and ~24 kbps of Opus keeps a few seconds of audio in a couple of kilobytes, so the
- * reader can send a whole session over mobile data. The server caps each take at the same size.
+ * reader can send a whole session over mobile data. The server caps each take at the same size; a
+ * ten-second take, the longest allowed, measures about 25 KB, so the ceiling is generous.
  */
 export const AUDIO = {
 	channels: 1,
 	sampleRate: 16_000,
 	bitrate: 24_000,
-	maxBytes: 512 * 1024,
+	maxBytes: 128 * 1024,
 	/** A take is a letter, a word or a short phrase; anything longer is a stuck recorder. */
 	maxSeconds: 10
 };
