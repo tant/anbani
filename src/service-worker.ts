@@ -21,6 +21,29 @@ sw.addEventListener('activate', (event) => {
 sw.addEventListener('fetch', (event) => {
 	const url = new URL(event.request.url);
 
+	// SvelteKit asks this file whether a newer build exists, so a cached answer would say no forever.
+	if (url.pathname === '/_app/version.json') return;
+
+	// Opening the app answers from the network first. Cached-first here is what made a cold start show
+	// yesterday's code and then reload itself a moment later; the cache is the offline fallback, not
+	// the first answer. Everything under _app/immutable is named by its contents and stays cache-first.
+	if (event.request.mode === 'navigate') {
+		event.respondWith(
+			(async () => {
+				try {
+					const fresh = await fetch(event.request);
+					const cache = await caches.open(CACHE);
+					void cache.put('/', fresh.clone());
+					return fresh;
+				} catch {
+					const cache = await caches.open(CACHE);
+					return (await cache.match('/')) ?? Response.error();
+				}
+			})()
+		);
+		return;
+	}
+
 	const skip = event.request.method !== 'GET' || url.origin !== location.origin || url.pathname.startsWith('/api/') || url.pathname.startsWith('/_/');
 	if (skip) return;
 

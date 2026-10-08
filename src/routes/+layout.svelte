@@ -41,11 +41,6 @@
 				.then(pull)
 				.catch(() => {});
 		}
-		// A new release took over from the previous service worker: reload once so the page matches it.
-		// Progress is saved after every answer, so nothing is lost.
-		if (navigator.serviceWorker?.controller) {
-			navigator.serviceWorker.addEventListener('controllerchange', () => location.reload(), { once: true });
-		}
 		const online = () => void push();
 		addEventListener('online', online);
 		const unwatch = watchInstall();
