@@ -24,8 +24,14 @@ BASE = os.environ.get("PB_URL", "http://127.0.0.1:8093").rstrip("/")
 fails = []
 
 
+# Recording is rate limited per caller, so each run claims its own address and never collides with
+# the last one. The server reads the rightmost X-Forwarded-For entry, which behind a proxy is the
+# address the proxy saw; here there is no proxy, so this is simply the caller we are pretending to be.
+CALLER = "198.51.100." + str(uuid.uuid4().int % 250 + 1)
+
+
 def call(path, payload=None, method="GET", token=None, files=0, raw=False):
-    headers = {}
+    headers = {"X-Forwarded-For": CALLER}
     if token:
         headers["Authorization"] = token
     data = None
@@ -181,6 +187,18 @@ check("but still edits its own settings", call(f"/api/collections/users/records/
 # Nothing in the request log should point back at whoever recorded.
 st, settings = call("/api/settings", None, "GET", SUPER)
 check("the request log keeps no IP address", settings["logs"]["logIP"], False)
+
+# A ceiling on an open endpoint is a weapon unless reaching it is slow, and a limit shared by every
+# visitor is no limit at all, so the real caller has to be resolved from the proxy header.
+check("recording is rate limited", settings["rateLimits"]["enabled"], True)
+check("the real caller is read from the proxy header", settings["trustedProxy"]["headers"], ["X-Forwarded-For"])
+check("and from the entry a client cannot forge", settings["trustedProxy"]["useLeftmostIP"], False)
+limit = next(r for r in settings["rateLimits"]["rules"] if r["label"] == "recordings:create")
+check("ten readings a minute, which no person reaches", (limit["maxRequests"], limit["duration"]), (10, 60))
+
+burst = [call("/api/collections/recordings/records", {"item": ITEM, "status": "pending"}, "POST", None, files=3)[0] for _ in range(12)]
+check("a burst from one caller is cut off", burst[-1], 429)
+check("and other callers are unaffected", any(c == 200 for c in burst), True)
 
 print()
 print("FAILED: " + ", ".join(fails) if fails else "all checks passed")
