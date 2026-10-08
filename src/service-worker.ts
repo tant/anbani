@@ -3,6 +3,7 @@
 /// <reference lib="esnext" />
 /// <reference lib="webworker" />
 import { build, files, version } from '$service-worker';
+import { preferCached, worthKeeping } from './lib/shell';
 
 const sw = self as unknown as ServiceWorkerGlobalScope;
 const CACHE = `anbani-${version}`;
@@ -27,16 +28,18 @@ sw.addEventListener('fetch', (event) => {
 	// Opening the app answers from the network first. Cached-first here is what made a cold start show
 	// yesterday's code and then reload itself a moment later; the cache is the offline fallback, not
 	// the first answer. Everything under _app/immutable is named by its contents and stays cache-first.
-	if (event.request.mode === 'navigate') {
+	if (event.request.mode === 'navigate' && event.request.method === 'GET' && url.origin === location.origin) {
 		event.respondWith(
 			(async () => {
+				const cache = await caches.open(CACHE);
 				try {
 					const fresh = await fetch(event.request);
-					const cache = await caches.open(CACHE);
-					void cache.put('/', fresh.clone());
+					if (worthKeeping(fresh, location.origin)) void cache.put('/', fresh.clone());
+					// A deploy swaps containers behind the proxy; for those few seconds the last good
+					// copy is a better answer than the proxy's error page.
+					if (preferCached(fresh)) return (await cache.match('/')) ?? fresh;
 					return fresh;
 				} catch {
-					const cache = await caches.open(CACHE);
 					return (await cache.match('/')) ?? Response.error();
 				}
 			})()

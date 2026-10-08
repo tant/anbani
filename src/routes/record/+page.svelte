@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import Icon from '$lib/components/Icon.svelte';
 	import Recorder from '$lib/components/Recorder.svelte';
 	import { releaseMic } from '$lib/mic';
 	import { dur, ease } from '$lib/motion';
@@ -70,7 +69,6 @@
 		{/key}
 	{:else}
 		<header class="bar">
-			<a class="icon-btn" href="/" aria-label="Back"><Icon name="back" /></a>
 			<h1>ჩაწერა <span class="muted">Recording</span></h1>
 		</header>
 
