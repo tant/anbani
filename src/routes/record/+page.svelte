@@ -3,7 +3,7 @@
 	import Icon from '$lib/components/Icon.svelte';
 	import { dur, ease } from '$lib/motion';
 	import { pb } from '$lib/pb';
-	import { byType, CATALOGUE, ITEM_TYPES, recordedCount, type ItemType } from '$lib/recording';
+	import { byType, CATALOGUE, ITEM_TYPES, recordedCount, TAKES, type ItemType } from '$lib/recording';
 	import { settings } from '$lib/settings.svelte';
 	import { fly } from 'svelte/transition';
 
@@ -23,7 +23,8 @@
 	onMount(async () => {
 		try {
 			const rows = await pb.collection('recordings').getFullList({ fields: 'item,audio', requestKey: null });
-			done = new Set(rows.filter((r) => r.audio).map((r) => r.item as string));
+			// An item counts as recorded once all three takes are in.
+			done = new Set(rows.filter((r) => (r.audio as string[])?.length >= TAKES).map((r) => r.item as string));
 		} catch {
 			failed = true;
 		} finally {

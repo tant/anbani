@@ -10,6 +10,9 @@ import { ALPHABET, type Lang } from './letters';
  */
 export type ItemType = 'letter' | 'cluster' | 'word' | 'phrase';
 
+/** Takes per item: the reader reads each one three times in a row, and all three are kept. */
+export const TAKES = 3;
+
 export interface Item {
 	/** Stable key for the recording; never reused for different text. */
 	id: string;
