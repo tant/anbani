@@ -1,5 +1,5 @@
-import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
+import migration from '../../pb/pb_migrations/1758290700_item_from_catalogue.js?raw';
 import { ALPHABET } from './letters';
 import { AUDIO, CATALOGUE, TAKES, baseMime, byType, extensionFor, nextUnrecorded, pickMime, recordedCount, takeName } from './recording';
 
@@ -67,7 +67,6 @@ describe('recording catalogue', () => {
 	it('lets the server accept only the items it lists', () => {
 		// The migration carries its own copy of the keys, because a PocketBase rule cannot read this
 		// file. A select field is what bounds an open recording endpoint, so the two must not drift.
-		const migration = readFileSync('pb/pb_migrations/1758290700_item_from_catalogue.js', 'utf8');
 		const allowed = JSON.parse(migration.slice(migration.indexOf('['), migration.indexOf('];') + 1).replace(/\t/g, ''));
 		expect(allowed).toEqual(CATALOGUE.map((i) => i.id));
 	});
