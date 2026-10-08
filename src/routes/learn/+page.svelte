@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Icon from '$lib/components/Icon.svelte';
-	import Listen from '$lib/components/Listen.svelte';
 	import Question from '$lib/components/Question.svelte';
 	import SavePrompt from '$lib/components/SavePrompt.svelte';
 	import Staff from '$lib/components/Staff.svelte';
@@ -90,10 +89,7 @@
 		<section class="stage">
 			<p class="prompt">{t('newLetter')}</p>
 			<Staff char={letter.char} size="min(11rem, 40vw)" tone="lapis" write />
-			<div class="say rise" style:--d="9">
-				<p class="sound">{letter.translit} <span class="muted">/{letter.ipa}/</span></p>
-				<Listen item="letter:{letter.char}" />
-			</div>
+			<p class="sound rise" style:--d="9">{letter.translit} <span class="muted">/{letter.ipa}/</span></p>
 			<p class="hint rise" style:--d="10">{letter.hint[settings.lang]}</p>
 		</section>
 		<div class="actions bottom"><button class="btn primary" onclick={learnt}>{t('gotIt')}</button></div>
@@ -121,7 +117,6 @@
 </main>
 
 <style>
-	.say { display: flex; align-items: center; justify-content: center; gap: 12px; }
 	.sound { font-size: 2.2rem; font-weight: 600; text-align: center; }
 	.sound .muted { font-size: 1.1rem; font-weight: 400; }
 	.done { justify-content: center; gap: 12px; padding-top: 20vh; }

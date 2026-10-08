@@ -11,7 +11,6 @@
 	import { t } from '$lib/settings.svelte';
 	import { band } from '$lib/mastery';
 	import type { LetterStatus } from '$lib/srs';
-	import { voices } from '$lib/voices.svelte';
 
 	const tone: Record<LetterStatus, string> = { unseen: 'muted', learning: 'lapis', known: 'ink' };
 
@@ -19,8 +18,6 @@
 	const known = $derived(Object.values(status).filter((s) => s === 'known').length);
 	const learning = $derived(Object.values(status).filter((s) => s === 'learning').length);
 	const started = $derived(known + learning > 0);
-
-	const recorded = $derived(Object.keys(voices.takes).length);
 
 	let selected = $state<Letter | null>(null);
 	const fill = !filled;
@@ -51,10 +48,6 @@
 		</ul>
 		<p class="muted">{started ? t('summary', { known, learning }) : t('intro')}</p>
 	</div>
-
-	{#if recorded}
-		<a class="btn" href="/listen">{t('listenTitle')}</a>
-	{/if}
 
 	<InstallCard />
 </main>

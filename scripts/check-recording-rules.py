@@ -129,13 +129,13 @@ check("owner approves three takes", st, 200)
 
 # what each audience sees
 st, anon = call("/api/collections/recordings/records?perPage=200")
-check("anonymous sees only approved", sorted({r["status"] for r in anon["items"]}), ["approved"])
+check("nobody signed in sees any recording", anon["items"], [])
 st, lrn = call("/api/collections/recordings/records?perPage=200", None, "GET", learner_tok)
-check("learner sees only approved", sorted({r["status"] for r in lrn["items"]}), ["approved"])
+check("a learner sees no recording either", lrn["items"], [])
 
 st, pend = call("/api/collections/recordings/records", {"item": f"letter:f-{tag}", "status": "pending", "reader": reader_id}, "POST", reader_tok, files=3)
 st, _ = call(f"/api/collections/recordings/records/{pend['id']}")
-check("anonymous cannot read a pending row", st, 404)
+check("nobody signed in can read a row", st, 404)
 st, _ = call(f"/api/collections/recordings/records/{pend['id']}", None, "GET", reader_tok)
 check("reader reads own pending row", st, 200)
 st, own = call("/api/collections/recordings/records?perPage=200&filter=" + urllib.request.quote('status="pending"'), None, "GET", owner_tok)
@@ -170,7 +170,9 @@ check("plain address of a pending take, nobody signed in", at(pend, pend["audio"
 check("plain address of a pending take, a learner", at(pend, pend["audio"][0], file_token(learner_tok)), 404)
 check("the owner reaches a pending take with a file token", at(pend, pend["audio"][0], file_token(owner_tok)), 200)
 check("its reader reaches it too", at(pend, pend["audio"][0], file_token(reader_tok)), 200)
-check("an approved take stays playable by anyone", at(full, full["audio"][0]), 200)
+check("not even an approved take is public", at(full, full["audio"][0]), 404)
+check("a learner cannot reach it with a token of their own", at(full, full["audio"][0], file_token(learner_tok)), 404)
+check("the owner reaches it", at(full, full["audio"][0], file_token(owner_tok)), 200)
 
 # a role is handed out by a superuser only, at sign-up as much as afterwards
 st, _ = call("/api/collections/users/records", {"email": f"sneak-{tag}@test.local", "password": "passw0rd1234", "passwordConfirm": "passw0rd1234", "role": "owner"}, "POST")

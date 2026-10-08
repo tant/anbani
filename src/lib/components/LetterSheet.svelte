@@ -3,7 +3,6 @@
 	import { progress } from '$lib/progress.svelte';
 	import { settings, t } from '$lib/settings.svelte';
 	import { dur } from '$lib/motion';
-	import Listen from './Listen.svelte';
 	import Staff from './Staff.svelte';
 
 	let { letter, onclose }: { letter: Letter | null; onclose: () => void } = $props();
@@ -46,10 +45,7 @@
 	{#if letter}
 		<div class="sheet">
 			<Staff char={letter.char} size="7.5rem" write />
-			<div class="say">
-				<p class="sound">{letter.translit} <span class="muted">/{letter.ipa}/</span></p>
-				<Listen item="letter:{letter.char}" />
-			</div>
+			<p class="sound">{letter.translit} <span class="muted">/{letter.ipa}/</span></p>
 			<p class="hint">{letter.hint[settings.lang]}</p>
 			{#if score !== undefined}
 				<div class="mastery">
@@ -63,7 +59,6 @@
 </dialog>
 
 <style>
-	.say { display: flex; align-items: center; gap: 12px; }
 	.mastery { display: flex; flex-direction: column; gap: 6px; width: 100%; max-width: 280px; }
 	.mastery p { font-size: 0.9rem; }
 	.bar { height: 8px; border-radius: 4px; background: var(--rule); overflow: hidden; }

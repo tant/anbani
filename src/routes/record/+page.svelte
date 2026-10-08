@@ -19,7 +19,6 @@
 
 	interface Row {
 		id: string;
-		status: string;
 	}
 
 	let user = $state(pb.authStore.record);
@@ -36,10 +35,10 @@
 
 	async function refresh() {
 		try {
-			const found = await pb.collection('recordings').getFullList({ fields: 'id,item,audio,status', requestKey: null });
+			const found = await pb.collection('recordings').getFullList({ fields: 'id,item,audio', requestKey: null });
 			// Exactly three takes, nothing less: a half-finished item stays on the list.
 			done = new Set(found.filter((r) => (r.audio as string[])?.length === TAKES).map((r) => r.item as string));
-			rows = new Map(found.map((r) => [r.item as string, { id: r.id, status: r.status as string }]));
+			rows = new Map(found.map((r) => [r.item as string, { id: r.id }]));
 			failed = false;
 		} catch {
 			failed = true;
@@ -73,7 +72,6 @@
 	const total = $derived(recordedCount(done));
 	const shown = $derived(filter === 'all' ? CATALOGUE : byType(filter));
 	const upNext = $derived(nextUnrecorded(done));
-	const statusOf = (item: string) => (done.has(item) ? rows.get(item)?.status : undefined);
 </script>
 
 <main class="page">
@@ -125,7 +123,6 @@
 						დასრულდა · All done
 					{/if}
 				</button>
-				{#if user.role === 'owner'}<a class="btn" href="/record/review">განხილვა · Review</a>{/if}
 			</div>
 
 			<p class="muted consent">
@@ -153,9 +150,7 @@
 								{#if item.example}<span class="muted" lang="ka">{item.example}</span>{/if}
 								{#if item.meaning}<span class="muted">{item.meaning.en}</span>{/if}
 							</span>
-							<span class="mark" aria-label={done.has(item.id) ? 'recorded' : 'not recorded'}>
-								{#if statusOf(item.id) === 'approved'}✓{:else if statusOf(item.id) === 'rejected'}↺{:else if done.has(item.id)}●{:else}○{/if}
-							</span>
+							<span class="mark" aria-label={done.has(item.id) ? 'recorded' : 'not recorded'}>{done.has(item.id) ? '●' : '○'}</span>
 						</button>
 					</li>
 				{/each}

@@ -23,13 +23,13 @@
 			<p>Máy chủ lưu bốn nhóm dữ liệu: địa chỉ email, cài đặt của bạn gồm ngôn ngữ, kiểu chữ và số lựa chọn mỗi câu, tiến độ học của từng chữ cái, và vai của tài khoản nếu bạn được mời tham gia thu âm.</p>
 
 			<h2>Ứng dụng không thu tiếng của người học</h2>
-			<p>Khi học, khi làm bài kiểm tra hay khi nghe phát âm, ứng dụng không xin quyền micro và không ghi lại tiếng của bạn. Quyền micro chỉ được xin ở màn thu âm dành riêng cho người đọc được mời, và chỉ sau khi người đó tự bấm nút thu.</p>
+			<p>Khi học hay khi làm bài kiểm tra, ứng dụng không xin quyền micro và không ghi lại tiếng của bạn. Quyền micro chỉ được xin ở màn thu âm dành riêng cho người đọc được mời, và chỉ sau khi người đó tự bấm nút thu.</p>
 
 			<h2>Bản thu phát âm của người đọc được mời</h2>
 			<p>Phần phát âm trong ứng dụng do người bản xứ được dự án mời đọc. Người đọc đăng nhập bằng Google, được cấp quyền thu, rồi tự đọc từng mục trong danh mục, mỗi mục ba lượt.</p>
 			<p>Với mỗi lượt thu, máy chủ lưu tệp âm thanh, mã của nội dung đã đọc, tài khoản đã thu, thời điểm thu và trạng thái duyệt. Giọng nói là dữ liệu cá nhân, nên người đọc cần biết rõ phần này trước khi bắt đầu.</p>
-			<p>Bản thu đã duyệt là nội dung công bố trong ứng dụng: người học nào cũng nghe được, kể cả khi chưa có tài khoản, vì đó chính là mục đích của bản thu. Bản chưa duyệt hoặc bị trả lại thì chỉ người đã thu và chủ dự án mở được; người khác có đúng đường dẫn tệp cũng không tải được.</p>
-			<p>Bản thu được dùng cho hai việc: phát cho người học nghe, và làm cơ sở để xây dựng phần đối chiếu phát âm về sau. Bản thu không được bán và không chia sẻ cho bên thứ ba.</p>
+			<p>Bản thu không được phát trong ứng dụng. Chỉ người đã thu và chủ dự án mở được bản thu của mình; người học không mở được, và người có đúng đường dẫn tệp cũng không tải được.</p>
+			<p>Dự án giữ bản thu làm tư liệu tham chiếu và làm cơ sở xây dựng phần đối chiếu phát âm về sau. Bản thu không được bán và không chia sẻ cho bên thứ ba. Nếu sau này bản thu được phát cho người học, trang này được cập nhật trước khi điều đó diễn ra.</p>
 			<p>Người đọc có thể yêu cầu xóa toàn bộ bản thu của mình bất cứ lúc nào bằng cách gửi thư tới <a href="mailto:txntan@gmail.com">txntan@gmail.com</a>. Yêu cầu được xử lý trong vòng 30 ngày, và mọi bản sao đã công bố trong ứng dụng được rút xuống.</p>
 
 			<h2>Không chia sẻ, không quảng cáo</h2>
@@ -53,13 +53,13 @@
 			<p>The server stores four things: your email address, your settings (language, letter style, choices per question), your learning progress for each letter, and the role of your account if you were invited to help with recordings.</p>
 
 			<h2>The app never records a learner</h2>
-			<p>While you study, take a test, or play a pronunciation clip, the app does not ask for the microphone and does not record you. The microphone is requested only on the recording screen, which is for invited readers, and only after that person taps the record button themselves.</p>
+			<p>While you study or take a test, the app does not ask for the microphone and does not record you. The microphone is requested only on the recording screen, which is for invited readers, and only after that person taps the record button themselves.</p>
 
 			<h2>Recordings made by an invited reader</h2>
 			<p>The pronunciation in the app is read by a native speaker invited by the project. The reader signs in with Google, is granted permission to record, and reads each item in the catalogue three times.</p>
 			<p>For every take, the server keeps the audio file, the key of the item that was read, the account that recorded it, the time, and its review status. A voice is personal data, so a reader should understand this before starting.</p>
-			<p>An approved recording is published material inside the app: any learner can play it, with or without an account, because that is what it is for. A recording that is waiting for review, or was sent back, can be opened only by the person who recorded it and by the project owner — holding the file address is not enough.</p>
-			<p>Recordings are used for two things: playing them to learners, and as the basis for pronunciation checking later on. They are never sold and never shared with third parties.</p>
+			<p>Recordings are not played in the app. Only the person who recorded them and the project owner can open them; a learner cannot, and holding the file address is not enough.</p>
+			<p>The project keeps the recordings as reference material and as the basis for pronunciation checking later on. They are never sold and never shared with third parties. If they are ever played to learners, this page will say so before that happens.</p>
 			<p>A reader may ask for all of their recordings to be deleted at any time by writing to <a href="mailto:txntan@gmail.com">txntan@gmail.com</a>. Requests are handled within 30 days, and anything already published in the app is withdrawn.</p>
 
 			<h2>No sharing, no ads</h2>
