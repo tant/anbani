@@ -6,10 +6,11 @@
 	import { dueCount } from '$lib/srs';
 	import Icon from './Icon.svelte';
 
-	const tabs: { href: string; label: MessageKey; icon?: 'learn' | 'test' | 'settings' }[] = [
+	const tabs: { href: string; label: MessageKey; icon?: 'learn' | 'test' | 'mic' | 'settings' }[] = [
 		{ href: '/', label: 'alphabet' },
 		{ href: '/learn', label: 'learn', icon: 'learn' },
 		{ href: '/test', label: 'test', icon: 'test' },
+		{ href: '/record', label: 'record', icon: 'mic' },
 		{ href: '/settings', label: 'settings', icon: 'settings' }
 	];
 
@@ -45,7 +46,7 @@
 		max-width: 560px;
 		transform: translateX(-50%);
 		display: grid;
-		grid-template-columns: repeat(4, 1fr);
+		grid-template-columns: repeat(5, 1fr);
 		padding: 4px 8px env(safe-area-inset-bottom);
 		background: var(--paper);
 		border-top: 1px solid var(--rule);
@@ -63,7 +64,7 @@
 		text-decoration: none;
 	}
 	a[aria-current='page'] { color: var(--lapis); font-weight: 600; }
-	.icon { position: relative; display: grid; place-items: center; height: 28px; width: 56px; }
+	.icon { position: relative; display: grid; place-items: center; height: 28px; width: 100%; max-width: 56px; }
 	.icon::before {
 		content: '';
 		position: absolute;
@@ -82,7 +83,7 @@
 		animation: pop 0.4s cubic-bezier(0.3, 1.6, 0.5, 1);
 		position: absolute;
 		top: -4px;
-		left: 32px;
+		left: 57%;
 		min-width: 18px;
 		padding: 0 5px;
 		border-radius: 999px;

@@ -1,5 +1,5 @@
 <script lang="ts">
-	let { name }: { name: 'settings' | 'close' | 'back' | 'learn' | 'test' | 'install' | 'share' } = $props();
+	let { name }: { name: 'settings' | 'close' | 'back' | 'learn' | 'test' | 'install' | 'share' | 'mic' } = $props();
 </script>
 
 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -18,6 +18,10 @@
 	{:else if name === 'share'}
 		<path d="M12 4v11m0-11L8.5 7.5M12 4l3.5 3.5" />
 		<path d="M6 11H5.5A1.5 1.5 0 0 0 4 12.5v6A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5v-6a1.5 1.5 0 0 0-1.5-1.5H18" />
+	{:else if name === 'mic'}
+		<rect x="9" y="3" width="6" height="11" rx="3" />
+		<path d="M5.5 11.5a6.5 6.5 0 0 0 13 0" />
+		<path d="M12 18v3" />
 	{:else if name === 'test'}
 		<rect x="4" y="4" width="16" height="16" rx="3" />
 		<path d="M8.5 12.5l2.5 2.5 4.5-5" />

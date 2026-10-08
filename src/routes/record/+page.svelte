@@ -6,6 +6,7 @@
 	import { dur, ease } from '$lib/motion';
 	import { pb } from '$lib/pb';
 	import { byType, CATALOGUE, ITEM_TYPES, nextUnrecorded, recordedCount, TAKES, type Item, type ItemType } from '$lib/recording';
+	import { ui } from '$lib/ui.svelte';
 	import { fly } from 'svelte/transition';
 
 	// The reader is a native speaker who does not read Vietnamese: this screen stays Georgian + English.
@@ -50,6 +51,12 @@
 		await refresh();
 		current = nextUnrecorded(done, finished) ?? null;
 	}
+
+	// While a take is being read, the tab bar steps aside: a mis-tap mid-reading would leave the screen.
+	$effect(() => {
+		ui.immersive = current !== null;
+		return () => (ui.immersive = false);
+	});
 
 	const total = $derived(recordedCount(done));
 	const shown = $derived(filter === 'all' ? CATALOGUE : byType(filter));
