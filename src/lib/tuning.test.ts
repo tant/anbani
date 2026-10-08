@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { ALPHABET } from './letters';
-import { confusable, confusedWith, difficultyBump, freq, intervalScale, nextLetter, soundTwins, TEACHING_ORDER, tuneDue } from './tuning';
-import { newCard } from './srs';
+import { State } from 'ts-fsrs';
+import { confusable, confusedWith, difficultyBump, freq, harder, intervalScale, nextLetter, soundTwins, TEACHING_ORDER, tuneDue } from './tuning';
+import { newCard, reviewCard } from './srs';
+import { Rating } from 'ts-fsrs';
 
 describe('frequency data', () => {
 	it('covers every letter and adds up to a whole', () => {
@@ -60,6 +62,15 @@ describe('difficulty and intervals', () => {
 	it('starts a letter with a sound twin harder than one without', () => {
 		expect(difficultyBump('ც')).toBeGreaterThan(difficultyBump('ა'));
 		expect(difficultyBump('ც')).toBeLessThanOrEqual(1.5);
+	});
+
+	it('adds the bump once FSRS has set a difficulty, not before', () => {
+		const now = new Date('2026-10-08T00:00:00Z');
+		const first = reviewCard(newCard(now), Rating.Good, now);
+		const bumped = harder(first, State.New, 'ც');
+		expect(bumped.difficulty).toBeCloseTo(first.difficulty + difficultyBump('ც'));
+		// a later review keeps whatever FSRS worked out, with no second bump
+		expect(harder(first, State.Review, 'ც').difficulty).toBe(first.difficulty);
 	});
 
 	it('reviews common letters sooner than rare ones', () => {

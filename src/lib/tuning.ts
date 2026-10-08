@@ -1,4 +1,4 @@
-import type { Card } from 'ts-fsrs';
+import { State, type Card } from 'ts-fsrs';
 import { FREQUENCY } from './frequency.generated';
 import { ALPHABET, byChar } from './letters';
 
@@ -42,7 +42,16 @@ export function nextLetter(introduced: Set<string>, learning: Set<string>): stri
 	return left.find(free) ?? left[0];
 }
 
-/** A letter with a sound twin, or with close look-alikes, starts out harder and so is asked more. */
+/**
+ * A letter with a sound twin, or with close look-alikes, is harder than its answers alone suggest.
+ * FSRS works out a card's difficulty at the first review, so the bump is added right after that one
+ * and carried forward from there; setting it any earlier would simply be overwritten.
+ */
+export function harder(card: Card, before: State, char: string): Card {
+	if (before !== State.New) return card;
+	return { ...card, difficulty: Math.min(10, card.difficulty + difficultyBump(char)) };
+}
+
 export function difficultyBump(char: string): number {
 	const bump = (soundTwins(char).length ? 0.8 : 0) + Math.min(3, byChar.get(char)?.looksLike.length ?? 0) * 0.2;
 	return Math.min(1.5, bump);
