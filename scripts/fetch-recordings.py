@@ -91,6 +91,10 @@ for row in rows:
 with open(os.path.join(OUT, "manifest.json"), "w") as f:
     json.dump(manifest, f, ensure_ascii=False, indent="\t")
 
+if not manifest:
+    print(f"nothing recorded yet on {BASE}")
+    raise SystemExit(0)
+
 total = sum(m["bytes"] for m in manifest)
 items = len({m["item"] for m in manifest})
 waiting = len({m["item"] for m in manifest if m["status"] != "approved"})
