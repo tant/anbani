@@ -1,8 +1,8 @@
 """Downloads every recording out of PocketBase, for listening or for building a training set.
 
-Pulls all rows, including the ones still waiting for review, writes each take to disk and leaves a
-manifest beside them. The `item` field is the catalogue key from src/lib/recording.ts, so it is also
-the label of what was read.
+Nothing in the app plays a recording, so this is how the takes are listened to and worked with.
+Writes every take to disk and leaves a manifest beside them. The `item` field is the catalogue key
+from src/lib/recording.ts, so it is also the label of what was read.
 
     cd ~/works/learn-mkhedruli && set -a && . ~/works/mydevops/.env && set +a
     PB_URL=https://anbani.korbvazi.com \
@@ -109,6 +109,7 @@ if not manifest:
 
 total = sum(m["bytes"] for m in manifest)
 items = len({m["item"] for m in manifest})
-waiting = len({m["item"] for m in manifest if m["status"] != "approved"})
+short = sorted(i for i in {m["item"] for m in manifest} if sum(1 for m in manifest if m["item"] == i) != 3)
 print(f"{len(manifest)} takes of {items} items, {total / 1024:.0f} KB, into {OUT}")
-print(f"{waiting} item(s) not approved yet" if waiting else "every item is approved")
+if short:
+    print(f"{len(short)} item(s) without all three takes: " + ", ".join(short))
