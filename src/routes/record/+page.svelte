@@ -23,8 +23,8 @@
 	onMount(async () => {
 		try {
 			const rows = await pb.collection('recordings').getFullList({ fields: 'item,audio', requestKey: null });
-			// An item counts as recorded once all three takes are in.
-			done = new Set(rows.filter((r) => (r.audio as string[])?.length >= TAKES).map((r) => r.item as string));
+			// Exactly three takes, nothing less: a half-finished item stays on the list.
+			done = new Set(rows.filter((r) => (r.audio as string[])?.length === TAKES).map((r) => r.item as string));
 		} catch {
 			failed = true;
 		} finally {

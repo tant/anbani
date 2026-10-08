@@ -10,7 +10,10 @@ import { ALPHABET, type Lang } from './letters';
  */
 export type ItemType = 'letter' | 'cluster' | 'word' | 'phrase';
 
-/** Takes per item: the reader reads each one three times in a row, and all three are kept. */
+/**
+ * Takes per item: every item is read exactly three times in one sitting, and all three are kept.
+ * Three is a requirement, not a ceiling — an item with fewer still counts as unrecorded.
+ */
 export const TAKES = 3;
 
 export interface Item {
