@@ -100,6 +100,8 @@
 			takes[index] = { blob, url: URL.createObjectURL(blob), seconds: (performance.now() - openedAt.at) / 1000 };
 			const empty = takes.findIndex((take) => !take);
 			if (empty >= 0) slot = empty;
+			// The third reading finishes the item on its own: nothing to confirm, nothing to tap.
+			else void store();
 		};
 
 		const tick = () => {
@@ -217,18 +219,19 @@
 			<button class="btn primary listening" onclick={cancel}>წაიკითხეთ ახლა · Read it now</button>
 		{:else if phase === 'arming'}
 			<button class="btn primary" disabled>მზადება… Getting ready…</button>
+		{:else if saving}
+			<button class="btn primary" disabled>ინახება… Saving…</button>
 		{:else if complete}
-			<button class="btn primary" onclick={store} disabled={saving}>
-				{saving ? 'ინახება… Saving…' : 'შენახვა · Save all three'}
-			</button>
+			<!-- only reached when a save failed; the reader taps to send the three takes again -->
+			<button class="btn primary" onclick={store}>ხელახლა შენახვა · Save again</button>
 		{:else}
 			<button class="btn primary" onclick={capture}>
 				ჩაწერა · Record <span class="muted">{filled + 1}/{TAKES}</span>
 			</button>
 		{/if}
 		<p class="muted how">
-			დააჭირეთ, წაიკითხეთ, და გაჩერება თავისთავად მოხდება.
-			<span lang="en">Tap once, read the item, and the take ends on its own.</span>
+			დააჭირეთ და წაიკითხეთ. მესამის შემდეგ თავისთავად ინახება.
+			<span lang="en">Tap and read. Each take ends by itself, and the third one saves the item and moves on.</span>
 		</p>
 	</div>
 </section>
