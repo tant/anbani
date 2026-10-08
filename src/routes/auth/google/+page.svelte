@@ -10,10 +10,10 @@
 
 	onMount(async () => {
 		try {
-			const { record } = await finishGoogleSignIn(new URLSearchParams(location.search));
+			const { record, from } = await finishGoogleSignIn(new URLSearchParams(location.search));
 			await adoptProfile(record);
 			await pull();
-			await goto('/', { replaceState: true });
+			await goto(from, { replaceState: true });
 		} catch (err) {
 			error = t(authError(err, navigator.onLine));
 		}

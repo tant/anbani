@@ -7,7 +7,8 @@ import { load, save } from './storage';
  */
 const PENDING_KEY = 'oauth-pending';
 
-type Pending = { state: string; verifier: string };
+/** `from` is the page the sign-in started on, so a reader who signs in at /record lands back there. */
+type Pending = { state: string; verifier: string; from: string };
 
 export const redirectUrl = () => `${location.origin}/auth/google`;
 
@@ -16,7 +17,7 @@ export async function startGoogleSignIn() {
 	const methods = await pb.collection('users').listAuthMethods();
 	const google = methods.oauth2.providers.find((p) => p.name === 'google');
 	if (!google) throw new Error('google provider is not enabled');
-	save(PENDING_KEY, { state: google.state, verifier: google.codeVerifier } satisfies Pending);
+	save(PENDING_KEY, { state: google.state, verifier: google.codeVerifier, from: location.pathname } satisfies Pending);
 	location.href = google.authURL + encodeURIComponent(redirectUrl());
 }
 
@@ -30,5 +31,6 @@ export async function finishGoogleSignIn(params: URLSearchParams) {
 	if (params.get('error') || !code) throw new Error(params.get('error') ?? 'missing code');
 	if (!pending || pending.state !== state) throw new Error('state mismatch');
 
-	return pb.collection('users').authWithOAuth2Code('google', code, pending.verifier, redirectUrl());
+	const auth = await pb.collection('users').authWithOAuth2Code('google', code, pending.verifier, redirectUrl());
+	return { ...auth, from: pending.from || '/' };
 }

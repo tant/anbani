@@ -12,6 +12,7 @@
 	import { pull, push } from '$lib/progress.svelte';
 	import { adoptProfile, settings } from '$lib/settings.svelte';
 	import { ui } from '$lib/ui.svelte';
+	import { loadVoices } from '$lib/voices.svelte';
 
 	let { children } = $props();
 
@@ -34,6 +35,8 @@
 	});
 
 	onMount(() => {
+		// Nothing depends on this finishing: the listen buttons appear as soon as the list lands.
+		void loadVoices().catch(() => {});
 		if (pb.authStore.isValid) {
 			pb.collection('users')
 				.authRefresh()

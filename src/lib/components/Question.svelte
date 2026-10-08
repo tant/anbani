@@ -4,6 +4,7 @@
 	import type { Skill } from '$lib/srs';
 	import { slide, fly } from 'svelte/transition';
 	import { dur, ease } from '$lib/motion';
+	import Listen from './Listen.svelte';
 	import Staff from './Staff.svelte';
 
 	let {
@@ -61,6 +62,9 @@
 		<Staff char={letter.char} size={wrong ? '6rem' : 'min(11rem, 40vw)'} tone={chosen === char ? 'ok' : 'ink'} />
 	{:else}
 		<p class="prompt-sound" class:right={chosen === char}>{letter.translit}</p>
+	{/if}
+	{#if chosen}
+		<Listen item="letter:{char}" size="sm" />
 	{/if}
 </section>
 

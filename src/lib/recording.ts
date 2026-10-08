@@ -99,6 +99,40 @@ const phrases: Item[] = [
 
 export const CATALOGUE: Item[] = [...letters, ...clusters, ...words, ...phrases];
 
+/**
+ * How a take is encoded. Speech at one channel and 16 kHz is what a speech-to-text engine resamples
+ * to anyway, and ~24 kbps of Opus keeps a few seconds of audio in a couple of kilobytes, so the
+ * reader can send a whole session over mobile data. The server caps each take at the same size.
+ */
+export const AUDIO = {
+	channels: 1,
+	sampleRate: 16_000,
+	bitrate: 24_000,
+	maxBytes: 512 * 1024,
+	/** A take is a letter, a word or a short phrase; anything longer is a stuck recorder. */
+	maxSeconds: 10
+};
+
+/** Opus first; Safari offers neither container and records AAC in an MP4 instead. */
+const CONTAINERS = ['audio/webm;codecs=opus', 'audio/ogg;codecs=opus', 'audio/mp4'];
+
+export const pickMime = (supported: (mime: string) => boolean) => CONTAINERS.find(supported);
+
+/** PocketBase matches the field's allowed types against a bare type, without the codec parameter. */
+export const baseMime = (mime: string) => mime.split(';')[0];
+
+export const extensionFor = (mime: string) =>
+	mime.includes('webm') ? 'webm' : mime.includes('ogg') ? 'ogg' : 'm4a';
+
+/**
+ * The next item still missing takes, carrying on from the one just finished and wrapping around, so
+ * a reader who starts in the middle of the list still gets shown everything that is left.
+ */
+export function nextUnrecorded(done: Set<string>, afterId?: string) {
+	const from = afterId ? CATALOGUE.findIndex((i) => i.id === afterId) + 1 : 0;
+	return [...CATALOGUE.slice(from), ...CATALOGUE.slice(0, from)].find((i) => !done.has(i.id));
+}
+
 export const ITEM_TYPES: ItemType[] = ['letter', 'cluster', 'word', 'phrase'];
 
 export const byType = (type: ItemType) => CATALOGUE.filter((i) => i.type === type);
