@@ -21,8 +21,10 @@ export async function mic(): Promise<Mic> {
 		stream = await navigator.mediaDevices.getUserMedia({
 			audio: { channelCount: AUDIO.channels, sampleRate: AUDIO.sampleRate, echoCancellation: true, noiseSuppression: true }
 		});
-		// Resampling here rather than in the encoder keeps the whole chain at the rate speech-to-text
-		// works in; a browser that refuses the rate just runs the graph at its own.
+		// Capturing at 16 kHz keeps the encoder from being handed detail it will throw away. The stored
+		// file still reports 48 kHz, because that is the rate Opus always presents; what the setting
+		// buys is the lower data rate, around 20 kbps in practice. A browser that refuses the rate
+		// just runs the graph at its own.
 		try {
 			ctx = new AudioContext({ sampleRate: AUDIO.sampleRate });
 		} catch {

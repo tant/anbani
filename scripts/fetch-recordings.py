@@ -10,8 +10,8 @@ from src/lib/recording.ts, so it is also the label of what was read.
       PB_SUPERUSER_PASSWORD="$ANBANI_PB_SUPERUSER_PASSWORD" \
       python3 scripts/fetch-recordings.py ~/anbani-voices
 
-Takes are Opus in a WebM container, one channel at 16 kHz. To turn the lot into the 16 kHz mono WAV
-most speech tooling wants:
+Takes are Opus in a WebM container, one channel, around 20 kbps. Opus always presents itself at
+48 kHz whatever it was captured at, so convert when speech tooling wants 16 kHz mono WAV:
 
     for f in ~/anbani-voices/audio/*.webm; do ffmpeg -v error -i "$f" -ac 1 -ar 16000 "${f%.webm}.wav"; done
 """
