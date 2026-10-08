@@ -157,12 +157,11 @@
 		if (!complete || saving) return;
 		saving = true;
 		error = '';
-		const reader = pb.authStore.record?.id;
 		try {
+			// Nothing identifying goes with a take: no account, no name, see privacy.
 			const body = new FormData();
 			body.append('item', item.id);
 			body.append('status', 'pending');
-			body.append('reader', reader ?? '');
 			takes.forEach((take, i) => {
 				body.append('audio', new File([take!.blob], takeName(item, i + 1, take!.blob.type), { type: take!.blob.type }));
 			});

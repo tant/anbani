@@ -96,7 +96,6 @@ for row in rows:
             "bytes": os.path.getsize(path),
             "seconds": seconds(path),
             "status": row["status"],
-            "reader": row["reader"],
             "recorded": row["created"],
         })
 

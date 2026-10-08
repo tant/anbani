@@ -2,7 +2,6 @@
 	import { onMount } from 'svelte';
 	import Icon from '$lib/components/Icon.svelte';
 	import Recorder from '$lib/components/Recorder.svelte';
-	import { startGoogleSignIn } from '$lib/google';
 	import { releaseMic } from '$lib/mic';
 	import { dur, ease } from '$lib/motion';
 	import { pb } from '$lib/pb';
@@ -21,15 +20,10 @@
 		id: string;
 	}
 
-	let user = $state(pb.authStore.record);
-	$effect(() => pb.authStore.onChange(() => (user = pb.authStore.record)));
-	const mayRecord = $derived(user?.role === 'reader' || user?.role === 'owner');
-
 	let rows = $state(new Map<string, Row>());
 	let done = $state(new Set<string>());
 	let loading = $state(true);
 	let failed = $state(false);
-	let signingIn = $state(false);
 	let filter = $state<ItemType | 'all'>('all');
 	let current = $state<Item | null>(null);
 
@@ -51,16 +45,6 @@
 		void refresh();
 		return releaseMic;
 	});
-
-	async function signIn() {
-		signingIn = true;
-		try {
-			await startGoogleSignIn();
-		} catch {
-			signingIn = false;
-			failed = true;
-		}
-	}
 
 	/** Saving an item moves straight on to the next one, so a long session needs no navigation. */
 	async function saved() {
@@ -87,25 +71,6 @@
 
 		{#if loading}
 			<p class="muted">იტვირთება… Loading…</p>
-		{:else if !user}
-			<section class="gate">
-				<p>ჩაწერამდე გაიარეთ ავტორიზაცია.</p>
-				<p class="muted">Sign in first, so your recordings are filed under your name.</p>
-				<button class="btn primary" onclick={signIn} disabled={signingIn}>
-					{signingIn ? 'იტვირთება…' : 'Google-ით შესვლა · Continue with Google'}
-				</button>
-			</section>
-		{:else if !mayRecord}
-			<section class="gate">
-				<p>ეს ანგარიში ჯერ არ არის ჩამწერად დამტკიცებული.</p>
-				<p class="muted">
-					This account cannot record yet. Send the address below to the project owner and they will grant access.
-				</p>
-				<p class="who">{user.email}</p>
-				<p class="muted consent">
-					<span lang="en">Before recording, please read the <a href="/terms">terms</a> and the <a href="/privacy">privacy notice</a>.</span>
-				</p>
-			</section>
 		{:else}
 			{#if failed}<p class="error" role="alert">სია ვერ განახლდა. The list could not be refreshed.</p>{/if}
 
@@ -162,9 +127,6 @@
 <style>
 	h1 { font-size: 1.2rem; font-weight: 600; }
 	h1 .muted { font-weight: 400; font-size: 0.9rem; }
-
-	.gate { display: flex; flex-direction: column; gap: 12px; }
-	.who { font-family: ui-monospace, monospace; padding: 10px 12px; border-radius: 10px; background: var(--tile); word-break: break-all; }
 
 	.summary { display: flex; flex-direction: column; gap: 8px; }
 	.count { font-size: 2.6rem; font-weight: 600; line-height: 1; font-variant-numeric: tabular-nums; }

@@ -25,12 +25,12 @@
 			<h2>Ứng dụng không thu tiếng của người học</h2>
 			<p>Khi học hay khi làm bài kiểm tra, ứng dụng không xin quyền micro và không ghi lại tiếng của bạn. Quyền micro chỉ được xin ở màn thu âm dành riêng cho người đọc được mời, và chỉ sau khi người đó tự bấm nút thu.</p>
 
-			<h2>Bản thu phát âm của người đọc được mời</h2>
-			<p>Phần phát âm trong ứng dụng do người bản xứ được dự án mời đọc. Người đọc đăng nhập bằng Google, được cấp quyền thu, rồi tự đọc từng mục trong danh mục, mỗi mục ba lượt.</p>
-			<p>Với mỗi lượt thu, máy chủ lưu tệp âm thanh, mã của nội dung đã đọc, tài khoản đã thu, thời điểm thu và trạng thái duyệt. Giọng nói là dữ liệu cá nhân, nên người đọc cần biết rõ phần này trước khi bắt đầu.</p>
+			<h2>Bản thu phát âm</h2>
+			<p>Phần phát âm do người bản xứ đọc. Màn thu mở cho bất kỳ ai có đường dẫn, không cần tài khoản và không cần đăng nhập.</p>
+			<p>Bản thu được giữ ẩn danh. Với mỗi lượt thu, máy chủ chỉ lưu tệp âm thanh, mã của nội dung đã đọc và thời điểm thu. Không lưu tài khoản, không lưu tên, và nhật ký máy chủ đã tắt phần ghi địa chỉ IP, nên không có dữ liệu nào chỉ ngược lại người đã đọc.</p>
 			<p>Bản thu không được phát trong ứng dụng. Chỉ người đã thu và chủ dự án mở được bản thu của mình; người học không mở được, và người có đúng đường dẫn tệp cũng không tải được.</p>
 			<p>Dự án giữ bản thu làm tư liệu tham chiếu và làm cơ sở xây dựng phần đối chiếu phát âm về sau. Bản thu không được bán và không chia sẻ cho bên thứ ba. Nếu sau này bản thu được phát cho người học, trang này được cập nhật trước khi điều đó diễn ra.</p>
-			<p>Người đọc có thể yêu cầu xóa toàn bộ bản thu của mình bất cứ lúc nào bằng cách gửi thư tới <a href="mailto:txntan@gmail.com">txntan@gmail.com</a>. Yêu cầu được xử lý trong vòng 30 ngày, và mọi bản sao đã công bố trong ứng dụng được rút xuống.</p>
+			<p>Vì bản thu ẩn danh, hệ thống không biết lượt nào của ai. Người đã đọc muốn rút bản thu thì nêu rõ những mục mình đã đọc và gửi thư tới <a href="mailto:txntan@gmail.com">txntan@gmail.com</a>; các mục đó được xóa trong vòng 30 ngày.</p>
 
 			<h2>Không chia sẻ, không quảng cáo</h2>
 			<p>Dữ liệu không được bán, không được chia sẻ với bên thứ ba, và không dùng cho quảng cáo. Ứng dụng không cài công cụ theo dõi hay đo lường hành vi nào.</p>
@@ -55,12 +55,12 @@
 			<h2>The app never records a learner</h2>
 			<p>While you study or take a test, the app does not ask for the microphone and does not record you. The microphone is requested only on the recording screen, which is for invited readers, and only after that person taps the record button themselves.</p>
 
-			<h2>Recordings made by an invited reader</h2>
-			<p>The pronunciation in the app is read by a native speaker invited by the project. The reader signs in with Google, is granted permission to record, and reads each item in the catalogue three times.</p>
-			<p>For every take, the server keeps the audio file, the key of the item that was read, the account that recorded it, the time, and its review status. A voice is personal data, so a reader should understand this before starting.</p>
+			<h2>Pronunciation recordings</h2>
+			<p>The pronunciation is read by a native speaker. The recording screen is open to anyone who has the link: no account, no sign-in.</p>
+			<p>Recordings are kept anonymous. For every take the server keeps only the audio file, the key of the item that was read, and the time. No account, no name, and the server log no longer keeps IP addresses, so nothing stored points back at whoever read it.</p>
 			<p>Recordings are not played in the app. Only the person who recorded them and the project owner can open them; a learner cannot, and holding the file address is not enough.</p>
 			<p>The project keeps the recordings as reference material and as the basis for pronunciation checking later on. They are never sold and never shared with third parties. If they are ever played to learners, this page will say so before that happens.</p>
-			<p>A reader may ask for all of their recordings to be deleted at any time by writing to <a href="mailto:txntan@gmail.com">txntan@gmail.com</a>. Requests are handled within 30 days, and anything already published in the app is withdrawn.</p>
+			<p>Because the recordings are anonymous, the system does not know whose takes are whose. Someone who has read for the project and wants their recordings removed should name the items they read and write to <a href="mailto:txntan@gmail.com">txntan@gmail.com</a>; those items are deleted within 30 days.</p>
 
 			<h2>No sharing, no ads</h2>
 			<p>Your data is never sold or shared with third parties, and is not used for advertising. The app carries no analytics or tracking of any kind.</p>

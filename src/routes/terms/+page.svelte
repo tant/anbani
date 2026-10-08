@@ -23,8 +23,9 @@
 			<p>Xin đừng dùng ứng dụng theo cách gây hại cho người khác, làm gián đoạn dịch vụ, hoặc truy cập vào phần dữ liệu không thuộc về bạn.</p>
 
 			<h2>Bản thu phát âm</h2>
-			<p>Phần này áp dụng cho người bản xứ được dự án mời đọc. Chỉ tài khoản được cấp quyền mới thu được, và chỉ nên thu đúng nội dung mà màn hình yêu cầu.</p>
-			<p>Người đọc giữ quyền nhân thân đối với giọng đọc của mình, đồng thời cho dự án Anbani quyền sử dụng không độc quyền, không giới hạn lãnh thổ, không phải trả phí, trong các việc sau: dùng bản thu để xây dựng phần đối chiếu phát âm của ứng dụng, và nếu về sau dự án quyết định phát bản thu thì phát cho người học trong ứng dụng. Dự án ghi công người đọc nếu người đọc muốn, và không ghi tên nếu người đọc đề nghị như vậy.</p>
+			<p>Phần này áp dụng cho người đọc giúp dự án. Màn thu mở cho bất kỳ ai có đường dẫn, không cần tài khoản; xin chỉ đọc đúng nội dung mà màn hình yêu cầu.</p>
+			<p>Khi bấm lưu, người đọc cho dự án Anbani quyền sử dụng không độc quyền, không giới hạn lãnh thổ, không phải trả phí, trong các việc sau: dùng bản thu để xây dựng phần đối chiếu phát âm của ứng dụng, và nếu về sau dự án quyết định phát bản thu thì phát cho người học trong ứng dụng. Người đọc giữ quyền nhân thân đối với giọng đọc của mình.</p>
+			<p>Bản thu được giữ ẩn danh, nên mặc định không ghi công ai. Người đọc muốn được ghi công thì cho dự án biết mình là ai và đã đọc những mục nào. Dự án có thể xóa bản thu không dùng được mà không cần báo trước.</p>
 			<p>Tệp âm thanh không thuộc phạm vi giấy phép MIT của mã nguồn. Người đọc có thể rút toàn bộ bản thu của mình bất cứ lúc nào, theo cách nêu trong trang Quyền riêng tư; khi đó bản thu được rút khỏi ứng dụng và khỏi mọi dữ liệu dùng để xây dựng phần đối chiếu phát âm.</p>
 			<p>Dự án không trả thù lao cho việc thu âm, trừ khi hai bên thống nhất riêng bằng văn bản trước khi thu.</p>
 
@@ -49,8 +50,9 @@
 			<p>Please do not use the app in ways that harm others, disrupt the service, or reach data that is not yours.</p>
 
 			<h2>Recordings</h2>
-			<p>This section is for the native speakers the project invites to read. Only an account that has been granted permission can record, and only the item shown on the screen should be read.</p>
-			<p>A reader keeps the moral rights to their own voice, and grants the Anbani project a non-exclusive, worldwide, royalty-free right to use the recordings to build the app's pronunciation checking, and, if the project later decides to play them, to play them to learners inside the app. The project credits a reader who wants to be credited, and leaves the name out for a reader who asks for that.</p>
+			<p>This section is for anyone who reads for the project. The recording screen is open to whoever has the link, with no account; please read only the item shown on the screen.</p>
+			<p>By tapping save, a reader grants the Anbani project a non-exclusive, worldwide, royalty-free right to use the recordings to build the app's pronunciation checking, and, if the project later decides to play them, to play them to learners inside the app. A reader keeps the moral rights to their own voice.</p>
+			<p>Recordings are kept anonymous, so by default nobody is credited. A reader who wants a credit should tell the project who they are and which items they read. The project may delete recordings it cannot use, without notice.</p>
 			<p>The audio files are not covered by the MIT licence that covers the source code. A reader may withdraw all of their recordings at any time, in the way set out on the Privacy page; the recordings are then taken out of the app and out of any data held for pronunciation checking.</p>
 			<p>The project pays nothing for recording unless the two sides agree otherwise, in writing, before the session.</p>
 

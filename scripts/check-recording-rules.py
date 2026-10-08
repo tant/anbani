@@ -1,43 +1,27 @@
-"""Proves the recording rules on a running PocketBase by calling the API as each role.
+"""Proves the recording rules on a running PocketBase by calling the API as each kind of caller.
 
-A rule expression that reads correctly can still be wrong, so this creates real users, real rows and
-real audio, then checks who is allowed to do what. Point it at a throwaway instance:
+A rule expression that reads correctly can still be wrong, so this creates real rows and real audio
+and checks who is allowed to do what. Recording is open and anonymous; the audio is not. Point it at
+a throwaway instance, and keep --automigrate=0 so a test cannot write migrations into the repo:
 
     ./pb/pocketbase superuser upsert root@test.local testpass12345 --dir /tmp/pbcheck
-    ./pb/pocketbase serve --dir /tmp/pbcheck --migrationsDir pb/pb_migrations --http 127.0.0.1:8093 &
-    PB_URL=http://127.0.0.1:8093 PB_SUPERUSER_EMAIL=root@test.local \
+    ./pb/pocketbase serve --dir /tmp/pbcheck --migrationsDir pb/pb_migrations --automigrate=0 \\
+      --http 127.0.0.1:8093 &
+    PB_URL=http://127.0.0.1:8093 PB_SUPERUSER_EMAIL=root@test.local \\
       PB_SUPERUSER_PASSWORD=testpass12345 python3 scripts/check-recording-rules.py
 """
 
-import json, os, subprocess, sys, tempfile, urllib.error, urllib.request, uuid
+import json
+import os
+import subprocess
+import sys
+import tempfile
+import urllib.error
+import urllib.request
+import uuid
 
 BASE = os.environ.get("PB_URL", "http://127.0.0.1:8093").rstrip("/")
 fails = []
-
-
-def superuser_token():
-    req = urllib.request.Request(
-        BASE + "/api/collections/_superusers/auth-with-password",
-        data=json.dumps({"identity": os.environ["PB_SUPERUSER_EMAIL"], "password": os.environ["PB_SUPERUSER_PASSWORD"]}).encode(),
-        headers={"Content-Type": "application/json"},
-    )
-    with urllib.request.urlopen(req) as r:
-        return json.load(r)["token"]
-
-
-def silence():
-    """A real Opus file, so the upload passes the field's media-type check."""
-    out = os.path.join(tempfile.mkdtemp(), "take.webm")
-    subprocess.run(
-        ["ffmpeg", "-v", "error", "-f", "lavfi", "-i", "sine=frequency=440:duration=0.6:sample_rate=16000",
-         "-ac", "1", "-c:a", "libopus", "-b:a", "24k", "-f", "webm", out, "-y"],
-        check=True,
-    )
-    return open(out, "rb").read()
-
-
-SUPER = superuser_token()
-AUDIO = silence()
 
 
 def call(path, payload=None, method="GET", token=None, files=0, raw=False):
@@ -46,18 +30,18 @@ def call(path, payload=None, method="GET", token=None, files=0, raw=False):
         headers["Authorization"] = token
     data = None
     if files:
-        b = uuid.uuid4().hex
+        boundary = uuid.uuid4().hex
         parts = []
-        for k, v in (payload or {}).items():
-            parts.append(f'--{b}\r\nContent-Disposition: form-data; name="{k}"\r\n\r\n{v}\r\n'.encode())
+        for key, value in (payload or {}).items():
+            parts.append(f'--{boundary}\r\nContent-Disposition: form-data; name="{key}"\r\n\r\n{value}\r\n'.encode())
         for i in range(files):
             parts.append(
-                f'--{b}\r\nContent-Disposition: form-data; name="audio"; filename="take{i}.webm"\r\n'
+                f'--{boundary}\r\nContent-Disposition: form-data; name="audio"; filename="take{i}.webm"\r\n'
                 f"Content-Type: audio/webm\r\n\r\n".encode() + AUDIO + b"\r\n"
             )
-        parts.append(f"--{b}--\r\n".encode())
+        parts.append(f"--{boundary}--\r\n".encode())
         data = b"".join(parts)
-        headers["Content-Type"] = f"multipart/form-data; boundary={b}"
+        headers["Content-Type"] = f"multipart/form-data; boundary={boundary}"
     elif payload is not None:
         data = json.dumps(payload).encode()
         headers["Content-Type"] = "application/json"
@@ -80,105 +64,110 @@ def check(name, got, want):
         fails.append(name)
 
 
-def mkuser(email, role):
-    st, u = call("/api/collections/users/records", {"email": email, "password": "passw0rd1234", "passwordConfirm": "passw0rd1234", "role": role}, "POST", SUPER)
-    assert st == 200, (st, u)
-    st, a = call("/api/collections/users/auth-with-password", {"identity": email, "password": "passw0rd1234"}, "POST")
-    assert st == 200, (st, a)
-    return u["id"], a["token"]
+def silence():
+    """A real Opus file, so the upload passes the field's media-type check."""
+    out = os.path.join(tempfile.mkdtemp(), "take.webm")
+    subprocess.run(
+        ["ffmpeg", "-v", "error", "-f", "lavfi", "-i", "sine=frequency=440:duration=0.6:sample_rate=16000",
+         "-ac", "1", "-c:a", "libopus", "-b:a", "24k", "-f", "webm", out, "-y"],
+        check=True,
+    )
+    return open(out, "rb").read()
 
 
+def superuser_token():
+    st, out = call(
+        "/api/collections/_superusers/auth-with-password",
+        {"identity": os.environ["PB_SUPERUSER_EMAIL"], "password": os.environ["PB_SUPERUSER_PASSWORD"]},
+        "POST",
+    )
+    assert st == 200, out
+    return out["token"]
+
+
+AUDIO = silence()
+SUPER = superuser_token()
 tag = uuid.uuid4().hex[:6]
-reader_id, reader_tok = mkuser(f"reader-{tag}@test.local", "reader")
-owner_id, owner_tok = mkuser(f"owner-{tag}@test.local", "owner")
-learner_id, learner_tok = mkuser(f"learner-{tag}@test.local", "")
 
-# a learner cannot record
-st, _ = call("/api/collections/recordings/records", {"item": f"letter:a-{tag}", "status": "pending", "reader": learner_id}, "POST", learner_tok, files=3)
-check("learner cannot create", st, 400)  # a blocked create reads as a bad request
 
-# a reader cannot publish their own work
-st, _ = call("/api/collections/recordings/records", {"item": f"letter:b-{tag}", "status": "approved", "reader": reader_id}, "POST", reader_tok, files=3)
-check("reader cannot create approved", st, 400)
+def account(email, role):
+    st, _ = call("/api/collections/users/records",
+                 {"email": email, "password": "passw0rd1234", "passwordConfirm": "passw0rd1234", "role": role},
+                 "POST", SUPER)
+    assert st == 200
+    st, auth = call("/api/collections/users/auth-with-password", {"identity": email, "password": "passw0rd1234"}, "POST")
+    assert st == 200, auth
+    return auth["record"]["id"], auth["token"]
 
-# a reader cannot file a recording under someone else
-st, _ = call("/api/collections/recordings/records", {"item": f"letter:c-{tag}", "status": "pending", "reader": owner_id}, "POST", reader_tok, files=3)
-check("reader cannot create for another", st, 400)
 
-# the normal path: three takes in one go
-st, full = call("/api/collections/recordings/records", {"item": f"letter:d-{tag}", "status": "pending", "reader": reader_id}, "POST", reader_tok, files=3)
-check("reader creates three takes", st, 200)
-check("three files stored", len(full.get("audio", [])), 3)
+owner_id, owner_tok = account(f"owner-{tag}@test.local", "owner")
+learner_id, learner_tok = account(f"learner-{tag}@test.local", "")
 
-# a short item is accepted but must not be publishable
-st, short = call("/api/collections/recordings/records", {"item": f"letter:e-{tag}", "status": "pending", "reader": reader_id}, "POST", reader_tok, files=2)
-check("reader creates two takes", st, 200)
-st, _ = call(f"/api/collections/recordings/records/{short['id']}", {"status": "approved"}, "PATCH", owner_tok)
-check("owner cannot approve two takes", st, 404)  # a row the rule rejects is reported as missing
-st, _ = call(f"/api/collections/recordings/records/{short['id']}", {"status": "rejected", "note": "again please"}, "PATCH", owner_tok)
-check("owner can reject two takes", st, 200)
 
-# the reader cannot review, but can withdraw their own unapproved work
-st, _ = call(f"/api/collections/recordings/records/{full['id']}", {"status": "approved"}, "PATCH", reader_tok)
-check("reader cannot update", st, 404)
-st, _ = call(f"/api/collections/recordings/records/{short['id']}", None, "DELETE", reader_tok)
-check("reader deletes own rejected row", st, 204)
-
-st, _ = call(f"/api/collections/recordings/records/{full['id']}", {"status": "approved"}, "PATCH", owner_tok)
-check("owner approves three takes", st, 200)
-
-# what each audience sees
-st, anon = call("/api/collections/recordings/records?perPage=200")
-check("nobody signed in sees any recording", anon["items"], [])
-st, lrn = call("/api/collections/recordings/records?perPage=200", None, "GET", learner_tok)
-check("a learner sees no recording either", lrn["items"], [])
-
-st, pend = call("/api/collections/recordings/records", {"item": f"letter:f-{tag}", "status": "pending", "reader": reader_id}, "POST", reader_tok, files=3)
-st, _ = call(f"/api/collections/recordings/records/{pend['id']}")
-check("nobody signed in can read a row", st, 404)
-st, _ = call(f"/api/collections/recordings/records/{pend['id']}", None, "GET", reader_tok)
-check("reader reads own pending row", st, 200)
-st, own = call("/api/collections/recordings/records?perPage=200&filter=" + urllib.request.quote('status="pending"'), None, "GET", owner_tok)
-check("owner sees pending rows", any(r["id"] == pend["id"] for r in own["items"]), True)
-
-# nobody promotes themselves
-st, _ = call(f"/api/collections/users/records/{learner_id}", {"role": "owner"}, "PATCH", learner_tok)
-check("learner cannot grant themselves a role", st, 404)
-st, _ = call(f"/api/collections/users/records/{learner_id}", {"lang": "en"}, "PATCH", learner_tok)
-check("learner still edits own settings", st, 200)
-
-# the reader cannot delete someone else's work either
-st, _ = call(f"/api/collections/recordings/records/{pend['id']}", None, "DELETE", learner_tok)
-check("learner cannot delete a recording", st, 404)
-
-# A take is a protected file: the address alone opens nothing, and the file route ignores the
-# Authorization header, so reaching one takes a file token of its own.
 def file_token(token):
     st, out = call("/api/files/token", {}, "POST", token)
     return out.get("token") if st == 200 else None
 
 
-def at(row, name, token=None):
+def reach(row, name, token=None):
     url = f"/api/files/{row['collectionId']}/{row['id']}/{name}"
     if token:
         url += "?token=" + token
     return call(url, None, "GET", None, raw=True)[0]
 
 
-check("a file token needs an account", file_token(None), None)
-check("plain address of a pending take, nobody signed in", at(pend, pend["audio"][0]), 404)
-check("plain address of a pending take, a learner", at(pend, pend["audio"][0], file_token(learner_tok)), 404)
-check("the owner reaches a pending take with a file token", at(pend, pend["audio"][0], file_token(owner_tok)), 200)
-check("its reader reaches it too", at(pend, pend["audio"][0], file_token(reader_tok)), 200)
-check("not even an approved take is public", at(full, full["audio"][0]), 404)
-check("a learner cannot reach it with a token of their own", at(full, full["audio"][0], file_token(learner_tok)), 404)
-check("the owner reaches it", at(full, full["audio"][0], file_token(owner_tok)), 200)
+# Recording needs no account at all.
+st, row = call("/api/collections/recordings/records", {"item": f"letter:{tag}", "status": "pending"}, "POST", None, files=3)
+check("anyone can record, with no account", st, 200)
+check("all three takes are stored", len(row.get("audio", [])), 3)
 
-# a role is handed out by a superuser only, at sign-up as much as afterwards
-st, _ = call("/api/collections/users/records", {"email": f"sneak-{tag}@test.local", "password": "passw0rd1234", "passwordConfirm": "passw0rd1234", "role": "owner"}, "POST")
+st, _ = call("/api/collections/recordings/records", {"item": f"word:{tag}", "status": "approved"}, "POST", None, files=3)
+check("a recording cannot arrive already reviewed", st, 400)
+
+st, _ = call("/api/collections/recordings/records", {"item": f"letter:{tag}", "status": "pending"}, "POST", None, files=3)
+check("one row per item, so an open endpoint is capped", st, 400)
+
+# The screen has to know what is done; the audio stays shut.
+st, listed = call("/api/collections/recordings/records?perPage=200")
+check("the list is open, so the screen knows what is recorded", any(r["item"] == f"letter:{tag}" for r in listed["items"]), True)
+check("the list says nothing about who recorded it", "reader" in listed["items"][0], False)
+
+check("one row cannot be read without an account", call(f"/api/collections/recordings/records/{row['id']}")[0], 404)
+check("nor by an ordinary account", call(f"/api/collections/recordings/records/{row['id']}", None, "GET", learner_tok)[0], 404)
+check("the owner reads it", call(f"/api/collections/recordings/records/{row['id']}", None, "GET", owner_tok)[0], 200)
+
+check("a file token needs an account", file_token(None), None)
+check("the audio does not open on its address alone", reach(row, row["audio"][0]), 404)
+check("nor for an ordinary account holding a token", reach(row, row["audio"][0], file_token(learner_tok)), 404)
+check("the owner reaches the audio with a file token", reach(row, row["audio"][0], file_token(owner_tok)), 200)
+
+# A misread item can be recorded again: drop the row, record it once more.
+check("an unreviewed row can be dropped so a redo can replace it", call(f"/api/collections/recordings/records/{row['id']}", None, "DELETE")[0], 204)
+st, row = call("/api/collections/recordings/records", {"item": f"letter:{tag}", "status": "pending"}, "POST", None, files=3)
+check("and recorded again in its place", st, 200)
+
+# Reviewing is nobody's job but the owner's, and it is still gated on three takes.
+check("an ordinary account cannot review", call(f"/api/collections/recordings/records/{row['id']}", {"status": "approved"}, "PATCH", learner_tok)[0], 404)
+st, short = call("/api/collections/recordings/records", {"item": f"short:{tag}", "status": "pending"}, "POST", None, files=2)
+check("a short item is stored", st, 200)
+check("but cannot be approved", call(f"/api/collections/recordings/records/{short['id']}", {"status": "approved"}, "PATCH", owner_tok)[0], 404)
+check("a full item can", call(f"/api/collections/recordings/records/{row['id']}", {"status": "approved"}, "PATCH", owner_tok)[0], 200)
+check("and once approved it can no longer be dropped", call(f"/api/collections/recordings/records/{row['id']}", None, "DELETE")[0], 404)
+
+# A role is handed out by a superuser only, at sign-up as much as afterwards.
+st, _ = call("/api/collections/users/records",
+             {"email": f"sneak-{tag}@test.local", "password": "passw0rd1234", "passwordConfirm": "passw0rd1234", "role": "owner"},
+             "POST")
 check("signing up cannot ask for a role", st, 400)
-st, _ = call("/api/collections/users/records", {"email": f"plain-{tag}@test.local", "password": "passw0rd1234", "passwordConfirm": "passw0rd1234"}, "POST")
+st, _ = call("/api/collections/users/records",
+             {"email": f"plain-{tag}@test.local", "password": "passw0rd1234", "passwordConfirm": "passw0rd1234"}, "POST")
 check("an ordinary sign-up still works", st, 200)
+check("an account cannot grant itself a role", call(f"/api/collections/users/records/{learner_id}", {"role": "owner"}, "PATCH", learner_tok)[0], 404)
+check("but still edits its own settings", call(f"/api/collections/users/records/{learner_id}", {"lang": "en"}, "PATCH", learner_tok)[0], 200)
+
+# Nothing in the request log should point back at whoever recorded.
+st, settings = call("/api/settings", None, "GET", SUPER)
+check("the request log keeps no IP address", settings["logs"]["logIP"], False)
 
 print()
 print("FAILED: " + ", ".join(fails) if fails else "all checks passed")
