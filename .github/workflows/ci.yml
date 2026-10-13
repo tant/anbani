@@ -1,0 +1,141 @@
+# Checks before merging, deploy right after (SDO-301).
+#
+# Life of a change:
+#   open a PR   -> `kiem` + `anh` run; red means branch protection blocks the merge
+#   push main (merge or direct push)
+#               -> both run again on that commit; green means `trien-khai` ships
+#                  it to https://anbani.korbvazi.com; red leaves production as is
+#
+# This is the ONLY way to production: the repo deliberately has no webhook
+# pointing straight at Dokploy, so nothing reaches the site without the checks.
+# Job names are shared by every app on the Dokploy host (fleet standard), which
+# is why they are not in English.
+
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  # Two pushes in a row: cancel the earlier run, never two deploys on top of each other.
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  kiem:
+    name: Bo kiem
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+      - name: Install
+        run: npm ci
+      - name: Svelte check
+        run: npm run check
+      - name: Unit tests
+        run: npm test
+      # scripts/check-recording-rules.py is deliberately not here: it calls the
+      # API of a running PocketBase as each kind of caller.
+
+  anh:
+    name: Dung anh Docker
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      # A real build, not a syntax check: Dokploy rebuilds this exact Dockerfile
+      # from the same commit, so a broken build must go red HERE, on the PR.
+      - name: Build
+        run: docker build -t anbani:ci-${{ github.sha }} .
+      # The fingerprint inside the image must equal the one computed from the
+      # source. If they ever differ, the wait in `trien-khai` can never match —
+      # catch it here instead of after a 15-minute wait on main.
+      - name: Fingerprint in image matches source
+        run: |
+          set -eu
+          want=$(sh scripts/van-tay.sh)
+          got=$(docker run --rm --entrypoint cat anbani:ci-${{ github.sha }} /app/pb_public/version.txt)
+          echo "source: $want — image: $got"
+          [ "$got" = "$want" ]
+
+  trien-khai:
+    name: Trien khai
+    needs: [kiem, anh]
+    # A push to main OR a manual run (workflow_dispatch) on main — the manual run
+    # is how to redeploy without a new commit. A PR never deploys.
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      # The source is needed to recompute the fingerprint in the last step.
+      - uses: actions/checkout@v7
+
+      # The secret is the WHOLE Dokploy webhook URL,
+      # https://<dokploy>/api/deploy/<refreshToken>. Deliberately not the Dokploy
+      # API key: that key opens every app on the host, the refreshToken only
+      # this one.
+      #
+      # ⚠️ The webhook only works while the app has autoDeploy on. Turning it
+      # off kills this step.
+      #
+      # The payload is a Gitea-style push, the same in every repo of the fleet:
+      # Dokploy reads the branch from `ref` and compares it with the app's branch
+      # (custom-git sources accept this format too). An empty POST has no branch
+      # and gets 301 "Branch Not Match" — a 301, not a 4xx.
+      - name: Tell Dokploy to build and run
+        env:
+          URL: ${{ secrets.DOKPLOY_DEPLOY_URL }}
+          SHA: ${{ github.sha }}
+          MSG: ${{ github.event.head_commit.message }}
+        run: |
+          set -eu
+          [ -n "${URL:-}" ] || { echo "Missing secret DOKPLOY_DEPLOY_URL"; exit 1; }
+          # Build the JSON in python so quotes or newlines in the message cannot break it.
+          python3 - > /tmp/payload.json <<'PY'
+          import json, os
+          msg = (os.environ.get("MSG") or "NEW COMMIT").splitlines()[0]
+          json.dump({
+              "ref": "refs/heads/main",
+              "after": os.environ.get("SHA", ""),
+              "commits": [{"message": msg, "added": [], "modified": [], "removed": []}],
+          }, open("/dev/stdout", "w"))
+          PY
+          # `|| true`: curl exits non-zero when it cannot connect, and `set -e`
+          # would kill the script before it could print what happened. Let the
+          # HTTP code decide.
+          code=$(curl -sS -o /tmp/resp -w '%{http_code}' --max-time 60 \
+                   --retry 3 --retry-delay 5 --retry-all-errors -X POST "$URL" \
+                   -H 'Content-Type: application/json' \
+                   -H 'x-gitea-event: push' \
+                   --data-binary @/tmp/payload.json || true)
+          echo "HTTP $code"; cat /tmp/resp; echo
+          case "$code" in 2??) ;; *) echo "::error::Dokploy refused the deploy — production still runs the old build"; exit 1 ;; esac
+
+      # Dokploy builds in the background and answers at once, so wait before
+      # concluding. A broken build leaves the OLD container serving 200, so wait
+      # for the content fingerprint instead: the Dockerfile runs
+      # scripts/van-tay.sh into pb_public/version.txt; run the same script here.
+      - name: Wait for the pushed build to go live
+        run: |
+          set -eu
+          want=$(sh scripts/van-tay.sh)
+          echo "Fingerprint of the pushed commit: $want"
+          for i in $(seq 1 90); do
+            sleep 10
+            # A different query every time, so a cached copy is never read.
+            got=$(curl -s --max-time 10 "https://anbani.korbvazi.com/version.txt?t=$(date +%s)" || true)
+            echo "try $i: site says '$got'"
+            if [ "$got" = "$want" ]; then
+              echo "Match — the pushed build is live."
+              exit 0
+            fi
+          done
+          echo "::error::After 15 minutes anbani.korbvazi.com still does not run the pushed build — check the deployment log on Dokploy" >&2
+          exit 1

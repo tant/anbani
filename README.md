@@ -99,6 +99,14 @@ Because the database is SQLite, never run two containers against the same volume
 stop the old container before starting the new one, which trades a few seconds of downtime for
 never having two writers.
 
+Production (`anbani.korbvazi.com`, on Dokploy) deploys only through CI —
+[`.github/workflows/ci.yml`](.github/workflows/ci.yml). A pull request runs the checks and a Docker
+build; a push to `main` runs them again and, if green, calls the app's Dokploy webhook (repo secret
+`DOKPLOY_DEPLOY_URL`) and waits until `/version.txt` returns the content fingerprint of the pushed
+commit ([`scripts/van-tay.sh`](scripts/van-tay.sh)). Red at any step leaves the old build running.
+To redeploy without a new commit, run the workflow by hand on `main`. The repo deliberately has no
+webhook pointing at Dokploy; do not add one back, or commits will skip the checks.
+
 ## Project layout
 
 | Path | What lives there |

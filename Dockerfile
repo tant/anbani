@@ -4,6 +4,11 @@ COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
 RUN npm run build
+# Content fingerprint (SDO-301): CI waits for anbani.korbvazi.com/version.txt to
+# return this value after deploying — see scripts/van-tay.sh. Written into the
+# build output after `vite build`, so it stays out of the service worker's
+# precache list (that list is taken from static/ at build time).
+RUN sh scripts/van-tay.sh > build/version.txt
 
 FROM alpine:3.24 AS pocketbase
 RUN apk add --no-cache curl unzip
